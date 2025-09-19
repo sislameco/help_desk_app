@@ -10,16 +10,13 @@ export class UserRoleService {
 
   list(data: Params) {
     return this.http.get<PaginationResponse<RoleListItemDto>>(
-      `${environment.userManagementBaseUrl}/roles/paged`,
+      `${environment.apiBaseUrl}/roles/paged`,
       {
         params: data,
       },
     );
   }
   roleUpsert(data: RoleUpsertRequest) {
-    return this.http.put<void>(
-      `${environment.userManagementBaseUrl}/roles/upsert-with-menus`,
-      data,
-    );
+    return this.http.put<void>(`${environment.apiBaseUrl}/roles/upsert-with-menus`, data);
   }
 }

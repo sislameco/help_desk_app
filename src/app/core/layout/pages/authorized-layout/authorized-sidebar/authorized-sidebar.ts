@@ -18,14 +18,4 @@ export class AuthorizedSidebar {
   toggleMenu(menu: MenuItem) {
     this.menuList().forEach((m) => (m.isOpen = m === menu ? !m.isOpen : false));
   }
-
-  // isActive(link?: string): boolean {
-  //   if (!link || link === '#') return false;
-  //   return this.router.isActive(link, {
-  //     paths: 'subset',
-  //     queryParams: 'ignored',
-  //     fragment: 'ignored',
-  //     matrixParams: 'ignored',
-  //   });
-  // }
 }

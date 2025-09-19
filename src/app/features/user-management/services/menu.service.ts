@@ -11,7 +11,7 @@ export class MenuService {
   private readonly http = inject(HttpClient);
 
   menuPermitted(data: Params) {
-    return this.http.get<MenuItem[]>(`${environment.userManagementBaseUrl}/menus/permitted-tree`, {
+    return this.http.get<MenuItem[]>(`${environment.apiBaseUrl}/menus/permitted-tree`, {
       params: data,
     });
   }
