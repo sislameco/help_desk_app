@@ -1,0 +1,37 @@
+<aside class="sidebar-menu">
+  <ul>
+    @for (menuItem of menuList(); track $index) {
+      <li>
+        @if (menuItem.children?.length) {
+          <a
+            href="javascript:void(0);"
+            (click)="toggleMenu(menuItem)"
+            [class.active]="menuItem.isOpen"
+          >
+            <svg width="15" viewBox="0 0 15 15" fill="currentColor">
+              <use [attr.href]="'assets/sprite.svg#' + menuItem.icon"></use>
+            </svg>
+            <span>{{ menuItem.label }}</span>
+          </a>
+        } @else {
+          <a [routerLink]="menuItem.link">
+            <svg width="15" viewBox="0 0 15 15" fill="currentColor">
+              <use [attr.href]="'assets/sprite.svg#' + menuItem.icon"></use>
+            </svg>
+            <span>{{ menuItem.label }}</span>
+          </a>
+        }
+
+        <div [collapse]="!menuItem.isOpen" [isAnimated]="true" class="sub-menu mt-1">
+          <ul>
+            @for (subItem of menuItem.children; track $index) {
+              <li>
+                <a [routerLink]="subItem.link">{{ subItem.label }}</a>
+              </li>
+            }
+          </ul>
+        </div>
+      </li>
+    }
+  </ul>
+</aside>

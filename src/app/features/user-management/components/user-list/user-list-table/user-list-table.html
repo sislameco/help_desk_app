@@ -1,0 +1,205 @@
+<div class="table-header">
+  <p>Showing 10-15 of 452 results</p>
+  <div class="table-filter">
+    <div class="form-group min-width-150">
+      <label for="roles">Roles</label>
+      <ng-select
+        placeholder="All"
+        id="roles"
+        clearable="false"
+        searchable="false"
+        [multiple]="true"
+        class="multi-form-select md-multi-select rounded"
+      >
+        <ng-option value="All">All</ng-option>
+        <ng-option value="Super Admins">Super Admins</ng-option>
+      </ng-select>
+    </div>
+    <div class="form-group min-width-150">
+      <label for="warehouse">Warehouse</label>
+      <ng-select
+        placeholder="All"
+        id="warehouse"
+        clearable="false"
+        searchable="false"
+        [multiple]="true"
+        class="multi-form-select md-multi-select rounded"
+      >
+        <ng-option value="All">All</ng-option>
+        <ng-option value="Cherry Orchard">Cherry Orchard</ng-option>
+      </ng-select>
+    </div>
+    <div class="form-group min-width-150 ng-select-md">
+      <label for="warehouse">Status</label>
+      <ng-select placeholder="All" id="warehouse" clearable="false" searchable="false">
+        <ng-option value="All">All</ng-option>
+        <ng-option value="All">All</ng-option>
+        <ng-option value="All">All</ng-option>
+        <ng-option value="All">All</ng-option>
+      </ng-select>
+    </div>
+    <a [routerLink]="'/pages/user-management/users/invite-user'" class="icon-sm-btn bg-primary">
+      <span class="icon">
+        <svg width="12" viewBox="0 0 18 18" fill="currentColor">
+          <use href="assets/sprite.svg#svg-plus"></use>
+        </svg>
+      </span>
+      Invite User
+    </a>
+  </div>
+</div>
+<!-- <div class="table-responsive"> -->
+<table class="table app-table mt-3">
+  <thead>
+    <tr>
+      <th>
+        <label class="custom-checkbox">
+          <input type="checkbox" [checked]="allSelected()" (change)="onSelectAll($event)" />
+          <span></span>
+        </label>
+      </th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Status</th>
+      <th>Roles</th>
+      <th>Wearhouse</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (user of userList(); track $index) {
+      <tr>
+        <td>
+          <label class="custom-checkbox">
+            <input
+              type="checkbox"
+              [checked]="selectedRows().includes($index)"
+              (change)="onSelectRow($event, $index)"
+            />
+            <span></span>
+          </label>
+        </td>
+        <td class="text-nowrap">{{ user.name }}</td>
+        <td class="text-nowrap">{{ user.email }}</td>
+        <td class="text-nowrap">{{ user.phone }}</td>
+        <td>
+          @if (user.status === UserStatusEnum.Inactive) {
+            <span class="badge badge-secondary">{{ user.status }}</span>
+          } @else if (user.status === UserStatusEnum.Pending) {
+            <span class="badge badge-warning">{{ user.status }}</span>
+          } @else if (user.status === UserStatusEnum.Active) {
+            <span class="badge badge-success">{{ user.status }}</span>
+          }
+        </td>
+        <td>{{ user.roles }}</td>
+        <td>{{ user.warehouse }}</td>
+        <td>
+          <div class="dropdown-action" dropdown placement="bottom right">
+            <button dropdownToggle type="button" class="active-btn">
+              <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                <use href="assets/sprite.svg#svg-cog"></use>
+              </svg>
+            </button>
+            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+              <li>
+                <button class="dropdown-item">
+                  <svg width="14" viewBox="0 0 16 16" fill="currentColor">
+                    <use href="assets/sprite.svg#svg-eye-outline"></use></svg
+                  >View
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item">
+                  <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                    <use href="assets/sprite.svg#edit-s-icon"></use></svg
+                  >Edit
+                </button>
+              </li>
+              @if (user.status === UserStatusEnum.Pending) {
+                <li>
+                  <button class="dropdown-item">
+                    <svg width="11" viewBox="0 0 11 11" fill="currentColor">
+                      <use href="assets/sprite.svg#svg-re-active"></use></svg
+                    >Resend Invite
+                  </button>
+                </li>
+              }
+              <li>
+                <button class="dropdown-item">
+                  <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                    <use href="assets/sprite.svg#delete-s-icon"></use></svg
+                  >Delete
+                </button>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>
+<!-- </div> -->
+@if (selectedRows().length > 0) {
+  <div class="d-flex justify-content-end gap-3 mt-3">
+    <a href="javascript:void(0);" class="btn btn-outline-danger">Cancel</a>
+    <a href="javascript:void(0);" class="btn btn-danger" (click)="removeAlert()">Delete</a>
+    <a href="javascript:void(0);" class="btn btn-outline-blue">Deactivate</a>
+    <a href="javascript:void(0);" class="btn btn-theme">Activate</a>
+  </div>
+}
+<div class="app-pagination bottom-fixed px-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-4">
+      <p>Items per page</p>
+      <ng-select clearable="false" [searchable]="false" placeholder="10">
+        <ng-option selected value="10">10</ng-option>
+        <ng-option value="20">20</ng-option>
+        <ng-option value="30">30</ng-option>
+        <ng-option value="40">40</ng-option>
+        <ng-option value="50">50</ng-option>
+      </ng-select>
+    </div>
+    <ul class="nav">
+      <li>
+        <a href="">
+          <svg width="6" viewBox="0 0 6 10" fill="currentColor">
+            <use href="assets/sprite.svg#svg-left-arrow-sm"></use>
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);">
+          <span>1</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);" class="active">
+          <span>2</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);">
+          <span>3</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);">
+          <span>4</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);">
+          <span>5</span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);">
+          <svg width="6" viewBox="0 0 6 10" fill="currentColor">
+            <use href="assets/sprite.svg#svg-right-arrow-sm"></use>
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

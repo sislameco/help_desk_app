@@ -1,0 +1,29 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  .section-wrapper {
+    display: flex;
+    align-items: start;
+    gap: 16px;
+    margin-top: -40px;
+    .auth-left-sidebar {
+      min-width: 264px;
+      width: 264px;
+      min-height: 88vh;
+      padding: 10px;
+      border-radius: 0 4px 0 0;
+      background: #fff;
+      padding-right: 0;
+      overflow: hidden;
+    }
+    .auth-main-content {
+      flex-grow: 1;
+      width: calc(100% - 264px);
+      border-radius: 4px 4px 0 0;
+      background: #fff;
+      min-height: 93vh;
+      margin-top: -45px;
+      position: relative;
+    }
+  }
+}

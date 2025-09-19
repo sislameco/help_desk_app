@@ -1,0 +1,69 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="d-grid gap-3">
+  <h2 class="text-center mb-3">Register</h2>
+  <label class="form-label">
+    <b>Name</b>
+    <input
+      id="name"
+      type="text"
+      class="form-control"
+      [formControl]="form.controls.name"
+      placeholder="Enter your name"
+      required
+    />
+    <strong *ngxControlError="form.controls.name; track: 'required'">Name is required.</strong>
+  </label>
+  <label class="form-label">
+    <b>Email</b>
+    <input
+      id="email"
+      type="email"
+      class="form-control"
+      [formControl]="form.controls.email"
+      placeholder="Enter your email"
+      required
+    />
+    <strong *ngxControlError="form.controls.email; track: 'required'">Email is required.</strong>
+    <strong *ngxControlError="form.controls.email; track: 'email'">Invalid email address.</strong>
+  </label>
+  <label class="form-label">
+    <b>Password</b>
+    <input
+      id="password"
+      type="password"
+      class="form-control"
+      [formControl]="form.controls.password"
+      placeholder="Create a password"
+      required
+    />
+    <strong *ngxControlError="form.controls.password; track: 'required'"
+      >Password is required.</strong
+    >
+    <strong *ngxControlError="form.controls.password; track: 'minlength'"
+      >Password must be at least 6 characters.</strong
+    >
+  </label>
+  <label class="form-label">
+    <b>Confirm Password</b>
+    <input
+      id="confirmPassword"
+      type="password"
+      class="form-control"
+      [formControl]="form.controls.confirmPassword"
+      placeholder="Confirm your password"
+      required
+    />
+    <strong *ngxControlError="form.controls.confirmPassword; track: 'required'"
+      >Please confirm your password.</strong
+    >
+  </label>
+  <button class="btn btn-success w-100" type="submit" [disabled]="loading() || form.invalid">
+    @if (loading()) {
+      <span class="spinner-border spinner-border-sm me-2"></span> Registering...
+    } @else {
+      Register
+    }
+  </button>
+  <div class="text-center">
+    <a [routerLink]="['../login']" [relativeTo]="route" class="small">Already have an account ?</a>
+  </div>
+</form>

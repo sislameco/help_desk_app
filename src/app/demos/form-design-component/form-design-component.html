@@ -1,0 +1,271 @@
+<div class="p-4">
+  <h5><strong>Form Primary Styles</strong></h5>
+  <p>Use the following classes to style your forms:</p>
+  <div class="card p-4 mt-3">
+    <form>
+      <div class="row">
+        <div class="col-lg-6 mb-4">
+          <div class="form-group">
+            <label for="" class="form-label">form-label</label>
+            <input type="text" class="form-control" value="form-control" />
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="form-group">
+            <label for="" class="form-label">form-label</label>
+            <ng-select
+              class="multi-form-select"
+              id="commissionItem"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              [clearable]="false"
+              [searchable]="false"
+              placeholder="multi-form-select"
+            >
+              <ng-option value="Product Sales"> Product Sales</ng-option>
+              <ng-option value="Total Order"> Total Order </ng-option>
+              <ng-option value="Sales Revenue"> Sales Revenue </ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="form-group">
+            <label for="" class="form-label">form-label</label>
+            <ng-select
+              class="multi-form-select"
+              id="commissionItem"
+              [clearable]="false"
+              [searchable]="false"
+              placeholder="multi-form-select"
+            >
+              <ng-option value="Product Sales"> Product Sales</ng-option>
+              <ng-option value="Total Order"> Total Order </ng-option>
+              <ng-option value="Sales Revenue"> Sales Revenue </ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="form-group">
+            <label for="" class="form-label">form-label</label>
+            <input type="text" class="form-control" value="form-control" />
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="form-group mb-2">
+            <div class="switch-wrapper">
+              <input type="checkbox" id="isCommissionRole" class="d-none" />
+              <label for="isCommissionRole" class="switch">Is Commission Role</label>
+            </div>
+            <pre class="mt-2"><code [highlightAuto]="switchBtn"></code></pre>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+          <div class="form-group mb-2">
+            <label class="custom-checkbox">
+              <input type="checkbox" />
+              <span></span>
+            </label>
+            <pre class="mt-2"><code [highlightAuto]="checkbox"></code></pre>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="form-group">
+            <label for="textarea" class="form-label">form-label</label>
+            <textarea id="textarea" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="col-lg-12 mt-3">
+          <div class="d-flex">
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-outline-danger" type="button">Cancel</button>
+              <button class="btn btn-theme" type="submit">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="p-4">
+  <h5><strong>Form Medium Styles</strong></h5>
+  <p>Use the following classes to style your forms:</p>
+  <div class="card p-4 mt-3">
+    <form>
+      <div class="row">
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <div class="search-box">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="m-0">
+                <use href="assets/sprite.svg#svg-search"></use>
+              </svg>
+              <input type="text" class="form-control ps-4" placeholder="Search by keyword" />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <div class="search-box">
+              <input type="text" class="form-control" placeholder="Search by keyword" />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <ng-select clearable="false" [searchable]="false" placeholder="Default">
+              <ng-option selected value="10">10</ng-option>
+              <ng-option value="20">20</ng-option>
+              <ng-option value="30">30</ng-option>
+              <ng-option value="40">40</ng-option>
+              <ng-option value="50">50</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <ng-select
+              class="multi-form-select md-multi-select"
+              id="commissionItem"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              [clearable]="false"
+              [searchable]="false"
+              placeholder="multi-form-select md-multi-select"
+            >
+              <ng-option value="Product Sales"> Product Sales</ng-option>
+              <ng-option value="Total Order"> Total Order </ng-option>
+              <ng-option value="Sales Revenue"> Sales Revenue </ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-12 mt-3">
+          <div class="d-flex">
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-outline-danger btn-md" type="button">Cancel</button>
+              <button class="btn btn-theme btn-md" type="submit">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="p-4">
+  <h5><strong>Form Medium Rounded Styles</strong></h5>
+  <p>Use the following classes to style your forms:</p>
+  <div class="card p-4 mt-3">
+    <form>
+      <div class="row">
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <label for="type">Type</label>
+            <ng-select class="ng-select-md" placeholder="ng-select-md" id="type" clearable="false">
+              <ng-option value="All">All</ng-option>
+              <ng-option value="All">All</ng-option>
+              <ng-option value="All">All</ng-option>
+              <ng-option value="All">All</ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input
+              type="text"
+              class="form-control form-control-md"
+              value="form-control form-control-md"
+            />
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <label for="type">Type</label>
+            <ng-select
+              class="multi-form-select md-multi-select rounded"
+              multiple="true"
+              placeholder="multi-form-select md-multi-select rounded"
+              id="type"
+              clearable="false"
+            >
+              <ng-option value="All">All</ng-option>
+              <ng-option value="All">All</ng-option>
+              <ng-option value="All">All</ng-option>
+              <ng-option value="All">All</ng-option>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-lg-6 mt-3">
+          <div class="d-flex">
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-outline-danger btn-md" type="button">Cancel</button>
+              <button class="btn btn-theme btn-md" type="submit">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="p-4">
+  <h5><strong>Form Small Styles</strong></h5>
+  <p>Use the following classes to style your forms:</p>
+  <div class="card p-4 mt-3">
+    <form>
+      <div class="row">
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <ng-select
+              class="multi-form-select sm-multi-select"
+              id="commissionItem"
+              [multiple]="true"
+              [closeOnSelect]="false"
+              [clearable]="false"
+              [searchable]="false"
+              placeholder="multi-form-select sm-multi-select"
+            >
+              <ng-option value="Create"> Create</ng-option>
+              <ng-option value="Edit"> Edit </ng-option>
+              <ng-option value="View"> View </ng-option>
+              <ng-option value="Delete"> Delete </ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="form-control form-control-sm"
+              value="form-control form-control-sm"
+            />
+          </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <div class="form-group">
+            <ng-select
+              class="sm-multi-select"
+              id="commissionItem"
+              [closeOnSelect]="false"
+              [clearable]="false"
+              [searchable]="false"
+              placeholder="sm-multi-select"
+            >
+              <ng-option value="Create"> Create</ng-option>
+              <ng-option value="Edit"> Edit </ng-option>
+              <ng-option value="View"> View </ng-option>
+              <ng-option value="Delete"> Delete </ng-option>
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-6 mt-3">
+          <div class="d-flex">
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-outline-danger btn-sm" type="button">Cancel</button>
+              <button class="btn btn-theme btn-sm" type="submit">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

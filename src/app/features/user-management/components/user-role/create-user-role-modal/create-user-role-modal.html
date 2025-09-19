@@ -1,0 +1,181 @@
+<div class="modal-header">
+  <h2>Create Role</h2>
+  <button type="button" (click)="bsModalRef.hide()">&times;</button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group mb-3">
+      <label for="roleName" class="form-label">Role Name <span class="text-danger">*</span></label>
+      <input
+        type="text"
+        id="roleName"
+        class="form-control"
+        placeholder="Type Here"
+        formControlName="roleName"
+      />
+      <strong *ngxControlError="form.controls.roleName; track: 'required'"
+        >Role name is required.</strong
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="roleDescription" class="form-label"
+        >Description <span class="text-danger">*</span></label
+      >
+      <textarea
+        id="roleDescription"
+        class="form-control"
+        placeholder="Type Here"
+        rows="5"
+        formControlName="description"
+      ></textarea>
+      <strong *ngxControlError="form.controls.description; track: 'required'"
+        >Description is required.</strong
+      >
+    </div>
+    <div class="form-group mb-2">
+      <div class="switch-wrapper">
+        <input
+          type="checkbox"
+          id="isCommissionRole"
+          class="d-none"
+          formControlName="isCommissionRole"
+        />
+        <label class="switch" for="isCommissionRole">Is Commission Role</label>
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="commissionItem" class="form-label"
+        >Commission Item <span class="text-danger">*</span></label
+      >
+      <ng-select
+        class="multi-form-select"
+        id="commissionItem"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [clearable]="false"
+        [searchable]="false"
+        placeholder="Select item"
+        formControlName="commissionItemId"
+      >
+        <ng-option [value]="1">Product Sales</ng-option>
+        <ng-option [value]="2">Total Order</ng-option>
+        <ng-option [value]="3">Sales Revenue</ng-option>
+      </ng-select>
+    </div>
+    <table class="table app-table form-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Permissions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of menus(); track item.id) {
+          <tr>
+            <td (click)="toggle(item.id)" class="cursor-pointer">
+              <span class="collapse-button" [class.active]="!collapsedMap()[item.id]">{{
+                item.displayName
+              }}</span>
+            </td>
+            <td>
+              <ng-select
+                class="multi-form-select sm-multi-select"
+                [multiple]="true"
+                [closeOnSelect]="false"
+                [clearable]="false"
+                [searchable]="false"
+                placeholder="Select items"
+                [ngModel]="selectedPermissions()[item.id]"
+                (ngModelChange)="selectPermission(item.id, $event, true)"
+              >
+                <ng-option *ngFor="let action of item.actions" [value]="action.keyEnum">{{
+                  action.name
+                }}</ng-option>
+              </ng-select>
+            </td>
+          </tr>
+          @if (item.children?.length) {
+            <tr>
+              <td colspan="2" class="table-collapse">
+                <div [collapse]="collapsedMap()[item.id]" [isAnimated]="true">
+                  <table class="table app-table">
+                    <tbody>
+                      @for (child of item.children; track child.id) {
+                        <tr>
+                          <td (click)="toggle(child.id)" class="cursor-pointer ps-4">
+                            {{ child.displayName }}
+                          </td>
+                          <td>
+                            <ng-select
+                              class="multi-form-select sm-multi-select"
+                              [multiple]="true"
+                              [closeOnSelect]="false"
+                              [clearable]="false"
+                              [searchable]="false"
+                              placeholder="Select items"
+                              [ngModel]="selectedPermissions()[child.id]"
+                              (ngModelChange)="selectPermission(child.id, $event, true)"
+                            >
+                              <ng-option
+                                *ngFor="let action of child.actions"
+                                [value]="action.keyEnum"
+                                >{{ action.name }}</ng-option
+                              >
+                            </ng-select>
+                          </td>
+                        </tr>
+                        @if (child.children?.length) {
+                          <tr>
+                            <td colspan="2" class="table-collapse">
+                              <div [collapse]="collapsedMap()[child.id]" [isAnimated]="true">
+                                <table class="table app-table">
+                                  <tbody>
+                                    @for (gchild of child.children; track gchild.id) {
+                                      <tr>
+                                        <td class="ps-5">{{ gchild.displayName }}</td>
+                                        <td>
+                                          <ng-select
+                                            class="multi-form-select sm-multi-select"
+                                            [multiple]="true"
+                                            [closeOnSelect]="false"
+                                            [clearable]="false"
+                                            [searchable]="false"
+                                            placeholder="Select items"
+                                            [ngModel]="selectedPermissions()[gchild.id]"
+                                            (ngModelChange)="
+                                              selectPermission(gchild.id, $event, true)
+                                            "
+                                          >
+                                            <ng-option
+                                              *ngFor="let action of gchild.actions"
+                                              [value]="action.keyEnum"
+                                              >{{ action.name }}</ng-option
+                                            >
+                                          </ng-select>
+                                        </td>
+                                      </tr>
+                                    }
+                                  </tbody>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+                        }
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button class="btn btn-outline-danger" type="button" (click)="bsModalRef.hide()">
+        Cancel
+      </button>
+      <button class="btn btn-theme" type="submit" [disabled]="isSubmitting()">Save</button>
+    </div>
+  </form>
+</div>

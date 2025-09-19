@@ -1,0 +1,85 @@
+/*Prefix Styles*/
+@use 'variable';
+
+body {
+  font-family: variable.$font;
+  background: #fafafa;
+  margin: 0;
+  padding: 0;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
+
+  p {
+    color: variable.$fontColor;
+    margin: 0;
+    font: 400 15px/21px variable.$font;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style: none;
+    }
+  }
+
+  /*Section Fix*/
+  section,
+  header,
+  footer {
+    margin: 0;
+    padding: 0;
+  }
+
+  #success {
+    display: none;
+  }
+
+  #error {
+    display: none;
+  }
+
+  iframe {
+    border: none;
+  }
+
+  i {
+    &:before {
+      margin-left: 0px !important;
+    }
+  }
+
+  /*Ancore*/
+  a,
+  .btn,
+  button,
+  svg {
+    outline: none;
+    // @include transition;
+    text-decoration: none;
+    transition: all 0.3s linear 0s;
+    cursor: pointer;
+    margin: 0;
+    // padding: 0;
+    &:before,
+    &:after {
+      // @include transition;
+      transition: all 0.3s linear 0s;
+    }
+
+    &:focus,
+    &:hover {
+      outline: none;
+      text-decoration: none;
+      // @include transition;
+      transition: all 0.3s linear 0s;
+    }
+  }
+}

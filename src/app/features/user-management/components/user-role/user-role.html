@@ -1,0 +1,174 @@
+<div class="table-header">
+  <p>
+    Showing
+    {{ (page() - 1) * pageSize() + 1 }}-
+    {{ lastItemIndex() }}
+    of {{ totalCount() }} results
+  </p>
+  <div class="table-filter">
+    <div class="form-group ng-select-md">
+      <label for="type">Type</label>
+      <ng-select
+        placeholder="All"
+        id="type"
+        [clearable]="true"
+        [searchable]="false"
+        [items]="typeOptions"
+        bindLabel="label"
+        bindValue="value"
+        [ngModel]="filters.value()['type']"
+        (ngModelChange)="setType($event)"
+      >
+        <ng-option [value]="undefined">All</ng-option>
+      </ng-select>
+    </div>
+    <a href="javascript:void(0);" class="icon-sm-btn bg-primary" (click)="createRoleModal()">
+      <span class="icon">
+        <svg width="12" viewBox="0 0 18 18" fill="currentColor">
+          <use href="assets/sprite.svg#svg-plus"></use>
+        </svg>
+      </span>
+      Create Role
+    </a>
+  </div>
+</div>
+<table class="table app-table mt-3">
+  <thead>
+    <tr appSortTableDirective (appSortChange)="sortData($event)">
+      <th
+        appSortInputDirective
+        [sortInput]="'name'"
+        [sortColumn]="'name'"
+        [sortBy]="EnumSortBy.DESC"
+      >
+        Role Name
+      </th>
+      <th
+        appSortInputDirective
+        [sortInput]="'type'"
+        [sortColumn]="'type'"
+        [sortBy]="EnumSortBy.DESC"
+      >
+        Type
+      </th>
+      <th
+        appSortInputDirective
+        [sortInput]="'description'"
+        [sortColumn]="'description'"
+        [sortBy]="EnumSortBy.DESC"
+      >
+        Description
+      </th>
+      <th
+        appSortInputDirective
+        [sortInput]="'isCommissionRole'"
+        [sortColumn]="'isCommissionRole'"
+        [sortBy]="EnumSortBy.DESC"
+      >
+        Is Commission Role
+      </th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (role of roles(); track role.id) {
+      <tr>
+        <td>{{ role.name }}</td>
+        <td>{{ getTypeLabel(role.type) }}</td>
+        <td>{{ role.description }}</td>
+        <td>
+          <span class="badge" [class]="role.isCommissionRole ? 'badge-success' : 'badge-secondary'">
+            {{ role.isCommissionRole ? 'Yes' : 'No' }}
+          </span>
+        </td>
+        <td>
+          <div class="dropdown-action" dropdown placement="bottom right">
+            <button dropdownToggle type="button" class="active-btn">
+              <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                <use href="assets/sprite.svg#svg-cog"></use>
+              </svg>
+            </button>
+            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+              <li>
+                <button class="dropdown-item" (click)="createRoleModal()">
+                  <svg width="14" viewBox="0 0 16 16" fill="currentColor">
+                    <use href="assets/sprite.svg#svg-eye-outline"></use>
+                  </svg>
+                  View
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item" (click)="createRoleModal()">
+                  <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                    <use href="assets/sprite.svg#edit-s-icon"></use>
+                  </svg>
+                  Edit
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item">
+                  <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                    <use href="assets/sprite.svg#delete-s-icon"></use>
+                  </svg>
+                  Delete
+                </button>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    }
+    @if (roles().length === 0) {
+      <tr>
+        <td colspan="5" class="text-center">No roles found.</td>
+      </tr>
+    }
+  </tbody>
+</table>
+<div class="app-pagination bottom-fixed px-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-4">
+      <p>Items per page</p>
+      <ng-select
+        [clearable]="false"
+        [searchable]="false"
+        placeholder="10"
+        [ngModel]="pageSize()"
+        (ngModelChange)="setPageSize($event)"
+      >
+        <ng-option [value]="10">10</ng-option>
+        <ng-option [value]="20">20</ng-option>
+        <ng-option [value]="30">30</ng-option>
+        <ng-option [value]="40">40</ng-option>
+        <ng-option [value]="50">50</ng-option>
+      </ng-select>
+    </div>
+    <ul class="nav">
+      <li>
+        <a href="javascript:void(0);" [class.disabled]="page() === 1" (click)="setPage(page() - 1)">
+          <svg width="6" viewBox="0 0 6 10" fill="currentColor">
+            <use href="assets/sprite.svg#svg-left-arrow-sm"></use>
+          </svg>
+        </a>
+      </li>
+      @for (i of pageNumbers(); track i) {
+        <li>
+          <a href="javascript:void(0);" [class.active]="page() === i" (click)="setPage(i)">
+            <span>{{ i }}</span>
+          </a>
+        </li>
+      }
+      <li>
+        <a
+          href="javascript:void(0);"
+          [class.disabled]="page() === totalPages()"
+          (click)="setPage(page() + 1)"
+        >
+          <svg width="6" viewBox="0 0 6 10" fill="currentColor">
+            <use href="assets/sprite.svg#svg-right-arrow-sm"></use>
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

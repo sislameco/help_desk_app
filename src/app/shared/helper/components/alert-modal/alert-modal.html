@@ -1,0 +1,11 @@
+<div class="modal-header">
+  <h2>Alert</h2>
+  <button type="button" (click)="bsModalRef.hide()">&times;</button>
+</div>
+<div class="modal-body text-center">
+  <p class="fw-semibold">Are you sure you want to delete all items?</p>
+  <div class="d-flex justify-content-center gap-3 mt-4">
+    <button class="btn btn-outline-danger" (click)="bsModalRef.hide()">No</button>
+    <button class="btn btn-theme">Yes</button>
+  </div>
+</div>

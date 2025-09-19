@@ -1,0 +1,110 @@
+.icon-sm-btn {
+  color: #444;
+  text-align: center;
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  padding: 7px 18px !important;
+  border-radius: 10px;
+  border: 1px solid #d2d1d4;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  span {
+    line-height: 12px;
+  }
+  &.bg-primary {
+    background-color: #59b96b !important;
+    border-color: #59b96b;
+    color: #fff;
+  }
+}
+.badge {
+  font-family: Mulish;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 4px;
+  padding: 2px 8px;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  &-success {
+    background: #00c17b;
+    color: #fff;
+  }
+  &-warning {
+    background: #ffb92d;
+    color: #444;
+  }
+  &-secondary {
+    background: #989898;
+    color: #fff;
+  }
+  &-danger {
+    background: #ff3f41;
+    color: #fff;
+  }
+}
+.btn {
+  text-align: center;
+  font-family: Mulish;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  color: #444;
+  min-width: 100px;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: inline-block;
+  border: 1px solid transparent;
+  &-md {
+    font-size: 14px;
+    padding: 7px 12px;
+  }
+  &-sm {
+    font-size: 14px;
+    padding: 2px 12px;
+    min-width: auto;
+    border-radius: 6px;
+  }
+  &:hover,
+  &:focus {
+    opacity: 0.8;
+  }
+  &-theme {
+    background: #00c17b !important;
+    color: #fff !important;
+    border-color: #00c17b;
+  }
+  &-outline-primary {
+    background: transparent !important;
+    color: #00c17b !important;
+    border-color: #00c17b !important;
+  }
+  &-theme-blue {
+    background: #00688f !important;
+    color: #fff !important;
+    border-color: #00688f !important;
+  }
+  &-outline-blue {
+    background: transparent !important;
+    color: #00688f !important;
+    border-color: #00688f !important;
+  }
+  &-outline-danger {
+    background: transparent !important;
+    color: #ff3f41 !important;
+    border-color: #ff3f41;
+  }
+  &-danger {
+    background: #ff3f41 !important;
+    color: #fff !important;
+    border-color: #ff3f41;
+  }
+}

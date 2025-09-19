@@ -1,0 +1,77 @@
+{
+  "name": "oms-admin-app",
+  "version": "1.0.0",
+  "author": "Efficient Software Solutions",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "pretty-quick": "pretty-quick --staged",
+    "lint": "ng lint --fix",
+    "prepare": "husky install"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^20.2.0",
+    "@angular/compiler": "^20.2.0",
+    "@angular/core": "^20.2.0",
+    "@angular/forms": "^20.2.0",
+    "@angular/platform-browser": "^20.2.0",
+    "@angular/router": "^20.2.0",
+    "@ng-select/ng-select": "^20.2.0",
+    "@ngrx/signals": "^20.0.1",
+    "@ngrx/store-devtools": "^20.0.1",
+    "bootstrap": "^5.3.8",
+    "ngx-bootstrap": "^20.0.1",
+    "ngx-spinner": "^19.0.0",
+    "ngx-toastr": "^19.0.0",
+    "ngxtension": "^5.1.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@analogjs/platform": "^1.20.2",
+    "@analogjs/vite-plugin-angular": "^1.20.2",
+    "@analogjs/vitest-angular": "^1.20.2",
+    "@angular-architects/ngrx-toolkit": "^20.4.0",
+    "@angular/build": "^20.2.2",
+    "@angular/cli": "^20.2.2",
+    "@angular/compiler-cli": "^20.2.0",
+    "@nx/vite": "^21.0.0",
+    "@playwright/test": "^1.55.0",
+    "@stylistic/eslint-plugin": "^5.3.1",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^24.3.1",
+    "@vitest/browser": "^3.2.4",
+    "angular-eslint": "20.2.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^8.0.0",
+    "jasmine-core": "~5.9.0",
+    "jsdom": "^22.0.0",
+    "ngx-highlightjs": "^14.0.1",
+    "ngxtension-plugin": "^5.1.0",
+    "prettier": "^3.6.2",
+    "pretty-quick": "^4.2.2",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.40.0",
+    "vite": "^6.0.0",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^3.0.0"
+  }
+}

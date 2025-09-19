@@ -1,0 +1,22 @@
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+
+@switch (pageLayoutService.layout()) {
+  @case (PageLayout.Authorized) {
+    <app-authorized-layout>
+      <router-outlet />
+    </app-authorized-layout>
+  }
+  @case (PageLayout.UnAuthorized) {
+    <app-unauthorized-layout>
+      <router-outlet />
+    </app-unauthorized-layout>
+  }
+  @case (PageLayout.Error) {
+    <app-error-layout>
+      <router-outlet />
+    </app-error-layout>
+  }
+  @default {
+    <router-outlet />
+  }
+}

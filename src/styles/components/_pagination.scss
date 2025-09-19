@@ -1,0 +1,49 @@
+.app-pagination {
+  p {
+    color: rgba(13, 13, 13, 0.4);
+    font-family: Mulish;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  .nav {
+    display: flex;
+    gap: 16px !important;
+    li {
+      a,
+      button {
+        color: #444;
+        font-family: Mulish;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 16px;
+        padding: 4px 12px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 24px;
+        &:hover,
+        &:focus,
+        &.active {
+          background: #59b96b;
+          color: #fff;
+          svg {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+  &.bottom-fixed {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+    background: #fff;
+    padding-block: 16px;
+  }
+}
