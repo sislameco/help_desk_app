@@ -1,17 +1,13 @@
-<section class="dashboard-container">
-  <h1 class="dashboard-title">Welcome to the Dashboard</h1>
-  <div class="dashboard-cards">
-    <div class="dashboard-card">
-      <h2>Users</h2>
-      <p>1,234</p>
-    </div>
-    <div class="dashboard-card">
-      <h2>Orders</h2>
-      <p>567</p>
-    </div>
-    <div class="dashboard-card">
-      <h2>Revenue</h2>
-      <p>$12,345</p>
-    </div>
-  </div>
+<section class="container">
+  @if (ticketSummary()) {
+    <h2>Open Tickets</h2>
+    <ul>
+      <li>Total Tickets: {{ ticketSummary() }}</li>
+      <li>Open Tickets: {{ ticketSummary() }}</li>
+      <li>Closed Tickets: {{ ticketSummary() }}</li>
+    </ul>
+    <button (click)="reload()">Reload</button>
+  } @else {
+    <span>Loading...</span>
+  }
 </section>

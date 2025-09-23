@@ -5,6 +5,9 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
+  message: string;
+  refreshToken: string;
+  isPasswordChange: boolean;
   user: {
     email: string;
     name: string;

@@ -12,7 +12,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
 
   login(data: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>('/api/auth/login', data);
+    return this.http.post<LoginResponse>(environment.apiBaseUrl + '/api/helpdesk/login', data);
   }
   getSidebarItems(): Observable<MenuItem[]> {
     return this.http.get<MenuItem[]>(environment.apiBaseUrl + '/api/sidebar-items');

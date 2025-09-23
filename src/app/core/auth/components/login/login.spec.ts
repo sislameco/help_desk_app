@@ -34,6 +34,9 @@ describe('AuthService', () => {
   it('should call login API and return LoginResponse', () => {
     const mockResponse: LoginResponse = {
       token: 'fake-jwt',
+      isPasswordChange: true,
+      message: '',
+      refreshToken: 'your-refresh-token',
       user: { email: 'test@example.com', name: 'Test User' },
     };
     const data: LoginRequest = {
