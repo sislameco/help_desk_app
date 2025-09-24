@@ -16,10 +16,10 @@
       </ng-select>
     </div>
     <div class="form-group min-width-150">
-      <label for="warehouse">Warehouse</label>
+      <label for="department">Department</label>
       <ng-select
         placeholder="All"
-        id="warehouse"
+        id="Department"
         clearable="false"
         searchable="false"
         [multiple]="true"
@@ -63,7 +63,7 @@
       <th>Phone</th>
       <th>Status</th>
       <th>Roles</th>
-      <th>Wearhouse</th>
+      <th>Department</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -80,20 +80,20 @@
             <span></span>
           </label>
         </td>
-        <td class="text-nowrap">{{ user.name }}</td>
+        <td class="text-nowrap">{{ user.fullName }}</td>
         <td class="text-nowrap">{{ user.email }}</td>
         <td class="text-nowrap">{{ user.phone }}</td>
         <td>
-          @if (user.status === UserStatusEnum.Inactive) {
+          @if (user.status === EnumRStatus.Inactive) {
             <span class="badge badge-secondary">{{ user.status }}</span>
-          } @else if (user.status === UserStatusEnum.Pending) {
+          } @else if (user.status === EnumRStatus.Pending) {
             <span class="badge badge-warning">{{ user.status }}</span>
-          } @else if (user.status === UserStatusEnum.Active) {
+          } @else if (user.status === EnumRStatus.Active) {
             <span class="badge badge-success">{{ user.status }}</span>
           }
         </td>
         <td>{{ user.roles }}</td>
-        <td>{{ user.warehouse }}</td>
+        <td>{{ user.departments }}</td>
         <td>
           <div class="dropdown-action" dropdown placement="bottom right">
             <button dropdownToggle type="button" class="active-btn">
@@ -116,7 +116,7 @@
                   >Edit
                 </button>
               </li>
-              @if (user.status === UserStatusEnum.Pending) {
+              @if (user.status === EnumRStatus.Pending) {
                 <li>
                   <button class="dropdown-item">
                     <svg width="11" viewBox="0 0 11 11" fill="currentColor">

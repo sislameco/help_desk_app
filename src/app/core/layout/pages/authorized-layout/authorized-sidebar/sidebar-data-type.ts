@@ -1,3 +1,19 @@
+export interface SubMenuu {
+  menuName: string;
+  icon: string;
+  route?: string;
+  children?: SubMenuu[];
+  isOpen?: boolean;
+}
+
+export interface UserMenuItem {
+  menuName: string;
+  icon: string;
+  route?: string;
+  isOpen?: boolean;
+  subMenus?: SubMenuu[];
+}
+
 export interface ChildItem {
   label: string;
   link?: string;

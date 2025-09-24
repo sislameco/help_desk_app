@@ -1,21 +1,27 @@
-import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
-import { derivedAsync } from 'ngxtension/derived-async';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DashboardService } from './dashboard.service';
+import { derivedAsync } from 'ngxtension/derived-async';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './home.html',
-  styleUrl: './home.scss',
+  styleUrls: ['./home.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home {
   protected readonly refresh = signal(0);
-
-  protected readonly ticketSummary = derivedAsync(() => this.dashboardService.getTicketSummary());
-
+  activeTab: 'workload' | 'performance' | 'trends' = 'workload';
   private readonly dashboardService = inject(DashboardService);
 
+  protected readonly ticketSummary = derivedAsync(() => {
+    this.refresh();
+    return this.dashboardService.getTicketSummary();
+  });
+
   reload() {
-    this.refresh.update((v) => v + 1);
+    this.refresh.update((v: number) => v + 1);
   }
 }

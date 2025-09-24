@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CollapseDirective } from 'ngx-bootstrap/collapse';
-import { MenuItem } from './sidebar-data-type';
-import { MENUS } from './sidebar-data';
+import { MenuItem, UserMenuItem } from './sidebar-data-type';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '@core/auth/services/auth.service';
 
 @Component({
   selector: 'app-authorized-sidebar',
@@ -12,10 +12,23 @@ import { Router, RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorizedSidebar {
-  menuList = signal<MenuItem[]>(MENUS);
-  private router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  toggleMenu(menu: MenuItem) {
-    this.menuList().forEach((m) => (m.isOpen = m === menu ? !m.isOpen : false));
+  menuList = signal<UserMenuItem[]>([]);
+
+  constructor() {
+    this.authService.getSidebarItems().subscribe((items: UserMenuItem[]) => {
+      this.menuList.set(items);
+    });
+  }
+
+  toggleMenu(menu: UserMenuItem) {
+    this.menuList.update((list: UserMenuItem[]) =>
+      list.map((m: UserMenuItem) => ({
+        ...m,
+        isOpen: m === menu ? !m.isOpen : false,
+      })),
+    );
   }
 }

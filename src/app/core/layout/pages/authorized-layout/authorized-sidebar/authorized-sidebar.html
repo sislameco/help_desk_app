@@ -1,9 +1,8 @@
 <aside class="sidebar-menu">
   <ul>
-    dfsdfdsfdf fdsf
     @for (menuItem of menuList(); track $index) {
       <li>
-        @if (menuItem.children?.length) {
+        @if (menuItem.subMenus?.length) {
           <a
             href="javascript:void(0);"
             (click)="toggleMenu(menuItem)"
@@ -12,22 +11,22 @@
             <svg width="15" viewBox="0 0 15 15" fill="currentColor">
               <use [attr.href]="'assets/sprite.svg#' + menuItem.icon"></use>
             </svg>
-            <span>{{ menuItem.label }}</span>
+            <span>{{ menuItem.menuName }}</span>
           </a>
         } @else {
-          <a [routerLink]="menuItem.link">
+          <a [routerLink]="menuItem.route">
             <svg width="15" viewBox="0 0 15 15" fill="currentColor">
               <use [attr.href]="'assets/sprite.svg#' + menuItem.icon"></use>
             </svg>
-            <span>{{ menuItem.label }}</span>
+            <span>{{ menuItem.menuName }}</span>
           </a>
         }
 
         <div [collapse]="!menuItem.isOpen" [isAnimated]="true" class="sub-menu mt-1">
           <ul>
-            @for (subItem of menuItem.children; track $index) {
+            @for (subItem of menuItem.subMenus; track $index) {
               <li>
-                <a [routerLink]="subItem.link">{{ subItem.label }}</a>
+                <a [routerLink]="subItem.route">{{ subItem.menuName }}</a>
               </li>
             }
           </ul>
