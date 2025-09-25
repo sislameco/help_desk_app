@@ -32,145 +32,49 @@
         >Description is required.</strong
       >
     </div>
-    <div class="form-group mb-2">
-      <div class="switch-wrapper">
-        <input
-          type="checkbox"
-          id="isCommissionRole"
-          class="d-none"
-          formControlName="isCommissionRole"
-        />
-        <label class="switch" for="isCommissionRole">Is Commission Role</label>
-      </div>
-    </div>
-    <div class="form-group mb-3">
-      <label for="commissionItem" class="form-label"
-        >Commission Item <span class="text-danger">*</span></label
-      >
-      <ng-select
-        class="multi-form-select"
-        id="commissionItem"
-        [multiple]="false"
-        [closeOnSelect]="true"
-        [clearable]="false"
-        [searchable]="false"
-        placeholder="Select item"
-        formControlName="commissionItemId"
-      >
-        <ng-option [value]="1">Product Sales</ng-option>
-        <ng-option [value]="2">Total Order</ng-option>
-        <ng-option [value]="3">Sales Revenue</ng-option>
-      </ng-select>
-    </div>
-    <table class="table app-table form-table">
+   
+@if (menuResource()?.menus?.length) {
+  @for (parent of menuResource().menus; track parent.menuId) {
+    <table class="app-table mb-3">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Permissions</th>
+          <th style="width: 40%">{{ parent.menu }}</th>
+          @for (action of menuResource().actions; track action.id) {
+            <th class="text-center" style="width: 12%">{{ action.httpVerb }}</th>
+          }
         </tr>
       </thead>
       <tbody>
-        @for (item of menus(); track item.id) {
+        @for (child of parent.childs; track child.menuId) {
           <tr>
-            <td (click)="toggle(item.id)" class="cursor-pointer">
-              <span class="collapse-button" [class.active]="!collapsedMap()[item.id]">{{
-                item.displayName
-              }}</span>
+            <td style="width: 40%">
+              <span class="pl-4 d-block">{{ child.menu }}</span>
             </td>
-            <td>
-              <ng-select
-                class="multi-form-select sm-multi-select"
-                [multiple]="true"
-                [closeOnSelect]="false"
-                [clearable]="false"
-                [searchable]="false"
-                placeholder="Select items"
-                [ngModel]="selectedPermissions()[item.id]"
-                (ngModelChange)="selectPermission(item.id, $event, true)"
-              >
-                <ng-option *ngFor="let action of item.actions" [value]="action.keyEnum">{{
-                  action.name
-                }}</ng-option>
-              </ng-select>
-            </td>
-          </tr>
-          @if (item.children?.length) {
-            <tr>
-              <td colspan="2" class="table-collapse">
-                <div [collapse]="collapsedMap()[item.id]" [isAnimated]="true">
-                  <table class="table app-table">
-                    <tbody>
-                      @for (child of item.children; track child.id) {
-                        <tr>
-                          <td (click)="toggle(child.id)" class="cursor-pointer ps-4">
-                            {{ child.displayName }}
-                          </td>
-                          <td>
-                            <ng-select
-                              class="multi-form-select sm-multi-select"
-                              [multiple]="true"
-                              [closeOnSelect]="false"
-                              [clearable]="false"
-                              [searchable]="false"
-                              placeholder="Select items"
-                              [ngModel]="selectedPermissions()[child.id]"
-                              (ngModelChange)="selectPermission(child.id, $event, true)"
-                            >
-                              <ng-option
-                                *ngFor="let action of child.actions"
-                                [value]="action.keyEnum"
-                                >{{ action.name }}</ng-option
-                              >
-                            </ng-select>
-                          </td>
-                        </tr>
-                        @if (child.children?.length) {
-                          <tr>
-                            <td colspan="2" class="table-collapse">
-                              <div [collapse]="collapsedMap()[child.id]" [isAnimated]="true">
-                                <table class="table app-table">
-                                  <tbody>
-                                    @for (gchild of child.children; track gchild.id) {
-                                      <tr>
-                                        <td class="ps-5">{{ gchild.displayName }}</td>
-                                        <td>
-                                          <ng-select
-                                            class="multi-form-select sm-multi-select"
-                                            [multiple]="true"
-                                            [closeOnSelect]="false"
-                                            [clearable]="false"
-                                            [searchable]="false"
-                                            placeholder="Select items"
-                                            [ngModel]="selectedPermissions()[gchild.id]"
-                                            (ngModelChange)="
-                                              selectPermission(gchild.id, $event, true)
-                                            "
-                                          >
-                                            <ng-option
-                                              *ngFor="let action of gchild.actions"
-                                              [value]="action.keyEnum"
-                                              >{{ action.name }}</ng-option
-                                            >
-                                          </ng-select>
-                                        </td>
-                                      </tr>
-                                    }
-                                  </tbody>
-                                </table>
-                              </div>
-                            </td>
-                          </tr>
-                        }
-                      }
-                    </tbody>
-                  </table>
-                </div>
+            @for (action of menuResource().actions; track action.id) {
+              <td class="text-center">
+                <label class="app-form--checkbox p-2 my-1 mx-auto d-table">
+                  <input
+                    type="checkbox"
+                    [checked]="togglePermission(child, action.id)"
+                    (change)="setPermission(child, action.id, $event.target.checked)"
+                  />
+                  <span class="d-flex justify-content-center align-items-center">
+                    <svg viewBox="0 0 10 8" fill="none" width="10">
+                      <use xlink:href="assets/sprite.svg#svg-check"></use>
+                    </svg>
+                  </span>
+                </label>
               </td>
-            </tr>
-          }
+            }
+          </tr>
         }
       </tbody>
     </table>
+  }
+}
+
+
+
     <div class="d-flex justify-content-center gap-3 mt-4">
       <button class="btn btn-outline-danger" type="button" (click)="bsModalRef.hide()">
         Cancel

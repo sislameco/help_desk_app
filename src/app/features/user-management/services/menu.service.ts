@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Params } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { MenuItem } from '../models/menu.model';
+import { MenuResource } from '../models/menu.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -10,9 +9,7 @@ import { environment } from '../../../../environments/environment';
 export class MenuService {
   private readonly http = inject(HttpClient);
 
-  menuPermitted(data: Params) {
-    return this.http.get<MenuItem[]>(`${environment.apiBaseUrl}/menus/permitted-tree`, {
-      params: data,
-    });
+  menuPermitted() {
+    return this.http.get<MenuResource>(`${environment.apiBaseUrl}/api/permission/menu`);
   }
 }

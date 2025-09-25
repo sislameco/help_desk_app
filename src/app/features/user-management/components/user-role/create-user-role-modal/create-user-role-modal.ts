@@ -15,7 +15,7 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { MenuService } from '../../../services/menu.service';
 import { UserRoleService } from '../../../services/user-role.service';
 import { NgxControlError } from 'ngxtension/control-error';
-import { MenuItem } from '../../../models/menu.model';
+import { MenuAccess, MenuItem, MenuResource } from '../../../models/menu.model';
 
 @Component({
   selector: 'app-create-user-role-modal',
@@ -42,15 +42,10 @@ export class CreateUserRoleModal {
     isCommissionRole: this.fb.nonNullable.control(false),
     commissionItemId: this.fb.control<number | null>(null),
   });
-
   // Menu tree from API
-  readonly menus = derivedAsync(
-    () => {
-      const params = { userId: 18 };
-      return this.menuService.menuPermitted(params);
-    },
-    { initialValue: [] as MenuItem[] },
-  );
+  readonly menuResource = derivedAsync(() => this.menuService.menuPermitted(), {
+    initialValue: { actions: [], menus: [] } as MenuResource,
+  });
 
   // Permissions selection state (menuId -> selected action keyEnums[])
   readonly selectedPermissions = signal<Record<number, number[]>>({});
@@ -102,7 +97,21 @@ export class CreateUserRoleModal {
 
     return walk(menuTree);
   }
+  getActionPermission(child: MenuAccess, actionId: number) {
+    return child.actions.find((a) => a.id === actionId);
+  }
+// Helper to check if action is permitted
+togglePermission(menu: MenuAccess, actionId: number) {
+  const target = menu.actions.find(a => a.id === actionId);
+  return target ? target.isPermitted : false;
+}
 
+setPermission(menu: MenuAccess, actionId: number, value: boolean) {
+  const target = menu.actions.find(a => a.id === actionId);
+  if (target) {
+    target.isPermitted = value;
+  }
+}
   // Submit handler
   submit() {
     if (this.form.invalid) {
