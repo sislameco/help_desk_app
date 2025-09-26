@@ -19,7 +19,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   return next(
     req.clone({
       setHeaders: {
-        Authorization: `Bearer ${STATIC_BEARER_TOKEN}`,
+        Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
       },
     }),
   );

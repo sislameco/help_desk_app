@@ -59,28 +59,24 @@
       >
         Description
       </th>
-      <th
+       <th
         appSortInputDirective
-        [sortInput]="'isCommissionRole'"
-        [sortColumn]="'isCommissionRole'"
+        [sortInput]="'description'"
+        [sortColumn]="'description'"
         [sortBy]="EnumSortBy.DESC"
       >
-        Is Commission Role
+        Users
       </th>
       <th>Action</th>
     </tr>
   </thead>
   <tbody>
-    @for (role of roles(); track role.id) {
+    @for (role of roles(); track role.roleId) {
       <tr>
-        <td>{{ role.name }}</td>
-        <td>{{ getTypeLabel(role.type) }}</td>
+        <td>{{ role.roleName }}</td>
+        <td>{{ role.type }}</td>
         <td>{{ role.description }}</td>
-        <td>
-          <span class="badge" [class]="role.isCommissionRole ? 'badge-success' : 'badge-secondary'">
-            {{ role.isCommissionRole ? 'Yes' : 'No' }}
-          </span>
-        </td>
+          <td>{{ role.users }}</td>
         <td>
           <div class="dropdown-action" dropdown placement="bottom right">
             <button dropdownToggle type="button" class="active-btn">

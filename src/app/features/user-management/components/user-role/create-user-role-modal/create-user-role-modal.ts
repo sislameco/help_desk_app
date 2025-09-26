@@ -34,13 +34,9 @@ export class CreateUserRoleModal {
   readonly form: FormGroup<{
     roleName: FormControl<string>;
     description: FormControl<string>;
-    isCommissionRole: FormControl<boolean>;
-    commissionItemId: FormControl<number | null>;
   }> = this.fb.group({
     roleName: this.fb.nonNullable.control('', [Validators.required]),
     description: this.fb.nonNullable.control('', [Validators.required]),
-    isCommissionRole: this.fb.nonNullable.control(false),
-    commissionItemId: this.fb.control<number | null>(null),
   });
   // Menu tree from API
   readonly menuResource = derivedAsync(() => this.menuService.menuPermitted(), {
@@ -100,39 +96,23 @@ export class CreateUserRoleModal {
   getActionPermission(child: MenuAccess, actionId: number) {
     return child.actions.find((a) => a.id === actionId);
   }
-// Helper to check if action is permitted
-togglePermission(menu: MenuAccess, actionId: number) {
-  const target = menu.actions.find(a => a.id === actionId);
-  return target ? target.isPermitted : false;
-}
-
-setPermission(menu: MenuAccess, actionId: number, value: boolean) {
-  const target = menu.actions.find(a => a.id === actionId);
-  if (target) {
-    target.isPermitted = value;
+  // Helper to check if action is permitted
+  togglePermission(menu: MenuAccess, actionId: number) {
+    const target = menu.actions.find((a) => a.id === actionId);
+    return target ? target.isPermitted : false;
   }
-}
+
+  setPermission(menu: MenuAccess, actionId: number, value: boolean) {
+    const target = menu.actions.find((a) => a.id === actionId);
+    if (target) {
+      target.isPermitted = value;
+    }
+  }
   // Submit handler
   submit() {
     if (this.form.invalid) {
       return;
     }
     this.isSubmitting.set(true);
-    // const menus = this.extractLastLevelPermissions(this.menus() ?? []);
-    // const req: RoleUpsertRequest = {
-    //   roleId: null,
-    //   roleName: this.form.controls.roleName.value,
-    //   description: this.form.controls.description.value,
-    //   isCommissionRole: this.form.controls.isCommissionRole.value,
-    //   commissionItemId: this.form.controls.commissionItemId.value,
-    //   menus,
-    // };
-    // this.userRoleService.roleUpsert(req).subscribe({
-    //   next: () => {
-    //     this.isSubmitting.set(false);
-    //     this.bsModalRef.hide();
-    //   },
-    //   error: () => this.isSubmitting.set(false),
-    // });
   }
 }

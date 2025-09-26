@@ -40,6 +40,7 @@ export const AuthStore = signalStore(
           authService.login(credentials).pipe(
             tap({
               next: (response: LoginResponse) => {
+                localStorage.setItem('auth_token', response.token);
                 cookieService.setCookie('token', response.token);
                 localStorage.setItem('user', JSON.stringify(response.user));
                 patchState(store, {

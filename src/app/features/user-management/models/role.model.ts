@@ -43,3 +43,10 @@ export interface RoleMenuUpsert {
   actions: number[];
   children: RoleMenuUpsert[]; // recursive for nested menus
 }
+export interface RoleWithUsersDto {
+  roleId: number;
+  roleName: string;
+  type: string;
+  description: string;
+  users: string;
+}

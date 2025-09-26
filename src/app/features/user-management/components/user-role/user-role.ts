@@ -40,7 +40,7 @@ export class UserRole {
   readonly rolesResult = derivedAsync(
     () => {
       const params = this.filters.toQueryParams();
-      return this.userRoleService.list(params);
+      return this.userRoleService.getRolesWithUsers(params);
     },
     {
       initialValue: {
