@@ -103,16 +103,16 @@
             </button>
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <li>
-                <button class="dropdown-item">
+                <button class="dropdown-item" (click)="viewUser(user)">
                   <svg width="14" viewBox="0 0 16 16" fill="currentColor">
-                    <use href="assets/sprite.svg#svg-eye-outline"></use></svg
-                  >View
+                    <use href="assets/sprite.svg#svg-eye-outline"></use></svg>
+                  View
                 </button>
               </li>
               <li>
                 <button class="dropdown-item">
                   <svg width="11" viewBox="0 0 11 10" fill="currentColor">
-                    <use href="assets/sprite.svg#edit-s-icon"></use></svg
+                    <use href="assets/sprite.svg#edit-s-icon"></use></svg>
                   >Edit
                 </button>
               </li>
@@ -120,7 +120,7 @@
                 <li>
                   <button class="dropdown-item">
                     <svg width="11" viewBox="0 0 11 11" fill="currentColor">
-                      <use href="assets/sprite.svg#svg-re-active"></use></svg
+                      <use href="assets/sprite.svg#svg-re-active"></use></svg>
                     >Resend Invite
                   </button>
                 </li>
@@ -128,7 +128,7 @@
               <li>
                 <button class="dropdown-item">
                   <svg width="12" viewBox="0 0 12 12" fill="currentColor">
-                    <use href="assets/sprite.svg#delete-s-icon"></use></svg
+                    <use href="assets/sprite.svg#delete-s-icon"></use></svg>
                   >Delete
                 </button>
               </li>
@@ -146,6 +146,31 @@
     <a href="javascript:void(0);" class="btn btn-danger" (click)="removeAlert()">Delete</a>
     <a href="javascript:void(0);" class="btn btn-outline-blue">Deactivate</a>
     <a href="javascript:void(0);" class="btn btn-theme">Activate</a>
+  </div>
+}
+
+<!-- Angular modal (popup) -->
+@if (isViewOpen) {
+  <div class="custom-modal-backdrop">
+    <div class="custom-modal">
+      <div class="custom-modal-header">
+        <h5>User Details</h5>
+      <button class="close-btn" (click)="closeView()">×</button>
+      </div>
+      @if (selectedUser; as user) {
+        <div class="custom-modal-body">
+          <p><strong>Full Name:</strong> {{ user.fullName }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Phone:</strong> {{ user.phone }}</p>
+          <p><strong>Roles:</strong> {{ user.roles }}</p>
+          <p><strong>Status:</strong> {{ user.status }}</p>
+          <p><strong>Departments:</strong> {{ user.departments }}</p>
+        </div>
+      }
+      <div class="custom-modal-footer">
+      <button class="btn btn-sm btn-secondary" (click)="closeView()">Close</button>
+      </div>
+    </div>
   </div>
 }
 <div class="app-pagination bottom-fixed px-3">

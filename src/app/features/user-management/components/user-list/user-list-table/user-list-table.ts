@@ -7,22 +7,25 @@ import { UserStatusEnum } from '../../../enums/user-list-enum';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { UserService } from '../../../services/user.service';
 import { derivedAsync } from 'ngxtension/derived-async';
-import { EnumRStatus } from '../../../models/user-list-model';
+import { EnumRStatus, Users } from '../../../models/user-list-model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-list-table',
-  imports: [NgSelectModule, BsDropdownModule, RouterLink],
+  imports: [NgSelectModule, BsDropdownModule, RouterLink, CommonModule],
   templateUrl: './user-list-table.html',
   styleUrl: './user-list-table.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BsModalService],
+  standalone: true,
 })
 export class UserListTable {
   UserStatusEnum = UserStatusEnum;
   EnumRStatus = EnumRStatus;
   protected readonly refresh = signal(0);
   private readonly userService = inject(UserService);
-
+  selectedUser: Users | null = null;
+  isViewOpen = false;
   protected readonly userList = derivedAsync(() => {
     this.refresh();
     return this.userService.getAll({
@@ -68,5 +71,13 @@ export class UserListTable {
   }
   reload() {
     this.refresh.update((v: number) => v + 1);
+  }
+  closeView() {
+    this.isViewOpen = false;
+    this.selectedUser = null;
+  }
+  viewUser(user: Users) {
+    this.selectedUser = user;
+    this.isViewOpen = true; // show popup
   }
 }
