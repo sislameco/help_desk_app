@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TicketListViewDto } from '../../../../models/ticket.model.model';
 
 @Component({
   standalone: true,
@@ -9,4 +10,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './ticket-list-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TicketListView {}
+export class TicketListView {
+  tickets: TicketListViewDto[] = [];
+}
