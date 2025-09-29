@@ -9,7 +9,9 @@ import { environment } from '../../../../environments/environment';
 export class MenuService {
   private readonly http = inject(HttpClient);
 
-  menuPermitted() {
-    return this.http.get<MenuResource>(`${environment.apiBaseUrl}/api/permission/menu`);
+  menuPermitted(roleId: number | 0) {
+    return this.http.get<MenuResource>(
+      `${environment.apiBaseUrl}/api/permission/menu?roleId=${roleId}`,
+    );
   }
 }

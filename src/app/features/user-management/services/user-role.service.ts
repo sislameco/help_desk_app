@@ -1,9 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RoleListItemDto, RoleUpsertRequest, RoleWithUsersDto } from '../models/role.model';
+import {
+  RoleInput,
+  RoleListItemDto,
+  RoleUpsertRequest,
+  RoleWithUsersDto,
+} from '../models/role.model';
 import { PaginationResponse } from '@shared/models/api-response.model';
 import { Params } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'any' })
 export class UserRoleService {
   private readonly http = inject(HttpClient);
@@ -21,10 +27,19 @@ export class UserRoleService {
   }
   getRolesWithUsers(data: Params) {
     return this.http.get<PaginationResponse<RoleWithUsersDto>>(
-      `${environment.apiBaseUrl}/role/all`,
+      `${environment.apiBaseUrl}/api/role/all`,
       {
         params: data,
       },
     );
+  }
+  createRole(role: RoleInput): Observable<void> {
+    return this.http.post<void>(`${environment.apiBaseUrl}/api/role`, role);
+  }
+  updateRole(roleId: number, role: RoleInput): Observable<void> {
+    return this.http.put<void>(`${environment.apiBaseUrl}/api/role/${roleId}`, role);
+  }
+  deleteRole(roleId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.apiBaseUrl}/api/role/${roleId}`);
   }
 }

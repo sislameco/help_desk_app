@@ -111,10 +111,11 @@ export class UserRole {
     this.setPage(1);
   }
 
-  createRoleModal() {
+  createRoleModal(roleId: number | 0) {
     const modalConfig = {
       backdrop: true,
       ignoreBackdropClick: true,
+      initialState: { roleId },
     };
     const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
     this.modalService.show(CreateUserRoleModal, modalParams);
@@ -124,5 +125,16 @@ export class UserRole {
     this.filters.set('sortBy', action.isAscending ? EnumSortBy.ASC : EnumSortBy.DESC);
     this.filters.set('page', 1);
     this.filters.set('sortColumn', action.key);
+  }
+
+  deleteRole(roleId: number) {
+    this.userRoleService.deleteRole(roleId).subscribe({
+      next: () => {
+        console.log('✅ Role deleted successfully');
+      },
+      error: (err) => {
+        console.error('❌ Error deleting role:', err);
+      },
+    });
   }
 }

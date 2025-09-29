@@ -22,7 +22,7 @@
         <ng-option [value]="undefined">All</ng-option>
       </ng-select>
     </div>
-    <a href="javascript:void(0);" class="icon-sm-btn bg-primary" (click)="createRoleModal()">
+    <a href="javascript:void(0);" class="icon-sm-btn bg-primary" (click)="createRoleModal(0)">
       <span class="icon">
         <svg width="12" viewBox="0 0 18 18" fill="currentColor">
           <use href="assets/sprite.svg#svg-plus"></use>
@@ -86,7 +86,7 @@
             </button>
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
               <li>
-                <button class="dropdown-item" (click)="createRoleModal()">
+                <button class="dropdown-item" (click)="createRoleModal(role.roleId)">
                   <svg width="14" viewBox="0 0 16 16" fill="currentColor">
                     <use href="assets/sprite.svg#svg-eye-outline"></use>
                   </svg>
@@ -94,7 +94,7 @@
                 </button>
               </li>
               <li>
-                <button class="dropdown-item" (click)="createRoleModal()">
+                <button class="dropdown-item" (click)="createRoleModal(role.roleId)">
                   <svg width="11" viewBox="0 0 11 10" fill="currentColor">
                     <use href="assets/sprite.svg#edit-s-icon"></use>
                   </svg>
@@ -102,7 +102,7 @@
                 </button>
               </li>
               <li>
-                <button class="dropdown-item">
+                <button class="dropdown-item" (click)="deleteRole(role.roleId)">
                   <svg width="12" viewBox="0 0 12 12" fill="currentColor">
                     <use href="assets/sprite.svg#delete-s-icon"></use>
                   </svg>

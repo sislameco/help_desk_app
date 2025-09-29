@@ -50,3 +50,14 @@ export interface RoleWithUsersDto {
   description: string;
   users: string;
 }
+
+export interface RoleMenuAction {
+  isAllowed: boolean;
+  fkMenuActionMapId: number;
+}
+
+export interface RoleInput {
+  name: string;
+  description: string;
+  fkMenuActionIds: RoleMenuAction[];
+}

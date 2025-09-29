@@ -18,6 +18,7 @@ export interface MenuAction {
   id: number;
   httpVerb: string;
   isPermitted: boolean;
+  fkMenuActionMapId: number;
 }
 
 export interface MenuAccess {
@@ -29,13 +30,14 @@ export interface MenuAccess {
 }
 
 // ManuActionDto equivalent
-export interface ManuAction {
+export interface Action {
   id: number;
   httpVerb: string;
 }
 
 // MenuResourceDto equivalent
 export interface MenuResource {
-  actions: ManuAction[];
+  role: { name: ''; description: '' };
+  actions: Action[];
   menus: MenuAccess[]; // assuming you already have a MenuAccess interface
 }

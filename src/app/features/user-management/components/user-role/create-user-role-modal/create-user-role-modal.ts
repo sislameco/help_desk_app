@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -10,7 +10,7 @@ import {
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CollapseDirective } from 'ngx-bootstrap/collapse';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { RoleMenuUpsert } from '../../../models/role.model';
+import { RoleInput, RoleMenuAction, RoleMenuUpsert } from '../../../models/role.model';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { MenuService } from '../../../services/menu.service';
 import { UserRoleService } from '../../../services/user-role.service';
@@ -25,11 +25,19 @@ import { MenuAccess, MenuItem, MenuResource } from '../../../models/menu.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateUserRoleModal {
+  constructor() {
+    effect(() => {
+      if (this.roleId > 0) {
+        this.syncFormWithMenuResource();
+      }
+    });
+  }
+  roleId: number | 0 = 0;
   bsModalRef = inject(BsModalRef);
   private menuService = inject(MenuService);
   private userRoleService = inject(UserRoleService);
   private fb = new FormBuilder();
-
+  roleMenuActions: RoleMenuAction[] = [];
   // Reactive form
   readonly form: FormGroup<{
     roleName: FormControl<string>;
@@ -39,8 +47,8 @@ export class CreateUserRoleModal {
     description: this.fb.nonNullable.control('', [Validators.required]),
   });
   // Menu tree from API
-  readonly menuResource = derivedAsync(() => this.menuService.menuPermitted(), {
-    initialValue: { actions: [], menus: [] } as MenuResource,
+  readonly menuResource = derivedAsync(() => this.menuService.menuPermitted(this.roleId), {
+    initialValue: { role: { name: '', description: '' }, actions: [], menus: [] } as MenuResource,
   });
 
   // Permissions selection state (menuId -> selected action keyEnums[])
@@ -106,13 +114,60 @@ export class CreateUserRoleModal {
     const target = menu.actions.find((a) => a.id === actionId);
     if (target) {
       target.isPermitted = value;
+      this.roleMenuActions.push({
+        isAllowed: target.isPermitted,
+        fkMenuActionMapId: target.fkMenuActionMapId,
+      });
     }
   }
-  // Submit handler
+  // ✅ Submit handler
   submit() {
     if (this.form.invalid) {
       return;
     }
     this.isSubmitting.set(true);
+
+    const payload: RoleInput = {
+      name: this.form.value.roleName ?? '',
+      description: this.form.value.description ?? '',
+      fkMenuActionIds: this.roleMenuActions,
+    };
+    if (this.roleId && this.roleId > 0) {
+      this.userRoleService.updateRole(this.roleId, payload).subscribe({
+        next: () => {
+          console.log('✅ Role updated successfully');
+          this.isSubmitting.set(false);
+          this.form.reset();
+        },
+        error: (err) => {
+          console.error('❌ Error updating role:', err);
+          this.isSubmitting.set(false);
+        },
+      });
+    } else {
+      this.userRoleService.createRole(payload).subscribe({
+        next: () => {
+          console.log('✅ Role created successfully');
+          this.isSubmitting.set(false);
+          this.form.reset();
+          this.roleMenuActions = [];
+        },
+        error: (err) => {
+          console.error('❌ Error creating role:', err);
+          this.isSubmitting.set(false);
+        },
+      });
+    }
+  }
+  // Sync form and permissions when editing existing role
+  syncFormWithMenuResource() {
+    const resource = this.menuResource();
+    if (resource) {
+      // Update form fields
+      this.form.patchValue({
+        roleName: resource.role.name,
+        description: resource.role.description,
+      });
+    }
   }
 }
