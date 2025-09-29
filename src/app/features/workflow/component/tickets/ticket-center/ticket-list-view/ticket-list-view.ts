@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TicketListViewDto } from '../../../../models/ticket.model.model';
 
@@ -11,5 +11,5 @@ import { TicketListViewDto } from '../../../../models/ticket.model.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TicketListView {
-  tickets: TicketListViewDto[] = [];
+  @Input() tickets: TicketListViewDto[] = [];
 }
