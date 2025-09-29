@@ -39,7 +39,7 @@
     "ngx-bootstrap": "^20.0.1",
     "ngx-spinner": "^19.0.0",
     "ngx-toastr": "^19.0.0",
-    "ngxtension": "^5.1.0",
+    "ngxtension": "^5.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

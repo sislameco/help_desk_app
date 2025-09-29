@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CollapseDirective } from 'ngx-bootstrap/collapse';
-import { MenuItem, UserMenuItem } from './sidebar-data-type';
+import { UserMenuItem } from './sidebar-data-type';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@core/auth/services/auth.service';
 

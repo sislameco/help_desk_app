@@ -1,1 +1,24 @@
-<p>ticket-centre works!</p>
+<div class="d-flex justify-content-end mb-3">
+  <button
+    class="btn btn-outline-secondary me-2"
+    [class.active]="viewMode() === 'list'"
+    (click)="setView('list')"
+  >
+    <i class="bi bi-list"></i> List
+  </button>
+
+  <button
+    class="btn btn-outline-secondary"
+    [class.active]="viewMode() === 'kanban'"
+    (click)="setView('kanban')"
+  >
+    <i class="bi bi-kanban"></i> Kanban
+  </button>
+</div>
+
+@if (viewMode() === 'list') {
+  <app-ticket-list-view [tickets]="ticketsResponse().items"></app-ticket-list-view>
+}
+@if (viewMode() === 'kanban') {
+  <app-ticket-kanban-view [tickets]="ticketsResponse().items"></app-ticket-kanban-view>
+}

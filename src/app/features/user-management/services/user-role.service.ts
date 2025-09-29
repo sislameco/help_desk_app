@@ -4,7 +4,6 @@ import { RoleListItemDto, RoleUpsertRequest, RoleWithUsersDto } from '../models/
 import { PaginationResponse } from '@shared/models/api-response.model';
 import { Params } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'any' })
 export class UserRoleService {
   private readonly http = inject(HttpClient);

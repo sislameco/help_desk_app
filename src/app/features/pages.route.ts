@@ -16,6 +16,10 @@ export const PagesRoute: Routes = [
         loadChildren: () =>
           import('./user-management/user-management.route').then((m) => m.UserManagementRoute),
       },
+      {
+        path: 'tickets',
+        loadChildren: () => import('./workflow/ticket.route').then((m) => m.TicketRoutes),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

@@ -1,0 +1,53 @@
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.table thead th {
+  background: #f9fafb;
+  font-weight: 600;
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.table tbody td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+  background-color: #fafafa;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 12px;
+  text-transform: capitalize;
+}
+
+.badge.high {
+  background: #ffe0e0;
+  color: #d32f2f;
+}
+
+.badge.medium {
+  background: #e0f0ff;
+  color: #1976d2;
+}
+
+.badge.low {
+  background: #e0ffe8;
+  color: #2e7d32;
+}

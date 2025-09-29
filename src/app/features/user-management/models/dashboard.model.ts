@@ -32,7 +32,7 @@ export interface DashboardStats {
 export interface RecentActivity {
   code: string;
   tag: string;
-  tagColor: 'primary' | 'warning' | 'info' | 'secondary';  // restrict to known Bootstrap colors
+  tagColor: 'primary' | 'warning' | 'info' | 'secondary'; // restrict to known Bootstrap colors
   title: string;
   assignee: string;
   due: string; // ISO date string e.g. "2025-08-20"
