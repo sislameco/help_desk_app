@@ -20,6 +20,11 @@ export const PagesRoute: Routes = [
         path: 'tickets',
         loadChildren: () => import('./workflow/ticket.route').then((m) => m.TicketRoutes),
       },
+      {
+        path: 'company-configuration',
+        loadChildren: () =>
+          import('./company-configuration/company.route').then((m) => m.CompanyRoutes),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

@@ -1,0 +1,21 @@
+<div class="container mt-4">
+  <h2 class="mb-3">Company Configuration</h2>
+  <p>Select a company to manage its QMS configuration and settings</p>
+
+  <div class="row">
+    <div class="col-md-4 mb-3" *ngFor="let company of companies()">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ company.name }}</h5>
+          <p class="card-text text-muted">{{ company.shortName }}</p>
+          <button
+            class="btn btn-outline-primary btn-sm"
+           [routerLink]="[company.id]"
+          >
+            Manage Configuration &rsaquo;
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

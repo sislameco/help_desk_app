@@ -1,0 +1,61 @@
+<div class="container mt-4" *ngIf="company() as comp">
+  <button class="btn btn-link mb-3" routerLink="/admin/company">
+    ← Back to Companies
+  </button>
+
+  <h2>Administration - {{ comp.name }}</h2>
+  <p class="text-muted">
+    Configure QMS settings, notifications, and custom fields for {{ comp.shortName }}
+  </p>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#notifications">Notifications</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#email">Email Settings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#sla">SLA Settings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#departments">Departments</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#users">Users</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#fields">Custom Fields</a>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <div id="notifications" class="tab-pane fade show active">
+      <h4>Notification Settings</h4>
+      <p class="text-muted">Configure email, SMS, and in-app notifications for QMS events</p>
+      <!-- later: <app-notification-settings /> -->
+    </div>
+    <div id="email" class="tab-pane fade">
+      <h4>Email Settings</h4>
+      <p>Placeholder for Email settings config.</p>
+    </div>
+    <div id="sla" class="tab-pane fade">
+      <h4>SLA Settings</h4>
+      <p>Placeholder for SLA settings config.</p>
+    </div>
+    <div id="departments" class="tab-pane fade">
+      <h4>Departments</h4>
+      <p>Placeholder for Department config.</p>
+    </div>
+    <div id="users" class="tab-pane fade">
+      <h4>Users</h4>
+      <p>Placeholder for Users config.</p>
+    </div>
+    <div id="fields" class="tab-pane fade">
+      <h4>Custom Fields</h4>
+      <p>Placeholder for Company-specific fields config.</p>
+    </div>
+  </div>
+</div>

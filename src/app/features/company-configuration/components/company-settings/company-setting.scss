@@ -1,0 +1,14 @@
+.nav-tabs .nav-link {
+  cursor: pointer;
+}
+
+.nav-tabs .nav-link.active {
+  font-weight: 600;
+}
+
+.tab-content {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
