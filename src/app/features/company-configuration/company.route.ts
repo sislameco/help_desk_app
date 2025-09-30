@@ -4,21 +4,19 @@ import { CompanySetting } from './components/company-settings/company-setting';
 
 export const CompanyRoutes: Routes = [
   { path: '', redirectTo: 'list', pathMatch: 'full' },
+
+  // 👉 Company List Page
   {
-    path: '',
+    path: 'list',
     component: CompanyList,
-    children: [
-      { path: '', redirectTo: 'list', pathMatch: 'full' },
-      {
-        path: 'list',
-        component: CompanyList,
-      },
-      {
-        path: 'company-configuration/:id',
-        component: CompanySetting,
-      },
-      { path: '**', redirectTo: 'list' },
-    ],
   },
+
+  // 👉 Company Settings Page
+  {
+    path: ':id',
+    component: CompanySetting,
+  },
+
+  // 👉 Fallback
   { path: '**', redirectTo: 'list' },
 ];

@@ -14,4 +14,12 @@ export class CompanyService {
   getActiveCompanies(): Observable<CompanyDto[]> {
     return this.http.get<CompanyDto[]>(`${this.baseUrl}/active`);
   }
+  // ✅ GET single company by ID
+  getCompanyById(id: number): Observable<CompanyDto> {
+    return this.http.get<CompanyDto>(`${this.baseUrl}/${id}`);
+  }
+  // ✅ UPDATE company
+  updateCompany(id: number, dto: CompanyDto): Observable<CompanyDto> {
+    return this.http.put<CompanyDto>(`${this.baseUrl}/${id}`, dto);
+  }
 }

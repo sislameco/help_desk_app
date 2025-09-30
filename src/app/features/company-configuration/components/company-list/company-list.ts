@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CompanyService } from '../../services/company.service';
 import { CompanyDto } from '../../models/company.model';
+import { debug } from 'ngxtension/debug';
 
 @Component({
   selector: 'app-company-list',
@@ -14,10 +15,13 @@ import { CompanyDto } from '../../models/company.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompanyList {
+  private router = inject(Router);
   private companyService = inject(CompanyService);
-
   // ✅ signal for active companies
   companies = toSignal(this.companyService.getActiveCompanies(), {
     initialValue: [] as CompanyDto[],
   });
+  selectCompany(company: CompanyDto) {
+    this.router.navigate(['/pages/company-configuration', company.id], { state: { company } });
+  }
 }

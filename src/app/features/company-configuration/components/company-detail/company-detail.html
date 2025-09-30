@@ -1,0 +1,51 @@
+<div class="card shadow-sm p-3">
+  <h5 class="mb-3">Company Detail</h5>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="row g-3 align-items-center">
+      
+      <!-- Name -->
+      <div class="col-md-4">
+        <label for="name" class="form-label">Name</label>
+        <input id="name" type="text" class="form-control" formControlName="name" />
+      </div>
+
+      <!-- ShortName -->
+      <div class="col-md-4">
+        <label for="shortName" class="form-label">Short Name</label>
+        <input id="shortName" type="text" class="form-control" formControlName="shortName" />
+      </div>
+
+      <!-- Description -->
+      <div class="col-md-4">
+        <label for="description" class="form-label">Description</label>
+        <input id="description" type="text" class="form-control" formControlName="description" />
+      </div>
+
+      <!-- AccessKey -->
+      <div class="col-md-4">
+        <label for="accessKey" class="form-label">Access Key</label>
+  <input id="accessKey" type="text" class="form-control" formControlName="accessKey" readonly />
+      </div>
+
+      <!-- SecrateKey -->
+      <div class="col-md-4">
+        <label for="secretKey" class="form-label">Secret Key</label>
+  <input id="secretKey" type="password" class="form-control" formControlName="secretKey" readonly />
+      </div>
+
+      <!-- PrefixTicket -->
+      <div class="col-md-4">
+        <label for="prefixTicket" class="form-label">Prefix Ticket</label>
+        <input id="prefixTicket" type="text" class="form-control" formControlName="prefixTicket" />
+      </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="mt-4 text-end">
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>
