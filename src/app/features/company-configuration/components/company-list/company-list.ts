@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CompanyService } from '../../services/company.service';
 import { CompanyDto } from '../../models/company.model';
-import { debug } from 'ngxtension/debug';
 
 @Component({
   selector: 'app-company-list',

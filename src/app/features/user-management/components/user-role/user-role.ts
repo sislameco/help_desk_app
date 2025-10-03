@@ -128,13 +128,6 @@ export class UserRole {
   }
 
   deleteRole(roleId: number) {
-    this.userRoleService.deleteRole(roleId).subscribe({
-      next: () => {
-        console.log('✅ Role deleted successfully');
-      },
-      error: (err) => {
-        console.error('❌ Error deleting role:', err);
-      },
-    });
+    this.userRoleService.deleteRole(roleId).subscribe({});
   }
 }

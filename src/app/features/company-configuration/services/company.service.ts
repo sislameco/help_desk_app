@@ -22,4 +22,8 @@ export class CompanyService {
   updateCompany(id: number, dto: CompanyDto): Observable<CompanyDto> {
     return this.http.put<CompanyDto>(`${this.baseUrl}/${id}`, dto);
   }
+  // ✅ CHECK endpoint validity
+  checkEndpoint(url: string) {
+    return this.http.get(url);
+  }
 }

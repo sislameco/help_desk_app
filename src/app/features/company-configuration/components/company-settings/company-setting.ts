@@ -18,7 +18,7 @@ export class CompanySetting {
   tabs = signal<TabConfig[]>(tabs);
 
   // ✅ Default tab
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   activeTab = signal<Type<unknown>>(CompanyDetail);
 
   selectTab(tab: TabConfig) {

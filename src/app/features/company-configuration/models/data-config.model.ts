@@ -2,7 +2,6 @@ import { Type } from '@angular/core';
 import { DepartmentSetting } from '../components/department-setting/department-setting';
 import { CompanyDetail } from '../components/company-detail/company-detail';
 
-
 export const tabs: TabConfig[] = [
   { label: 'Company Detail', component: CompanyDetail },
   { label: 'Notifications', component: DepartmentSetting },

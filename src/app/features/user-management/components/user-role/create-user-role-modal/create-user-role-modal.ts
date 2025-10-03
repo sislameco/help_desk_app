@@ -135,25 +135,22 @@ export class CreateUserRoleModal {
     if (this.roleId && this.roleId > 0) {
       this.userRoleService.updateRole(this.roleId, payload).subscribe({
         next: () => {
-          console.log('✅ Role updated successfully');
           this.isSubmitting.set(false);
           this.form.reset();
         },
-        error: (err) => {
-          console.error('❌ Error updating role:', err);
+        error: () => {
           this.isSubmitting.set(false);
         },
       });
     } else {
       this.userRoleService.createRole(payload).subscribe({
         next: () => {
-          console.log('✅ Role created successfully');
+          // console.log('✅ Role created successfully');
           this.isSubmitting.set(false);
           this.form.reset();
           this.roleMenuActions = [];
         },
-        error: (err) => {
-          console.error('❌ Error creating role:', err);
+        error: () => {
           this.isSubmitting.set(false);
         },
       });

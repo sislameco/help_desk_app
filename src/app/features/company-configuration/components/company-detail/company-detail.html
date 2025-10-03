@@ -1,51 +1,70 @@
-<div class="card shadow-sm p-3">
+<form [formGroup]="form" (ngSubmit)="submit()" class="card shadow-sm p-3">
+  <!-- ================== -->
+  <!-- Company Detail     -->
+  <!-- ================== -->
   <h5 class="mb-3">Company Detail</h5>
-
-  <form [formGroup]="form" (ngSubmit)="submit()">
-    <div class="row g-3 align-items-center">
-      
-      <!-- Name -->
-      <div class="col-md-4">
-        <label for="name" class="form-label">Name</label>
-        <input id="name" type="text" class="form-control" formControlName="name" />
-      </div>
-
-      <!-- ShortName -->
-      <div class="col-md-4">
-        <label for="shortName" class="form-label">Short Name</label>
-        <input id="shortName" type="text" class="form-control" formControlName="shortName" />
-      </div>
-
-      <!-- Description -->
-      <div class="col-md-4">
-        <label for="description" class="form-label">Description</label>
-        <input id="description" type="text" class="form-control" formControlName="description" />
-      </div>
-
-      <!-- AccessKey -->
-      <div class="col-md-4">
-        <label for="accessKey" class="form-label">Access Key</label>
-  <input id="accessKey" type="text" class="form-control" formControlName="accessKey" readonly />
-      </div>
-
-      <!-- SecrateKey -->
-      <div class="col-md-4">
-        <label for="secretKey" class="form-label">Secret Key</label>
-  <input id="secretKey" type="password" class="form-control" formControlName="secretKey" readonly />
-      </div>
-
-      <!-- PrefixTicket -->
-      <div class="col-md-4">
-        <label for="prefixTicket" class="form-label">Prefix Ticket</label>
-        <input id="prefixTicket" type="text" class="form-control" formControlName="prefixTicket" />
-      </div>
+  <div class="row g-3 align-items-center">
+    <div class="col-md-4">
+      <label>
+        Company Name
+        <input type="text" formControlName="companyName" />
+      </label>
     </div>
 
-    <!-- Save Button -->
-    <div class="mt-4 text-end">
-      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
-        Save Changes
-      </button>
+    <div class="col-md-4">
+      <label>
+        Short Name
+        <input type="text" formControlName="shortName" />
+      </label>
     </div>
-  </form>
-</div>
+
+    <div class="col-md-4">
+      <label>
+        Description
+        <input type="text" formControlName="description" />
+      </label>
+    </div>
+
+    <div class="col-md-4">
+      <label>
+        Prefix Ticket
+        <input type="text" formControlName="prefixTicket" />
+      </label>
+    </div>
+  </div>
+
+  <!-- ================== -->
+  <!-- Authentication     -->
+  <!-- ================== -->
+  <h5 class="mt-4 mb-3">Authentication</h5>
+  <div class="row g-3 align-items-center">
+    <div class="col-md-6">
+      <label>
+        Access Key
+        <input type="text" formControlName="accessKey" readonly />
+      </label>
+    </div>
+
+    <div class="col-md-6">
+      <label>
+        Secret Key
+        <input type="password" class="form-control" formControlName="secretKey" readonly />
+      </label>
+    </div>
+  </div>
+
+  <!-- ================== -->
+  <!-- Data Sources Button -->
+  <!-- ================== -->
+  <h5 class="mt-4 mb-3">Data Sources</h5>
+  <div class="mt-2">
+    <button type="button" class="btn btn-outline-primary" (click)="openDataSourceModal()">
+      + Manage Data Sources
+    </button>
+  </div>
+
+  <!-- Save Button -->
+  <div class="mt-4 text-end">
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save Changes</button>
+  </div>
+</form>

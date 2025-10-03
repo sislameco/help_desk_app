@@ -1,0 +1,81 @@
+<!-- ================== -->
+<!-- Angular-only Modal -->
+<!-- ================== -->
+<div class="custom-modal-backdrop">
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2>Manage Data Source</h2>
+      <button type="button" (click)="bsModalRef.hide()">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- ✅ Wrap with formGroup -->
+      <form [formGroup]="dataSourceForm" (ngSubmit)="save()">
+        <div class="row g-3">
+          <!-- Data Source Type (Enum select) -->
+          <!-- Data Source Type -->
+          <div class="mb-3">
+            <label for="source" class="form-label">Source</label>
+            <select id="source" class="form-select" formControlName="source">
+              <option *ngFor="let key of enumKeys" [value]="enumDataSource[key]">{{ key }}</option>
+            </select>
+          </div>
+          <!-- Source -->
+          <div class="col-md-6">
+            <label for="source" class="form-label">Source</label>
+            <input
+              id="source"
+              type="text"
+              class="form-control"
+              placeholder="Enter source"
+              formControlName="source"
+            />
+          </div>
+          <!-- Validate -->
+          <div class="col-md-3 d-flex align-items-center">
+            <div class="form-check mt-4">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="validate"
+                formControlName="isValidate"
+                (click)="checkEndpoint(dataSourceForm.get('source')?.value)"
+              />
+              <label class="form-check-label" for="validate">Validate</label>
+            </div>
+          </div>
+
+          <!-- Sync -->
+          <div class="col-md-3 d-flex align-items-center">
+            <div class="form-check mt-4">
+              <input class="form-check-input" type="checkbox" id="sync" formControlName="isSync" />
+              <label class="form-check-label" for="sync">Sync</label>
+            </div>
+          </div>
+
+          <!-- Json Data -->
+          <div class="col-12">
+            <label for="jsonData" class="form-label">Json Data</label>
+            <textarea
+              id="jsonData"
+              rows="3"
+              class="form-control"
+              placeholder="Enter JSON data"
+              formControlName="jsonData"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <button type="button" class="btn btn-outline-danger" (click)="bsModalRef.hide()">
+            Cancel
+          </button>
+          <button class="btn btn-theme" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
