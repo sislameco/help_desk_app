@@ -41,23 +41,4 @@ export class DepartmentSettingService {
       { params },
     );
   }
-
-  getDepartmentById(id: number): Observable<DepartmentSettingOutputDto> {
-    return this.http.get<DepartmentSettingOutputDto>(`${this.baseUrl}/${id}`);
-  }
-
-  updateDepartment(
-    id: number,
-    dto: DepartmentSettingOutputDto,
-  ): Observable<DepartmentSettingOutputDto> {
-    return this.http.put<DepartmentSettingOutputDto>(`${this.baseUrl}/${id}`, dto);
-  }
-
-  createDepartment(dto: DepartmentSettingOutputDto): Observable<DepartmentSettingOutputDto> {
-    return this.http.post<DepartmentSettingOutputDto>(`${this.baseUrl}`, dto);
-  }
-
-  deleteDepartment(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
-  }
 }

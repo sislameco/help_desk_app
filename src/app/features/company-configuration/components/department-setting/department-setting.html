@@ -1,1 +1,82 @@
-<p>department-setting works!</p>
+<div class="container py-3">
+  <h3 class="mb-3">Department Management</h3>
+  <p class="text-muted">Manage departments, access permissions, and organizational structure</p>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Total Departments</h5>
+        <p class="fs-4 fw-bold">{{ 10 }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Active Departments</h5>
+        <p class="fs-4 fw-bold text-success">{{ 10 }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Total Users</h5>
+        <p class="fs-4 fw-bold">{{ 10 }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Avg Users/Dept</h5>
+        <p class="fs-4 fw-bold">{{ 10 }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Departments Table -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Departments</h5>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped table-bordered mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Department</th>
+            <th>Manager</th>
+            <th>Users</th>
+            <th>Permissions</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (dep of departments().items; track dep.id) {
+            <tr>
+              <td>
+                <div class="fw-bold">{{ dep.name }}</div>
+                <div class="text-muted small">{{ dep.managerEmail }}</div>
+              </td>
+              <td>{{ dep.managerName }}</td>
+              <td>{{ dep.totalUsers }} users</td>
+             <td>-</td>
+              <!-- <td>
+                @for (p of dep.permissions ?? []; track p) {
+                  <span class="badge bg-dark me-1">{{ p }}</span>
+                }
+              </td> -->
+              <td>
+                {{dep.status || enumRStatus}}
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary me-1">
+                  ✏️
+                </button>
+                <button class="btn btn-sm btn-outline-danger">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
