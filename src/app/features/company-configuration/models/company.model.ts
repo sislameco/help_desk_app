@@ -6,10 +6,11 @@ export interface CompanyDto {
   accessKey: string;
   secretKey: string;
   prefixTicket: string;
-  dataSource: CompanyDefineDataSourceDto[];
+  defineDataSources: CompanyDefineDataSourceDto[];
 }
 export interface CompanyDefineDataSourceDto {
   id: number;
+  type: EnumDataSource;
   source: string;
   isValidate: boolean;
   isSync: boolean;

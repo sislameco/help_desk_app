@@ -15,10 +15,20 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { AddUpdateDefineData } from './add-update-define-data/add-update-define-data';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { CommonModule } from '@angular/common';
+import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+
 @Component({
   selector: 'app-company-detail',
   standalone: true,
-  imports: [NgSelectModule, BsDropdownModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    NgSelectModule,
+    BsDropdownModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    EnumToStringPipe,
+  ],
   templateUrl: './company-detail.html',
   styleUrls: ['./company-detail.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +41,7 @@ export class CompanyDetail implements OnInit {
   private companyService = inject(CompanyService);
   private route = inject(ActivatedRoute);
   id = Number(this.route.snapshot.paramMap.get('id'));
-  company!: CompanyDto;
+  company: CompanyDto | null = null;
   save = new EventEmitter<CompanyDto>();
   departmentValid: boolean | null = null;
   userValid: boolean | null = null;
@@ -50,12 +60,16 @@ export class CompanyDetail implements OnInit {
       // 👇 matches CompanyDto.dataSource
       dataSource: this.fb.array([]),
     });
-    this.addDataSource();
-
     this.companyService.getCompanyById(this.id).subscribe((company) => {
+      debugger;
       this.company = company;
-      this.form.patchValue(company);
+      this.company.defineDataSources = company.defineDataSources || [];
+      this.form.patchValue({
+        ...company,
+        dataSource: company.defineDataSources,
+      });
     });
+    this.addDataSource();
   }
   get dataSource(): FormArray {
     return this.form.get('dataSource') as FormArray;
@@ -154,4 +168,34 @@ export class CompanyDetail implements OnInit {
   }
 
   saveDataSources() {}
+  syncSource(ds: CompanyDefineDataSourceDto) {
+    this.companyService.syncDataSource(ds.id, this.company?.id ?? 0, ds.type).subscribe({
+      next: (res) => {
+        alert('Sync initiated successfully.');
+      },
+    });
+  }
+  downloadJson(ds: CompanyDefineDataSourceDto) {
+    try {
+      // Ensure jsonData is valid JSON
+      const jsonObject = JSON.parse(ds.jsonData);
+
+      // Convert object to formatted JSON string
+      const jsonString = JSON.stringify(jsonObject, null, 2);
+
+      // Create blob and temporary download link
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${ds.source || 'dataSource'}_${ds.id}.json`;
+      a.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+    } catch {
+      alert('This datasource has invalid JSON data.');
+    }
+  }
 }

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { CompanyDto } from '../models/company.model';
+import { CompanyDto, EnumDataSource } from '../models/company.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -25,5 +25,11 @@ export class CompanyService {
   // ✅ CHECK endpoint validity
   checkEndpoint(url: string) {
     return this.http.get(url);
+  }
+
+  syncDataSource(id: number, companyId: number, type: EnumDataSource): Observable<boolean> {
+    // Build query params (id, companyId, type)
+    const params = { id, companyId, type };
+    return this.http.post<boolean>(`${this.baseUrl}/sync`, null, { params });
   }
 }
