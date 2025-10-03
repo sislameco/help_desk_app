@@ -1,0 +1,59 @@
+<div class="card p-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h5 class="mb-1">Custom Fields</h5>
+      <small class="text-muted">Add custom fields to QMS modules for additional data collection</small>
+    </div>
+    <button class="btn btn-primary" (click)="addField()">
+      <i class="bi bi-plus-lg"></i> Add Custom Field
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-3">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div class="table-responsive" *ngIf="!loading && fields.length > 0">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Field Name</th>
+          <th>QMS Type</th>
+          <th>Field Type</th>
+          <th>Required</th>
+          <th>Description</th>
+          <th style="width: 120px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let f of fields">
+          <td>{{ f.name }}</td>
+          <td><span class="badge bg-secondary">{{ f.qmsType }}</span></td>
+          <td>{{ f.type }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.bg-danger]="f.isRequired"
+              [class.bg-secondary]="!f.isRequired"
+            >
+              {{ f.isRequired ? 'Required' : 'Optional' }}
+            </span>
+          </td>
+          <td>{{ f.description }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-secondary me-1" (click)="editField(f)">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteField(f.id)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && fields.length === 0" class="text-center text-muted py-3">
+    No custom fields configured yet.
+  </div>
+</div>

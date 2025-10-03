@@ -1,0 +1,39 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CustomFieldDto } from '../models/data-config.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CustomDefineDataSourceService {
+  private http = inject(HttpClient);
+
+  // Base API endpoint (adjust if needed, e.g., '/api/field')
+  private readonly baseUrl = '/field';
+
+  /** 🔹 Get all fields */
+  getAll(): Observable<CustomFieldDto[]> {
+    return this.http.get<CustomFieldDto[]>(this.baseUrl);
+  }
+
+  /** 🔹 Get single field by ID */
+  getById(id: number): Observable<CustomFieldDto> {
+    return this.http.get<CustomFieldDto>(`${this.baseUrl}/${id}`);
+  }
+
+  /** 🔹 Create multiple fields */
+  createMany(dtos: CustomFieldDto[]): Observable<CustomFieldDto[]> {
+    return this.http.post<CustomFieldDto[]>(this.baseUrl, dtos);
+  }
+
+  /** 🔹 Update field by ID */
+  update(id: number, dto: CustomFieldDto): Observable<CustomFieldDto> {
+    return this.http.put<CustomFieldDto>(`${this.baseUrl}/${id}`, dto);
+  }
+
+  /** 🔹 Delete field by ID */
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+}

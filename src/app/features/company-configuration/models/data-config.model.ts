@@ -15,3 +15,11 @@ export interface TabConfig {
   label: string;
   component: Type<unknown>;
 }
+// ✅ Match your C# DTO
+export interface CustomFieldDto {
+  id?: number;
+  name: string;
+  type: string;
+  isRequired: boolean;
+  // add any other properties from your backend DTO
+}
