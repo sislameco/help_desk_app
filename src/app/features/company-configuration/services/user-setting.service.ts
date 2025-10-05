@@ -7,13 +7,14 @@ import {
   UserSetupOutputDto,
 } from '../models/user-setting.model';
 import { PaginationResponse } from '@shared/models/api-response.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserSettingService {
   private http = inject(HttpClient);
-  private readonly baseUrl = '/api/tenant-user'; // adjust if needed
+  private readonly baseUrl = `${environment.apiBaseUrl}/api/tenant-user`; // adjust if needed
 
   // ✅ Get all users by companyId (with pagination/filter)
   getAllUsers(

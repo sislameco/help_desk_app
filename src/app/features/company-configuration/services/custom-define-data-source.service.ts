@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CustomFieldDto } from '../models/data-config.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class CustomDefineDataSourceService {
   private http = inject(HttpClient);
 
   // Base API endpoint (adjust if needed, e.g., '/api/field')
-  private readonly baseUrl = '/field';
+  private readonly baseUrl = `${environment.apiBaseUrl}/api/field`;
 
   /** 🔹 Get all fields */
   getAll(): Observable<CustomFieldDto[]> {
