@@ -1,1 +1,81 @@
+<div class="container py-3">
+  <h3 class="mb-3">User Management</h3>
+  <p class="text-muted">Manage users, access permissions, and organizational structure</p>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Total Users</h5>
+        <p class="fs-4 fw-bold">{{ users().total }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Active Users</h5>
+        <p class="fs-4 fw-bold text-success">{{ users().items.length }}</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Roles</h5>
+        <p class="fs-4 fw-bold">-</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card p-3 text-center">
+        <h5>Avg Roles/User</h5>
+        <p class="fs-4 fw-bold">-</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0">Users</h5>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-striped table-bordered mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users().items; track user.id) {
+            <tr>
+              <td>
+                <div class="fw-bold">{{ user.fullName }}</div>
+                <div class="text-muted small">{{ user.emailAddress }}</div>
+              </td>
+              <td>{{ user.email }}</td>
+              <td>
+                @for (role of user.roleName ?? []; track role) {
+                  <span class="badge bg-dark me-1">{{ role }}</span>
+                }
+              </td>
+              <td>
+                {{ user.status }}
+              </td>
+              <td class="text-center">
+                <button
+                  class="btn btn-sm btn-outline-primary me-1"
+                  (click)="openUserSetupModal(user)"
+                >
+                  ✏️
+                </button>
+                <button class="btn btn-sm btn-outline-danger">🗑️</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 <p>user-setting works!</p>
