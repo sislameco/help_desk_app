@@ -23,12 +23,11 @@ export class CustomDefineDataSourceComponent implements OnInit {
   loadFields() {
     this.loading = true;
     this.service.getAll().subscribe({
-      // eslint-disable-next-line prettier/prettier
       next: (res) => {
         this.fields = res;
         this.loading = false;
       },
-      // eslint-disable-next-line prettier/prettier
+
       error: (err) => {
         console.error('Failed to load fields', err);
         this.loading = false;

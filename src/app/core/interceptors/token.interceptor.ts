@@ -15,7 +15,6 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   const isAsset = req.url.startsWith('/assets') || req.url.startsWith('assets/');
   const hasAuthHeader = req.headers.has('Authorization');
-  console.log('Has Authorization header:', `${localStorage.getItem('auth_token')}`);
   if (isAsset || hasAuthHeader) {
     return next(req);
   }
