@@ -30,9 +30,9 @@
       <label for="managerId" class="form-label"> Manager <span class="text-danger">*</span> </label>
       <select id="managerId" class="form-select" formControlName="managerId">
         <option value="" disabled selected>-- Select Manager --</option>
-        <option *ngFor="let manager of managers" [value]="manager.id">
+        <!-- <option *ngFor="let manager of managers" [value]="manager.id">
           {{ manager.name }}
-        </option>
+        </option> -->
       </select>
     </div>
 
