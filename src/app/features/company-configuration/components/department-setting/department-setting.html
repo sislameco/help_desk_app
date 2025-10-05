@@ -56,20 +56,23 @@
               </td>
               <td>{{ dep.managerName }}</td>
               <td>{{ dep.totalUsers }} users</td>
-             <td>-</td>
+              <td>-</td>
               <!-- <td>
                 @for (p of dep.permissions ?? []; track p) {
                   <span class="badge bg-dark me-1">{{ p }}</span>
                 }
               </td> -->
               <td>
-                {{dep.status || enumRStatus}}
+                {{ dep.status || enumRStatus }}
               </td>
               <td class="text-center">
-                <button class="btn btn-sm btn-outline-primary me-1">
+                <button
+                  class="btn btn-sm btn-outline-primary me-1"
+                  (click)="openDepSetupModal(dep)"
+                >
                   ✏️
                 </button>
-                <button class="btn btn-sm btn-outline-danger">
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteDepartment(dep.id)">
                   🗑️
                 </button>
               </td>

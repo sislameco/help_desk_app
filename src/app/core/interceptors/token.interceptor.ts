@@ -1,4 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { LocalStorageService } from '@core/services/local-storage.service';
 
 // Replace with your actual static token
 //const STATIC_BEARER_TOKEN =
@@ -9,9 +11,11 @@ import { HttpInterceptorFn } from '@angular/common/http';
  * Skips requests for assets and those that already have an Authorization header.
  */
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
+  const localStorage = inject(LocalStorageService);
+
   const isAsset = req.url.startsWith('/assets') || req.url.startsWith('assets/');
   const hasAuthHeader = req.headers.has('Authorization');
-
+  console.log('Has Authorization header:', `${localStorage.getItem('auth_token')}`);
   if (isAsset || hasAuthHeader) {
     return next(req);
   }

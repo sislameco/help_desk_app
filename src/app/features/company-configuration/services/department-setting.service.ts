@@ -6,6 +6,8 @@ import { PaginationResponse } from '@shared/models/api-response.model';
 import {
   DepartmentSettingInputDto,
   DepartmentSettingOutputDto,
+  DepartmentSetupOutputDto,
+  DepartmentUpdateDto,
 } from '../models/department-setting.model';
 
 @Injectable({ providedIn: 'root' })
@@ -40,5 +42,11 @@ export class DepartmentSettingService {
       `${this.baseUrl}/all/${companyId}`,
       { params },
     );
+  }
+  updateDepartment(dto: DepartmentUpdateDto): Observable<boolean> {
+    return this.http.patch<boolean>(`${this.baseUrl}/update`, dto);
+  }
+  getDepById(id: number): Observable<DepartmentSetupOutputDto> {
+    return this.http.get<DepartmentSetupOutputDto>(`${this.baseUrl}/${id}`);
   }
 }

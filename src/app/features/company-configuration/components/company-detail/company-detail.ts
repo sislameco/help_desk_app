@@ -61,7 +61,6 @@ export class CompanyDetail implements OnInit {
       dataSource: this.fb.array([]),
     });
     this.companyService.getCompanyById(this.id).subscribe((company) => {
-      debugger;
       this.company = company;
       this.company.defineDataSources = company.defineDataSources || [];
       this.form.patchValue({
@@ -172,6 +171,7 @@ export class CompanyDetail implements OnInit {
     this.companyService.syncDataSource(ds.id, this.company?.id ?? 0, ds.type).subscribe({
       next: (res) => {
         alert('Sync initiated successfully.');
+        return res;
       },
     });
   }

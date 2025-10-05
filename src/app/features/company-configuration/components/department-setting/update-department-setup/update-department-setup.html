@@ -1,0 +1,85 @@
+<div class="modal-header">
+  <h2>Update Department</h2>
+  <button type="button" (click)="bsModalRef.hide()">&times;</button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group mb-3">
+      <label for="deptName" class="form-label">Department Name</label>
+      <input type="text" id="deptName" class="form-control" formControlName="name" readonly />
+    </div>
+
+    <!-- Description -->
+    <div class="form-group mb-3">
+      <label for="deptDescription" class="form-label">
+        Description <span class="text-danger">*</span>
+      </label>
+      <textarea
+        id="deptDescription"
+        class="form-control"
+        placeholder="Type Here"
+        rows="4"
+        formControlName="description"
+      ></textarea>
+      <strong *ngIf="form.controls.description.touched && form.controls.description.invalid">
+        Description is required.
+      </strong>
+    </div>
+    <!-- Manager -->
+    <div class="form-group mb-3">
+      <label for="managerId" class="form-label"> Manager <span class="text-danger">*</span> </label>
+      <select id="managerId" class="form-select" formControlName="managerId">
+        <option value="" disabled selected>-- Select Manager --</option>
+        <option *ngFor="let manager of managers" [value]="manager.id">
+          {{ manager.name }}
+        </option>
+      </select>
+    </div>
+
+    @if (loadDepartment()?.menus?.length) {
+      @for (parent of loadDepartment().menus; track parent) {
+        <table class="app-table mb-3">
+          <thead>
+            <tr>
+              <th style="width: 40%">{{ parent.menu }}</th>
+              @for (action of parent.actions; track action.id) {
+                <th class="text-center" style="width: 12%">{{ action.httpVerb }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (child of parent.childs; track child.menuId) {
+              <tr>
+                <td style="width: 40%">
+                  <span class="pl-4 d-block">{{ child.menu }}</span>
+                </td>
+                @for (action of child.actions; track action.id) {
+                  <td class="text-center">
+                    <label class="app-form--checkbox p-2 my-1 mx-auto d-table">
+                      <input
+                        type="checkbox"
+                        [checked]="togglePermission(child, action.id)"
+                        (change)="setPermission(child, action.id, $event.target.checked)"
+                      />
+                      <span class="d-flex justify-content-center align-items-center">
+                        <svg viewBox="0 0 10 8" fill="none" width="10">
+                          <use xlink:href="assets/sprite.svg#svg-check"></use>
+                        </svg>
+                      </span>
+                    </label>
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    }
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button class="btn btn-outline-danger" type="button" (click)="bsModalRef.hide()">
+        Cancel
+      </button>
+      <button class="btn btn-theme" type="submit" [disabled]="isSubmitting()">Save</button>
+    </div>
+  </form>
+</div>
