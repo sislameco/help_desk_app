@@ -2,31 +2,24 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { SLAInputDto, SLAOutputDto } from '../models/sla.model';
+import { EmailConfigInputDto, EmailConfigurationOutput } from '../models/email-configuration-model';
 @Injectable({
   providedIn: 'root',
 })
-export class SLAService {
+export class EmailConfigurationService {
   private http = inject(HttpClient);
-  private baseUrl = `${environment.apiBaseUrl}/api/sla`;
+  private baseUrl = `${environment.apiBaseUrl}/api/email-configuration`;
 
-  getAll(): Observable<SLAOutputDto[]> {
-    return this.http.get<SLAOutputDto[]>(`${this.baseUrl}`);
+  updateFields(input: EmailConfigInputDto): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/update`, input);
   }
 
-  getById(id: number): Observable<SLAOutputDto> {
-    return this.http.get<SLAOutputDto>(`${this.baseUrl}/${id}`);
+  setDefault(id: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/set-default/${id}`, {});
   }
 
-  create(dto: SLAInputDto): Observable<SLAOutputDto> {
-    return this.http.post<SLAOutputDto>(`${this.baseUrl}`, dto);
-  }
-
-  update(id: number, dto: SLAInputDto): Observable<SLAOutputDto> {
-    return this.http.put<SLAOutputDto>(`${this.baseUrl}/${id}`, dto);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  getAllActiveByCompanyId(fkCompanyId: number): Observable<EmailConfigurationOutput[]> {
+    debugger;
+    return this.http.get<EmailConfigurationOutput[]>(`${this.baseUrl}/all/${fkCompanyId}`);
   }
 }

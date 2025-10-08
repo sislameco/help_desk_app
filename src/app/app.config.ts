@@ -22,6 +22,7 @@ import { provideHighlightOptions } from 'ngx-highlightjs';
 import { tokenInterceptor } from '@core/interceptors/token.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { spinnerInterceptor } from '@core/interceptors/spinner-interceptor';
+import { errorHandlingInterceptor } from '@core/interceptors/error-handler-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -38,9 +39,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([
         ...(environment.useMockBackend ? [fakeBackendInterceptor] : []),
-        //apiUrlInterceptor,
         tokenInterceptor,
         spinnerInterceptor,
+        errorHandlingInterceptor,
       ]),
     ),
 

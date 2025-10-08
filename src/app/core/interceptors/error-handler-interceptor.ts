@@ -26,6 +26,13 @@ export const errorHandlingInterceptor = (
             errorHandlerStore.handleError404(error);
             // Re-throw the error after handling
             return throwError(() => error); // Modern way to use throwError
+          case 400:
+            errorHandlerStore.handleError400(error);
+            // Re-throw the error after handling
+            return throwError(() => error); // Modern way to use throwError
+          case 500:
+            errorHandlerStore.handleError500(error);
+            return throwError(() => error); // Modern way to use throwError
           default:
             // For other HTTP errors, re-throw them directly
             return throwError(() => error); // Modern way to use throwError
