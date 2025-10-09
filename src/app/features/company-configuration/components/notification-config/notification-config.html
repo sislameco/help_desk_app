@@ -1,1 +1,83 @@
-<p>notification-config works!</p>
+<div class="container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold">Notification Settings</h4>
+    <button class="btn btn-primary btn-sm" (click)="saveChanges()">💾 Save Changes</button>
+  </div>
+
+  <div class="row">
+    <!-- LEFT PANEL -->
+    <div class="col-md-4">
+      <div class="card p-3 shadow-sm">
+        <h6 class="fw-semibold mb-3">Notification Events</h6>
+
+        <div
+          *ngFor="let evt of notifications()"
+          class="border rounded p-2 mb-2"
+          [class.border-primary]="selectedEvent()?.id === evt.id"
+        >
+          <div class="fw-semibold">
+            {{ getEventName(evt.event) }} ({{ getTypeName(evt.notificationType) }})
+          </div>
+
+          <div class="form-check form-switch mt-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="toggle{{ evt.id }}"
+              (change)="toggleEnabled(evt.id, $event.target.checked)"
+            />
+            <label class="form-check-label small" [for]="'toggle' + evt.id">Enabled</label>
+          </div>
+
+          <button
+            class="btn btn-sm btn-outline-primary mt-2 w-100"
+            (click)="selectEvent(evt, evt.notificationType)"
+          >
+            Edit Template
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="col-md-8" *ngIf="selectedEvent()">
+      <div class="card p-3 shadow-sm">
+        <h6 class="fw-semibold mb-3">
+          Editing: {{ getEventName(selectedEvent()?.event!) }}
+          ({{ getTypeName(selectedEvent()?.notificationType!) }})
+        </h6>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Subject
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="template.subjectTemplate"
+            placeholder="Enter subject template"
+          />
+          </label>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Body
+          <textarea
+            class="form-control font-monospace"
+            rows="8"
+            [(ngModel)]="template.bodyTemplate"
+            placeholder="Enter body content..."
+          ></textarea>
+          </label>
+        </div>
+
+        <div>
+          <h6 class="fw-semibold mb-2">Available Variables</h6>
+          <div class="d-flex flex-wrap gap-2">
+            <span *ngFor="let v of availableVariables" class="badge bg-light border text-dark">
+              {{ v }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,14 +1,13 @@
 import { NotificationEvent } from './email-configuration-model';
 
-export interface NotificationTemplateDto {
-  fkCompanyId: number;
+export interface NotificationOutputDto {
+  id: number;
   event: NotificationEvent;
   notificationType: NotificationType;
-  emailConfigurationId?: number | null;
   subjectTemplate: string;
   bodyTemplate: string;
-  isEnabled: boolean;
-  variables: string[];
+  headerTemplate: string;
+  footerTemplate: string;
 }
 
 export enum NotificationType {
@@ -17,3 +16,13 @@ export enum NotificationType {
   App = 3,
   System = 4,
 }
+
+export interface NotificationInputDto {
+  id: number;
+  emailConfigurationId: number;
+  subjectTemplate: string;
+  bodyTemplate: string;
+  ccList: string;
+}
+export { NotificationEvent };
+

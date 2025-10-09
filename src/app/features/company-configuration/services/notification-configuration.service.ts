@@ -2,31 +2,36 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { SLAInputDto, SLAOutputDto } from '../models/sla.model';
+import {
+  NotificationInputDto,
+  NotificationOutputDto,
+} from '../models/notification-configuration.model';
+
 @Injectable({
   providedIn: 'root',
 })
-export class SLAService {
-  private http = inject(HttpClient);
-  private baseUrl = `${environment.apiBaseUrl}/api/sla`;
+export class NotificationConfigurationService {
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${environment.apiBaseUrl}/notification-configuration`;
 
-  getAll(): Observable<SLAOutputDto[]> {
-    return this.http.get<SLAOutputDto[]>(`${this.baseUrl}`);
+  /**
+   * ✅ Update notification template
+   */
+  updateTemplate(input: NotificationInputDto): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/update-template/${input.id}`, input);
   }
 
-  getById(id: number): Observable<SLAOutputDto> {
-    return this.http.get<SLAOutputDto>(`${this.baseUrl}/${id}`);
+  /**
+   * ✅ Enable or disable a notification
+   */
+  updateIsEnabled(id: number, isEnabled: boolean): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/update-enabled/${id}?isEnabled=${isEnabled}`, {});
   }
 
-  create(dto: SLAInputDto): Observable<SLAOutputDto> {
-    return this.http.post<SLAOutputDto>(`${this.baseUrl}`, dto);
-  }
-
-  update(id: number, dto: SLAInputDto): Observable<SLAOutputDto> {
-    return this.http.put<SLAOutputDto>(`${this.baseUrl}/${id}`, dto);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  /**
+   * ✅ Get all active notifications by company
+   */
+  getAllActiveByCompanyId(fkCompanyId: number): Observable<NotificationOutputDto[]> {
+    return this.http.get<NotificationOutputDto[]>(`${this.baseUrl}/all/${fkCompanyId}`);
   }
 }
