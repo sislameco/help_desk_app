@@ -59,23 +59,28 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label fw-semibold">Body
-          <textarea
-            class="form-control font-monospace"
-            rows="8"
-            [(ngModel)]="template.bodyTemplate"
-            placeholder="Enter body content..."
-          ></textarea>
-          </label>
+          <label class="form-label fw-semibold" for="bodyEditor">Body</label>
+            <ngx-editor-menu [editor]="editorRef"></ngx-editor-menu>
+  <ngx-editor
+    [(ngModel)]="html"
+    [editor]="editorRef"
+    placeholder="Write email template here..."
+  ></ngx-editor>
+         
         </div>
 
         <div>
           <h6 class="fw-semibold mb-2">Available Variables</h6>
-          <div class="d-flex flex-wrap gap-2">
-            <span *ngFor="let v of availableVariables" class="badge bg-light border text-dark">
-              {{ v }}
-            </span>
-          </div>
+           <div class="d-flex flex-wrap gap-2">
+      <button
+        *ngFor="let v of availableVariables"
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        (click)="copyVariable(v)"
+      >
+        {{ v }}
+      </button>
+    </div>
         </div>
       </div>
     </div>

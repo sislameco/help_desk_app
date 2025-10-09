@@ -1,0 +1,25 @@
+
+ngx-editor {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  display: block;
+  min-height: 200px;
+  background-color: #fff;
+}
+ngx-editor .ngx-editor-content {
+  min-height: 150px;
+}
+
+.editor-container {
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background: #fff;
+  ngx-editor-menu {
+    border-bottom: 1px solid #dee2e6;
+  }
+  ngx-editor {
+    min-height: 200px;
+    display: block;
+    padding: 8px;
+  }
+}

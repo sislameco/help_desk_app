@@ -1,4 +1,11 @@
-import { Component, OnInit, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+  inject,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotificationConfigurationService } from '../../services/notification-configuration.service';
@@ -8,16 +15,20 @@ import {
   NotificationOutputDto,
   NotificationType,
 } from '../../models/notification-configuration.model';
+import { Editor, NgxEditorModule } from 'ngx-editor';
 
 @Component({
   selector: 'app-notification-config',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxEditorModule],
   styleUrls: ['./notification-config.scss'],
   templateUrl: './notification-config.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NotificationConfig implements OnInit {
+export class NotificationConfig implements OnInit, OnDestroy {
+  editorRef!: Editor;
+  html = signal<string>('');
+  subject = signal<string>('');
   private readonly service = inject(NotificationConfigurationService);
   NotificationEvent = NotificationEvent;
   NotificationType = NotificationType;
@@ -61,8 +72,11 @@ export class NotificationConfig implements OnInit {
 
   ngOnInit(): void {
     this.loadNotifications();
+    this.editorRef = new Editor();
   }
-
+  ngOnDestroy() {
+    this.editorRef.destroy();
+  }
   loadNotifications(): void {
     this.isLoading.set(true);
     this.service.getAllActiveByCompanyId(this.fkCompanyId).subscribe({
@@ -85,10 +99,17 @@ export class NotificationConfig implements OnInit {
       bodyTemplate: evt.bodyTemplate,
       ccList: '',
     };
+    this.html.set(evt.bodyTemplate);
+    this.subject.set(evt.subjectTemplate);
   }
 
   saveChanges(): void {
-    if (!this.selectedEvent()) return;
+    if (!this.selectedEvent()) {
+      return;
+    }
+    this.template.bodyTemplate = this.html();
+    this.template.subjectTemplate = this.subject();
+    this.template.id = this.selectedEvent()!.id;
     this.service.updateTemplate(this.template).subscribe({
       next: () => alert('Notification template updated successfully!'),
     });
@@ -106,5 +127,9 @@ export class NotificationConfig implements OnInit {
 
   getTypeName(type: NotificationType): string {
     return NotificationType[type];
+  }
+  copyVariable(variable: string) {
+    navigator.clipboard.writeText(variable);
+    alert(`Copied: ${variable}`);
   }
 }
