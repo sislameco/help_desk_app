@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ mode === 'add' ? 'Add SLA Rule' : 'Edit SLA Rule' }}</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="bsModalRef.hide()"></button>
+</div>
+
+<div class="modal-body">
+  <p>Configure service level agreement timeframes for QMS items based on type and priority.</p>
+
+  <form [formGroup]="slaForm">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="qmsType">QMS Type</label>
+        <select id="qmsType" class="form-select" formControlName="type">
+          <option *ngFor="let type of qmsTypes" [value]="type.value">{{ type.key }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="priorityLevel">Priority Level</label>
+        <select id="priorityLevel" class="form-select" formControlName="priority">
+          <option *ngFor="let priority of priorities" [value]="priority.value">{{ priority.key }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="timeUnit">Time Unit</label>
+        <select id="timeUnit" class="form-select" formControlName="unit">
+          <option *ngFor="let unit of units" [value]="unit.value">{{ unit.key }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label for="responseTime">Response Time</label>
+        <input id="responseTime" type="number" class="form-control" formControlName="responseTime" />
+      </div>
+
+      <div class="col-md-4">
+        <label for="resolutionTime">Resolution Time</label>
+        <input id="resolutionTime" type="number" class="form-control" formControlName="resolutionTime" />
+      </div>
+
+      <div class="col-md-4">
+        <label for="escalationTime">Escalation Time</label>
+        <input id="escalationTime" type="number" class="form-control" formControlName="escalationTime" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-secondary" (click)="bsModalRef.hide()">Cancel</button>
+  <button class="btn btn-primary" (click)="save()">
+    {{ mode === 'add' ? 'Create Rule' : 'Update Rule' }}
+  </button>
+</div>

@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CommonModule } from '@angular/common';
-import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
 import {
   FormBuilder,
   FormGroup,
@@ -20,14 +19,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-email-config',
-  imports: [
-    NgSelectModule,
-    BsDropdownModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CommonModule,
-    EnumToStringPipe,
-  ],
+  imports: [NgSelectModule, BsDropdownModule, FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './email-config.html',
   styleUrl: './email-config.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

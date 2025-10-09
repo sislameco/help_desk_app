@@ -1,3 +1,5 @@
+import { EnumRStatus } from "../../user-management/models/user-list-model";
+
 export enum EnumUnit {
   Minutes = 1,
   Hours = 2,
@@ -24,7 +26,10 @@ export interface SLAInputDto {
   priority: EnumPriority;
   fkCompanyId: number;
   unit: EnumUnit;
-  value: number;
+  responseTime: number;
+  resolutionTime: number;
+  escalationTime: number;
+  status: EnumRStatus;
 }
 
 export interface SLAOutputDto extends SLAInputDto {

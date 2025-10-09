@@ -1,1 +1,32 @@
-<p>sla-configuration works!</p>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>SLA Settings</h3>
+  <button class="btn btn-primary" (click)="openAdd()">Add SLA Rule</button>
+</div>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>QMS Type</th>
+      <th>Priority</th>
+      <th>Response Time</th>
+      <th>Resolution Time</th>
+      <th>Escalation Time</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of slas()">
+      <td>{{ item.type }}</td>
+      <td><span [class]="'badge bg-' + getPriorityColor(item.priority)">{{ item.priority }}</span></td>
+      <td>{{ item.responseTime }} {{ item.unit }}</td>
+      <td>{{ item.resolutionTime }} {{ item.unit }}</td>
+      <td>{{ item.escalationTime }} {{ item.unit }}</td>
+      <td>{{ item.status }}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="openEdit(item)">Edit</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="delete(item.id!)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
