@@ -19,7 +19,6 @@ export class EmailConfigurationService {
   }
 
   getAllActiveByCompanyId(fkCompanyId: number): Observable<EmailConfigurationOutput[]> {
-    debugger;
     return this.http.get<EmailConfigurationOutput[]>(`${this.baseUrl}/all/${fkCompanyId}`);
   }
 }

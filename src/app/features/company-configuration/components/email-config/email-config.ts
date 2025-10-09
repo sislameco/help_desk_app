@@ -5,8 +5,17 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CommonModule } from '@angular/common';
 import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EmailConfigInputDto, EmailConfigurationOutput } from '../../models/email-configuration-model';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  EmailConfigInputDto,
+  EmailConfigurationOutput,
+} from '../../models/email-configuration-model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -73,6 +82,7 @@ export class EmailConfig implements OnInit {
     }
 
     const input: EmailConfigInputDto = this.form.value;
+    input.id = this.selectedId || 0;
     this.emailService.updateFields(input).subscribe({
       next: () => {
         this.toastr.success('Email configuration updated');
