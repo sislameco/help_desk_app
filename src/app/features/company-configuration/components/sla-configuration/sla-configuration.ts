@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { EnumPriority, SLAOutputDto } from '../../models/sla.model';
+import { EnumPriority, EnumQMSType, EnumUnit, SLAOutputDto } from '../../models/sla.model';
 import { SLAService } from '../../services/sla.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { AddEditModal } from './add-edit-modal/add-edit-modal';
@@ -8,10 +8,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+import { EnumRStatus } from '../../../user-management/models/user-list-model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sla-configuration',
-  imports: [NgSelectModule, BsDropdownModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [
+    NgSelectModule,
+    BsDropdownModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    EnumToStringPipe,
+  ],
   templateUrl: './sla-configuration.html',
   styleUrl: './sla-configuration.scss',
   standalone: true,
@@ -21,8 +31,18 @@ import { derivedAsync } from 'ngxtension/derived-async';
 export class SlaConfiguration {
   private readonly service = inject(SLAService);
   private readonly modalService = inject(BsModalService);
+  enumPriority: typeof EnumPriority = EnumPriority;
+  enumQMSType: typeof EnumQMSType = EnumQMSType;
+  enumUnit: typeof EnumUnit = EnumUnit;
+  enumRstatus: typeof EnumRStatus = EnumRStatus;
+  private route = inject(ActivatedRoute);
+  companyId = Number(this.route.snapshot.paramMap.get('id'));
   isLoading = signal(false);
-
+  totalRules = 0;
+  activeRules = 0;
+  criticalRules = 0;
+  avgResponse = 0;
+  avgResolution = 0;
   readonly slas = derivedAsync(() => this.service.getAll(), {
     initialValue: [],
   });
@@ -31,7 +51,7 @@ export class SlaConfiguration {
     const modalConfig = {
       backdrop: true,
       ignoreBackdropClick: true,
-      initialState: { sla: {} as SLAOutputDto },
+      initialState: { sla: {} as SLAOutputDto, companyId: this.companyId },
     };
     const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
     this.modalService.show(AddEditModal, modalParams);
@@ -41,7 +61,7 @@ export class SlaConfiguration {
     const modalConfig = {
       backdrop: true,
       ignoreBackdropClick: true,
-      initialState: { sla, mode: 'edit' as const },
+      initialState: { sla, mode: 'edit' as const, companyId: this.companyId },
     };
     const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
     this.modalService.show(AddEditModal, modalParams);

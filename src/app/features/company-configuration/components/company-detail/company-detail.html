@@ -78,7 +78,7 @@
       <tbody>
         @for (source of company?.defineDataSources ?? []; track source.id) {
           <tr>
-            <td>{{ source.type | enumToString }}</td>
+            <td>{{ source.type | enumToString: enumDataSource }}</td>
             <td>{{ source.source }}</td>
             <td class="text-center">
               <button

@@ -1,0 +1,12 @@
+.sla-summary .card {
+  border-radius: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.sla-summary .card:hover {
+  transform: translateY(-4px);
+}
+
+.sla-summary h4 {
+  font-size: 1.75rem;
+}

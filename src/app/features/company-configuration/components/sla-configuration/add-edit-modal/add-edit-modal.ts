@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, Input, OnInit } from '@angular/core';
 import { EnumPriority, EnumQMSType, EnumUnit, SLAOutputDto } from '../../../models/sla.model';
 import { SLAService } from '../../../services/sla.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -16,12 +16,11 @@ import { CommonModule } from '@angular/common';
 export class AddEditModal implements OnInit {
   mode: 'add' | 'edit' = 'add';
   @Input() sla?: SLAOutputDto;
+  @Input() companyId: number | 1 = 1;
   private readonly fb = inject(FormBuilder);
   slaForm: FormGroup;
   private readonly service = inject(SLAService);
   bsModalRef = inject(BsModalRef);
-
-  // 🔹 Enums
   EnumUnit = EnumUnit;
   EnumPriority = EnumPriority;
   EnumQMSType = EnumQMSType;
@@ -33,6 +32,7 @@ export class AddEditModal implements OnInit {
 
   constructor() {
     this.slaForm = this.fb.group({
+      fkCompanyId: this.companyId,
       type: [EnumQMSType.Ticket, Validators.required],
       priority: [EnumPriority.Medium, Validators.required],
       unit: [EnumUnit.Hours, Validators.required],
@@ -44,6 +44,7 @@ export class AddEditModal implements OnInit {
   ngOnInit(): void {
     if (this.mode === 'edit' && this.sla) {
       this.slaForm.patchValue({
+        fkCompanyId: this.companyId,
         type: this.sla.type ?? EnumQMSType.Ticket,
         priority: this.sla.priority ?? EnumPriority.Medium,
         unit: this.sla.unit ?? EnumUnit.Hours,
