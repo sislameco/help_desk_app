@@ -24,3 +24,11 @@ export enum EnumDataSource {
   Customer = 4,
   Scheme = 5,
 }
+export enum EnumDataType {
+  textInput = 1,
+  textArea = 2,
+  number = 3,
+  date = 4,
+  dropdownList = 5,
+  fileUpload = 6,
+}

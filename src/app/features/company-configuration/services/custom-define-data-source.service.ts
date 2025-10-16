@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CustomFieldDto } from '../models/data-config.model';
+import { CustomFieldDto, CustomFieldOutputDto } from '../models/data-config.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -14,18 +14,18 @@ export class CustomDefineDataSourceService {
   private readonly baseUrl = `${environment.apiBaseUrl}/api/field`;
 
   /** 🔹 Get all fields */
-  getAll(): Observable<CustomFieldDto[]> {
-    return this.http.get<CustomFieldDto[]>(this.baseUrl);
+  getAll(): Observable<CustomFieldOutputDto[]> {
+    return this.http.get<CustomFieldOutputDto[]>(this.baseUrl);
   }
 
   /** 🔹 Get single field by ID */
-  getById(id: number): Observable<CustomFieldDto> {
-    return this.http.get<CustomFieldDto>(`${this.baseUrl}/${id}`);
+  getById(id: number): Observable<CustomFieldOutputDto> {
+    return this.http.get<CustomFieldOutputDto>(`${this.baseUrl}/${id}`);
   }
 
   /** 🔹 Create multiple fields */
-  createMany(dtos: CustomFieldDto[]): Observable<CustomFieldDto[]> {
-    return this.http.post<CustomFieldDto[]>(this.baseUrl, dtos);
+  createMany(dtos: CustomFieldDto): Observable<CustomFieldDto> {
+    return this.http.post<CustomFieldDto>(this.baseUrl, dtos);
   }
 
   /** 🔹 Update field by ID */

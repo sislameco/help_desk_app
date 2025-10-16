@@ -1,36 +1,41 @@
 /* eslint-disable no-console */
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { CustomFieldDto } from '../../models/data-config.model';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { CustomFieldOutputDto } from '../../models/data-config.model';
 import { CustomDefineDataSourceService } from '../../services/custom-define-data-source.service';
+import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+import { EnumDataType } from '../../models/company.model';
+import { CustomFieldModalComponent } from './custom-field-modal/custom-field-modal';
+import { CommonModule } from '@angular/common';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-custom-define-data-source',
-  imports: [],
   templateUrl: './custom-define-data-source.html',
   styleUrl: './custom-define-data-source.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [EnumToStringPipe, CommonModule],
+  providers: [BsModalService],
+  standalone: true,
 })
-export class CustomDefineDataSourceComponent implements OnInit {
-  private service = inject(CustomDefineDataSourceService);
-
-  fields: CustomFieldDto[] = [];
-  loading = false;
-
-  ngOnInit(): void {
+export class CustomDefineDataSourceComponent {
+  private readonly service = inject(CustomDefineDataSourceService);
+  private readonly modalService = inject(BsModalService);
+  readonly fields = signal<CustomFieldOutputDto[]>([]);
+  readonly loading = signal(false);
+  enumDataType: typeof EnumDataType = EnumDataType;
+  constructor() {
     this.loadFields();
   }
 
   loadFields() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getAll().subscribe({
       next: (res) => {
-        this.fields = res;
-        this.loading = false;
+        this.fields.set(res);
+        this.loading.set(false);
       },
-
-      error: (err) => {
-        console.error('Failed to load fields', err);
-        this.loading = false;
+      error: () => {
+        this.loading.set(false);
       },
     });
   }
@@ -41,15 +46,28 @@ export class CustomDefineDataSourceComponent implements OnInit {
     }
     if (confirm('Are you sure you want to delete this field?')) {
       this.service.delete(id).subscribe(() => {
-        this.fields = this.fields.filter((f) => f.id !== id);
+        this.fields.update((fields) => fields.filter((f) => f.id !== id));
       });
     }
   }
 
   addField() {
-    // 👉 later you can open modal for create field
+    const modalConfig = {
+      backdrop: true,
+      ignoreBackdropClick: true,
+      initialState: { mode: 'edit' as const, fkTicketTypeId: 0 },
+    };
+    const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
+    this.modalService.show(CustomFieldModalComponent, modalParams);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  editField(field: CustomFieldDto) {}
+  editField(field: CustomFieldOutputDto) {
+    const modalConfig = {
+      backdrop: true,
+      ignoreBackdropClick: true,
+      initialState: { mode: 'edit' as const, fkTicketTypeId: field.id },
+    };
+    const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
+    this.modalService.show(CustomFieldModalComponent, modalParams);
+  }
 }

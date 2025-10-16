@@ -1,0 +1,147 @@
+<div class="modal-content rounded-3 shadow-sm border-0">
+  <div class="modal-header border-0 pb-0">
+    <h5 class="modal-title fw-semibold">Add Custom Field</h5>
+    <button type="button" class="btn-close" (click)="cancel()"></button>
+  </div>
+
+  <div class="modal-body pt-2">
+    <p class="text-muted small mb-4">
+      Configure a custom field to add to QMS forms for additional data collection.
+    </p>
+
+    <form [formGroup]="form">
+      <!-- Field Name + QMS Type -->
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Display Name
+          <input
+            formControlName="displayName"
+            placeholder="Enter field name..."
+            class="form-control form-control-sm rounded-2"
+          />
+          </label>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Ticket Type
+          <select
+            class="form-select form-select-sm rounded-2"
+            formControlName="fkTicketTypeId"
+          >
+            <option [value]="0">Tickets</option>
+            <option [value]="1">Complaints</option>
+            <option [value]="2">CAPA</option>
+          </select>
+          </label>
+        </div>
+      </div>
+
+      <!-- Field Type + Required -->
+      <div class="row g-3 mb-3 align-items-center">
+        <div class="col-md-6">
+          <label class="form-label fw-medium">Field Type
+          <select
+            formControlName="dataType"
+            class="form-select form-select-sm rounded-2"
+          >
+            <option [value]="EnumDataType.textInput">Text</option>
+            <option [value]="EnumDataType.number">Number</option>
+            <option [value]="EnumDataType.date">Date</option>
+            <option [value]="EnumDataType.dropdownList">Dropdown List</option>
+          </select>
+          </label>
+        </div>
+        @if (+form.value.dataType === EnumDataType.dropdownList) {
+<div class="form-check mb-2">
+  <input
+    type="checkbox"
+    class="form-check-input"
+    id="isMultiSelect"
+    formControlName="isMultiSelect"
+  />
+  <label class="form-check-label" for="isMultiSelect">
+    Multi Select
+  </label>
+</div>
+        }
+        <div class="col-md-6 d-flex align-items-center mt-3 mt-md-0">
+          <input
+            type="checkbox"
+            id="isRequired"
+            class="form-check-input me-2"
+            formControlName="isRequired"
+          />
+          <label for="isRequired" class="form-check-label small text-muted"
+            >Required Field</label
+          >
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label class="form-label fw-medium">Description
+        <textarea
+          formControlName="description"
+          rows="2"
+          placeholder="Optional description for the field..."
+          class="form-control form-control-sm rounded-2"
+        ></textarea>
+        </label>
+      </div>
+@if (+form.value.dataType === EnumDataType.dropdownList) {
+ 
+      <!-- Dropdown Values -->
+      <div class="mb-3">
+        <p class="form-label fw-medium">List Options</p>
+        <div
+          formArrayName="dDLValue"
+          class="d-flex flex-column gap-2 mb-2"
+        >
+          <div
+            *ngFor="let ctrl of ddlValues.controls; let i = index"
+            class="d-flex align-items-center gap-2"
+          >
+            <input
+              [formControlName]="i"
+              placeholder="Option {{ i + 1 }}"
+              class="form-control form-control-sm rounded-2"
+            />
+            <button
+              class="btn btn-outline-danger btn-sm"
+              type="button"
+              (click)="removeDDLValue(i)"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm rounded-2"
+          (click)="addDDLValue()"
+        >
+          + Add Option
+        </button>
+      </div>
+    }
+    </form>
+  </div>
+
+  <div class="modal-footer border-0 pt-0">
+    <button
+      type="button"
+      class="btn btn-light rounded-2 px-3"
+      (click)="cancel()"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary rounded-2 px-4"
+      (click)="submit()"
+      [disabled]="form.invalid"
+    >
+      Create Field
+    </button>
+  </div>
+</div>

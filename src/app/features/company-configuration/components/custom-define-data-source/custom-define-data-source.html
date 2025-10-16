@@ -9,51 +9,64 @@
     </button>
   </div>
 
-  <div *ngIf="loading" class="text-center my-3">
-    <div class="spinner-border text-primary"></div>
-  </div>
+  @if (loading()) {
+    <div class="text-center my-3">
+      <div class="spinner-border text-primary"></div>
+    </div>
+  }
 
-  <div class="table-responsive" *ngIf="!loading && fields.length > 0">
-    <table class="table table-bordered align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Field Name</th>
-          <th>QMS Type</th>
-          <th>Field Type</th>
-          <th>Required</th>
-          <th>Description</th>
-          <th style="width: 120px;">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let f of fields">
-          <td>{{ f.name }}</td>
-          <td><span class="badge bg-secondary">{{ f.qmsType }}</span></td>
-          <td>{{ f.type }}</td>
-          <td>
-            <span
-              class="badge"
-              [class.bg-danger]="f.isRequired"
-              [class.bg-secondary]="!f.isRequired"
-            >
-              {{ f.isRequired ? 'Required' : 'Optional' }}
-            </span>
-          </td>
-          <td>{{ f.description }}</td>
-          <td>
-            <button class="btn btn-sm btn-outline-secondary me-1" (click)="editField(f)">
-              <i class="bi bi-pencil"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-danger" (click)="deleteField(f.id)">
-              <i class="bi bi-trash"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
-  <div *ngIf="!loading && fields.length === 0" class="text-center text-muted py-3">
-    No custom fields configured yet.
-  </div>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Field Name</th>
+            <th>Ticket Type ID</th>
+            <th>Data Type</th>
+            <th>Value</th>
+            <th>Multi Select</th>
+            <th>Required</th>
+            <th>Description</th>
+
+            <th style="width: 120px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+                  @for (field of fields(); track field.id) {
+            <tr>
+              <td>{{ field.displayName }}</td>
+              <td><span class="badge bg-secondary">{{ field.fkTicketTypeId }}</span></td>
+              <td>{{ field.dataType | enumToString: enumDataType }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [class.bg-danger]="field.isRequired"
+                  [class.bg-secondary]="!field.isRequired"
+                >
+                  {{ field.isRequired ? 'Required' : 'Optional' }}
+                </span>
+              </td>
+                      <td>
+                <span
+                  class="badge"
+                  [class.bg-danger]="field.isMultiSelect"
+                  [class.bg-secondary]="!field.isMultiSelect"
+                >
+                  {{ field.isMultiSelect ? 'Multi-Select' : 'Single-Select' }}
+                </span>
+              </td>
+              <td>{{ field.description }}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-secondary me-1" (click)="editField(field)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteField(field.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 </div>
