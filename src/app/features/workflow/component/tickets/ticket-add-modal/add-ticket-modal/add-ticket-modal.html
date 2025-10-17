@@ -11,7 +11,9 @@
       <h5 class="section-title">🧾 Basic Information</h5>
 
       <div class="form-grid">
-        <div class="form-group">
+
+        <!-- conditional company select  if company is multiple companies-->
+        <div class="form-group" >
           <p>Company</p>
           <select class="form-select" [value]="fkCompanyId" disabled>
             <option [value]="fkCompanyId">Company #{{ fkCompanyId }}</option>
@@ -139,14 +141,24 @@
           </select>
         </div>
 
-        <div class="form-group full">
-          <p>Departments</p>
-          <select multiple formControlName="fkDepartmentId" class="form-select">
-            @for (d of departments(); track d.id) {
-              <option [value]="d.id">{{ d.name }}</option>
-            }
-          </select>
-        </div>
+    <!-- Departments (multi-select) -->
+    <div class="form-group full">
+      <p>Departments</p>
+      <ng-select
+        class="select-dropdown"
+        [items]="departments()"
+        [multiple]="true"
+        bindLabel="name"
+        bindValue="id"
+        [formControlName]="'fkDepartmentId'"
+        [searchable]="true"
+        placeholder="Select departments"
+      >
+        <ng-template ng-option-tmp let-item="item">
+          <span>{{ item.name }}</span>
+        </ng-template>
+      </ng-select>
+    </div>
 
         <div class="form-group full">
           <p>Attachments</p>

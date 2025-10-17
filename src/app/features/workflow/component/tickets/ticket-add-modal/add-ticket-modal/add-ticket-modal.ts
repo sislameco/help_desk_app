@@ -7,15 +7,15 @@ import { FieldOutputDto } from '../../../../../company-configuration/models/ddl.
 import { TicketService } from '../../../../services/ticket.service';
 import { AddTicketInputDto } from '../../../../models/ticket.model.model';
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-add-ticket-modal',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgSelectComponent],
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [BsModalRef],
 })
 export class AddTicketModal {
   // 🔹 Inject services
