@@ -1,11 +1,18 @@
 <div class="d-flex justify-content-end mb-3">
   <button
+    class="btn btn-primary me-2"
+    (click)="openAddTicket()"
+  >
+    <i class="bi bi-plus-lg"></i> Add Ticket
+  </button>
+
+  <button
     class="btn btn-outline-secondary me-2"
     [class.active]="viewMode() === 'list'"
     (click)="setView('list')"
   >
     <i class="bi bi-list"></i> List
-  </button>
+  </button> 
 
   <button
     class="btn btn-outline-secondary"

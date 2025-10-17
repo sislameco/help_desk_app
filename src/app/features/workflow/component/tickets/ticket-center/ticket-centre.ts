@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { AddTicketModal } from '../ticket-add-modal/add-ticket-modal/add-ticket-modal';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { TicketService } from '../../../services/ticket.service';
 import { Params } from '@angular/router';
@@ -12,9 +14,11 @@ import { TicketKanbanView } from './ticket-kanban-view/ticket-kanban-view';
   templateUrl: './ticket-centre.html',
   styleUrl: './ticket-centre.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [BsModalService],
 })
 export class TicketCentre {
   private readonly ticketService = inject(TicketService);
+  private readonly modalService = inject(BsModalService);
 
   readonly viewMode = signal<'list' | 'kanban'>('list');
 
@@ -22,10 +26,13 @@ export class TicketCentre {
     this.viewMode.set(mode);
   }
 
-  // Example params, replace with actual filter logic as needed
   readonly params = signal<Params>({});
 
   readonly ticketsResponse = derivedAsync(() => this.ticketService.getTickets(this.params()), {
     initialValue: { items: [], total: 0, page: 1, pageSize: 0 },
   });
+
+  openAddTicket() {
+    this.modalService.show(AddTicketModal, { class: 'modal-lg' });
+  }
 }
