@@ -1,28 +1,57 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { map, of } from 'rxjs';
 import { TicketReferenceService } from '../../../../../company-configuration/services/ticket-reference-service';
 import { FieldOutputDto } from '../../../../../company-configuration/models/ddl.model';
-import { map, of } from 'rxjs';
+import { TicketService } from '../../../../services/ticket.service';
+import { AddTicketInputDto } from '../../../../models/ticket.model.model';
 
 @Component({
   selector: 'app-add-ticket-modal',
-  imports: [],
+  standalone: true,
+  imports: [ReactiveFormsModule],
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddTicketModal {
+  // 🔹 Inject services
+  private readonly fb = inject(FormBuilder);
   private readonly ticketRef = inject(TicketReferenceService);
+  private readonly ticketService = inject(TicketService);
 
-  fkCompanyId = 1; // Set this signal as needed
-  ticketTypeId = signal<number | null>(null); // Set this signal as needed
+  // 🔹 Base signals (unchanged)
+  fkCompanyId = 1;
+  ticketTypeId = signal<number | null>(null);
 
+  // =======================================
+  // 🔹 Reactive form
+  // =======================================
+  form: FormGroup = this.fb.group({
+    subject: [''],
+    description: [''],
+    isCustomer: [false],
+    fkCustomerId: [null],
+    fkProjectId: [null],
+    fkAssignUser: [null],
+    fkDepartmentId: [[]],
+    files: [[]],
+  });
+
+  selectedFiles: File[] = [];
+  uploadedFileIds: number[] = [];
+  isSubmitting = signal(false);
+
+  // =======================================
+  // 🔹 derivedAsync dropdowns (unchanged)
+  // =======================================
   departments = derivedAsync(
     () =>
       this.fkCompanyId
         ? this.ticketRef
             .getDepartments(this.fkCompanyId)
-            .pipe(map((result) => (Array.isArray(result) ? result : [result])))
+            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
         : of([]),
     { initialValue: [] },
   );
@@ -32,7 +61,7 @@ export class AddTicketModal {
       this.fkCompanyId
         ? this.ticketRef
             .getTicketTypes(this.fkCompanyId)
-            .pipe(map((result) => (Array.isArray(result) ? result : [result])))
+            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
         : of([]),
     { initialValue: [] },
   );
@@ -42,17 +71,7 @@ export class AddTicketModal {
       this.fkCompanyId
         ? this.ticketRef
             .getRootCauses(this.fkCompanyId)
-            .pipe(map((result) => (Array.isArray(result) ? result : [result])))
-        : of([]),
-    { initialValue: [] },
-  );
-
-  relocations = derivedAsync(
-    () =>
-      this.fkCompanyId
-        ? this.ticketRef
-            .getRelocations(this.fkCompanyId)
-            .pipe(map((result) => (Array.isArray(result) ? result : [result])))
+            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
         : of([]),
     { initialValue: [] },
   );
@@ -62,7 +81,7 @@ export class AddTicketModal {
       this.fkCompanyId
         ? this.ticketRef
             .getCustomers(this.fkCompanyId)
-            .pipe(map((result) => (Array.isArray(result) ? result : [result])))
+            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
         : of([]),
     { initialValue: [] },
   );
@@ -72,7 +91,7 @@ export class AddTicketModal {
       this.fkCompanyId
         ? this.ticketRef
             .getProjects(this.fkCompanyId)
-            .pipe(map((result) => (Array.isArray(result) ? result : [result])))
+            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
         : of([]),
     { initialValue: [] },
   );
@@ -80,9 +99,7 @@ export class AddTicketModal {
   users = derivedAsync(
     () =>
       this.fkCompanyId
-        ? this.ticketRef
-            .getUsers(this.fkCompanyId)
-            .pipe(map((result) => (Array.isArray(result) ? result : [result])))
+        ? this.ticketRef.getUsers(this.fkCompanyId).pipe(map((r) => (Array.isArray(r) ? r : [r])))
         : of([]),
     { initialValue: [] },
   );
@@ -90,11 +107,64 @@ export class AddTicketModal {
   subforms = derivedAsync<FieldOutputDto[]>(
     () =>
       this.fkCompanyId
-        ? this.ticketRef.getSubforms(1).pipe(
-            // Ensure the result is always an array
-            map((result) => (Array.isArray(result) ? result : [result])),
-          )
+        ? this.ticketRef.getSubforms(1).pipe(map((r) => (Array.isArray(r) ? r : [r])))
         : of([]),
     { initialValue: [] },
   );
+
+  // =======================================
+  // 🔹 File upload handling
+  // =======================================
+  onFileSelected(event: Event) {
+    const files = (event.target as HTMLInputElement).files as FileList;
+    this.selectedFiles = Array.from(files);
+  }
+
+  uploadFiles() {
+    if (this.selectedFiles.length === 0) {
+      return;
+    }
+
+    // this.fileService.uploadFiles(this.selectedFiles).subscribe({
+    //   next: (res) => {
+    //     this.uploadedFileIds = res.map((f) => f.id);
+    //     this.form.patchValue({ files: this.uploadedFileIds });
+    //   },
+    // });
+  }
+
+  // =======================================
+  // 🔹 onSubmit handler (used by ngSubmit)
+  // =======================================
+  onSubmit() {
+    if (this.form.invalid) {
+      return;
+    }
+    this.isSubmitting.set(true);
+
+    const input: AddTicketInputDto = {
+      fkCompanyId: this.fkCompanyId,
+      subject: this.form.value.subject,
+      description: this.form.value.description,
+      isCustomer: this.form.value.isCustomer,
+      fkCustomerId: this.form.value.fkCustomerId,
+      fkProjectId: this.form.value.fkProjectId,
+      fkAssignUser: this.form.value.fkAssignUser,
+      fkDepartmentId: this.form.value.fkDepartmentId,
+      files: this.form.value.files,
+      fkTicketTypeId: 0,
+      subFrom: [], // todo: this.form.value.subForm,
+      fkRelocationId: 0,
+      fkRootCauseId: 0,
+    };
+
+    this.ticketService.createTicket(input).subscribe({
+      next: () => {
+        this.isSubmitting.set(true);
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+      },
+    });
+  }
 }

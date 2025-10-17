@@ -1,1 +1,176 @@
-<p>add-ticket-modal works!</p>
+<div class="ticket-create-modal">
+  <div class="modal-header d-flex align-items-center justify-content-between mb-3">
+    <h3 class="fw-bold mb-0">Create New Ticket</h3>
+    <button type="button" class="btn-close" aria-label="Close"></button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form">
+
+    <!-- 🧾 Basic Information -->
+    <section class="ticket-section">
+      <h5 class="section-title">🧾 Basic Information</h5>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <p>Company</p>
+          <select class="form-select" [value]="fkCompanyId" disabled>
+            <option [value]="fkCompanyId">Company #{{ fkCompanyId }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <p>Subject</p>
+          <input type="text" formControlName="subject" class="form-control" placeholder="Enter ticket subject..." />
+        </div>
+
+        <div class="form-group full">
+          <p>Description</p>
+          <textarea
+            formControlName="description"
+            rows="3"
+            class="form-control"
+            placeholder="Describe the issue in detail..."
+          ></textarea>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- 👤 Customer & Project -->
+    <section class="ticket-section">
+      <h5 class="section-title">👤 Customer & Project</h5>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <p>Is Related to a Customer?</p>
+          <input type="checkbox" formControlName="isCustomer" />
+        </div>
+
+        <div class="form-group">
+          <p>Customer</p>
+          <select formControlName="fkCustomerId" class="form-select">
+            @for (c of customers(); track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <p>Project</p>
+          <select formControlName="fkProjectId" class="form-select">
+            @for (p of projects(); track p.id) {
+              <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- 📂 Ticket Type & Details -->
+    <section class="ticket-section">
+      <h5 class="section-title">📂 Ticket Type & Details</h5>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <p>Ticket Type</p>
+          <select formControlName="fkTicketTypeId" class="form-select" (change)="ticketTypeId.set($event.target.value)">
+            @for (t of ticketTypes(); track t.id) {
+              <option [value]="t.id">{{ t.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <p>Relocation</p>
+          <select formControlName="fkRelocationId" class="form-select">
+            @for (r of rootCauses(); track r.id) {
+              <option [value]="r.id">{{ r.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <p>Root Cause</p>
+          <select formControlName="fkRootCauseId" class="form-select">
+            @for (rc of rootCauses(); track rc.id) {
+              <option [value]="rc.id">{{ rc.name }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Dynamic Subform -->
+      @if (subforms()?.length > 0) {
+        <div class="subform mt-3">
+          <h6 class="text-muted mb-2">Additional Fields</h6>
+          <div class="form-grid">
+            @for (field of subforms(); track field.id) {
+              <div class="form-group">
+                <p>{{ field.displayName }}</p>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter {{ field.displayName }}"
+                  [formControlName]="'subform_' + field.id"
+                />
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+
+    <hr />
+
+    <!-- 👥 Assignment & Attachments -->
+    <section class="ticket-section">
+      <h5 class="section-title">👥 Assignment & Attachments</h5>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <p>Assign User</p>
+          <select formControlName="fkAssignUser" class="form-select">
+            @for (u of users.value(); track u.id) {
+              <option [value]="u.id">{{ u.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <p>Departments</p>
+          <select multiple formControlName="fkDepartmentId" class="form-select">
+            @for (d of departments.value(); track d.id) {
+              <option [value]="d.id">{{ d.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group full">
+          <p>Attachments</p>
+          <div class="upload-box">
+            <input type="file" multiple (change)="onFileSelected($event)" />
+            <button type="button" class="btn btn-outline-primary mt-2" (click)="uploadFiles()">Upload Files</button>
+          </div>
+
+          @if (uploadedFileIds.length > 0) {
+            <ul class="uploaded-list mt-2">
+              @for (id of uploadedFileIds; track id) {
+                <li>File ID: {{ id }}</li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Submit -->
+    <div class="modal-footer d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">Create Ticket</button>
+    </div>
+  </form>
+</div>
