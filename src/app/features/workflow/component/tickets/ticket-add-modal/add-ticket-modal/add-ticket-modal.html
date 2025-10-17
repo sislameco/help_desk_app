@@ -51,20 +51,36 @@
 
         <div class="form-group">
           <p>Customer</p>
-          <select formControlName="fkCustomerId" class="form-select">
-            @for (c of customers(); track c.id) {
-              <option [value]="c.id">{{ c.fullName }}</option>
-            }
-          </select>
+            <ng-select
+              class="select-dropdown"
+              [items]="customers()"
+              bindLabel="fullName"
+              bindValue="id"
+              [formControlName]="'fkCustomerId'"
+              [searchable]="true"
+              placeholder="Select customer"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.fullName }}</span>
+              </ng-template>
+            </ng-select>
         </div>
 
         <div class="form-group">
           <p>Project</p>
-          <select formControlName="fkProjectId" class="form-select">
-            @for (p of projects(); track p.id) {
-              <option [value]="p.id">{{ p.referenceNumber }}</option>
-            }
-          </select>
+            <ng-select
+              class="select-dropdown"
+              [items]="projects()"
+              bindLabel="referenceNumber"
+              bindValue="id"
+              [formControlName]="'fkProjectId'"
+              [searchable]="true"
+              placeholder="Select project"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.referenceNumber }}</span>
+              </ng-template>
+            </ng-select>
         </div>
       </div>
     </section>
@@ -78,29 +94,54 @@
       <div class="form-grid">
         <div class="form-group">
           <p>Ticket Type</p>
-          <select formControlName="fkTicketTypeId" class="form-select" (change)="onTicketTypeChange($event)">
-            @for (t of ticketTypes(); track t.id) {
-              <option [value]="t.id">{{ t.name }}</option>
-            }
-          </select>
+            <ng-select
+              class="select-dropdown"
+              [items]="ticketTypes()"
+              bindLabel="name"
+              bindValue="id"
+              [formControlName]="'fkTicketTypeId'"
+              [searchable]="true"
+              placeholder="Select ticket type"
+              (change)="onTicketTypeChange($event)"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.name }}</span>
+              </ng-template>
+            </ng-select>
         </div>
 
         <div class="form-group">
           <p>Relocation</p>
-          <select formControlName="fkRelocationId" class="form-select">
-            @for (r of rootCauses(); track r.id) {
-              <option [value]="r.id">{{ r.name }}</option>
-            }
-          </select>
+            <ng-select
+              class="select-dropdown"
+              [items]="rootCauses()"
+              bindLabel="name"
+              bindValue="id"
+              [formControlName]="'fkRelocationId'"
+              [searchable]="true"
+              placeholder="Select relocation"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.name }}</span>
+              </ng-template>
+            </ng-select>
         </div>
 
         <div class="form-group">
           <p>Root Cause</p>
-          <select formControlName="fkRootCauseId" class="form-select">
-            @for (rc of rootCauses(); track rc.id) {
-              <option [value]="rc.id">{{ rc.name }}</option>
-            }
-          </select>
+            <ng-select
+              class="select-dropdown"
+              [items]="rootCauses()"
+              bindLabel="name"
+              bindValue="id"
+              [formControlName]="'fkRootCauseId'"
+              [searchable]="true"
+              placeholder="Select root cause"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.name }}</span>
+              </ng-template>
+            </ng-select>
         </div>
       </div>
 
@@ -134,11 +175,19 @@
       <div class="form-grid">
         <div class="form-group">
           <p>Assign User</p>
-          <select formControlName="fkAssignUser" class="form-select">
-            @for (u of users(); track u.id) {
-              <option [value]="u.id">{{ u.name }}</option>
-            }
-          </select>
+            <ng-select
+              class="select-dropdown"
+              [items]="users()"
+              bindLabel="name"
+              bindValue="id"
+              [formControlName]="'fkAssignUser'"
+              [searchable]="true"
+              placeholder="Select user"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.name }}</span>
+              </ng-template>
+            </ng-select>
         </div>
 
     <!-- Departments (multi-select) -->
