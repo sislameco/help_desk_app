@@ -1,7 +1,7 @@
 <div class="ticket-create-modal">
   <div class="modal-header d-flex align-items-center justify-content-between mb-3">
     <h3 class="fw-bold mb-0">Create New Ticket</h3>
-    <button type="button" class="btn-close" aria-label="Close"></button>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form">
@@ -51,7 +51,7 @@
           <p>Customer</p>
           <select formControlName="fkCustomerId" class="form-select">
             @for (c of customers(); track c.id) {
-              <option [value]="c.id">{{ c.name }}</option>
+              <option [value]="c.id">{{ c.fullName }}</option>
             }
           </select>
         </div>
@@ -60,7 +60,7 @@
           <p>Project</p>
           <select formControlName="fkProjectId" class="form-select">
             @for (p of projects(); track p.id) {
-              <option [value]="p.id">{{ p.name }}</option>
+              <option [value]="p.id">{{ p.referenceNumber }}</option>
             }
           </select>
         </div>
@@ -76,7 +76,7 @@
       <div class="form-grid">
         <div class="form-group">
           <p>Ticket Type</p>
-          <select formControlName="fkTicketTypeId" class="form-select" (change)="ticketTypeId.set($event.target.value)">
+          <select formControlName="fkTicketTypeId" class="form-select" (change)="onTicketTypeChange($event)">
             @for (t of ticketTypes(); track t.id) {
               <option [value]="t.id">{{ t.name }}</option>
             }
@@ -103,7 +103,7 @@
       </div>
 
       <!-- Dynamic Subform -->
-      @if (subforms()?.length > 0) {
+  <!-- @if (subforms().length > 0) {
         <div class="subform mt-3">
           <h6 class="text-muted mb-2">Additional Fields</h6>
           <div class="form-grid">
@@ -114,13 +114,13 @@
                   type="text"
                   class="form-control"
                   placeholder="Enter {{ field.displayName }}"
-                  [formControlName]="'subform_' + field.id"
+                  [formControlName]="'subForm'"
                 />
               </div>
             }
           </div>
         </div>
-      }
+      } -->
     </section>
 
     <hr />
@@ -133,7 +133,7 @@
         <div class="form-group">
           <p>Assign User</p>
           <select formControlName="fkAssignUser" class="form-select">
-            @for (u of users.value(); track u.id) {
+            @for (u of users(); track u.id) {
               <option [value]="u.id">{{ u.name }}</option>
             }
           </select>
@@ -142,7 +142,7 @@
         <div class="form-group full">
           <p>Departments</p>
           <select multiple formControlName="fkDepartmentId" class="form-select">
-            @for (d of departments.value(); track d.id) {
+            @for (d of departments(); track d.id) {
               <option [value]="d.id">{{ d.name }}</option>
             }
           </select>

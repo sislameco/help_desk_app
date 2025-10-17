@@ -6,6 +6,7 @@ import { TicketReferenceService } from '../../../../../company-configuration/ser
 import { FieldOutputDto } from '../../../../../company-configuration/models/ddl.model';
 import { TicketService } from '../../../../services/ticket.service';
 import { AddTicketInputDto } from '../../../../models/ticket.model.model';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-add-ticket-modal',
@@ -14,13 +15,14 @@ import { AddTicketInputDto } from '../../../../models/ticket.model.model';
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [BsModalRef],
 })
 export class AddTicketModal {
   // 🔹 Inject services
   private readonly fb = inject(FormBuilder);
   private readonly ticketRef = inject(TicketReferenceService);
   private readonly ticketService = inject(TicketService);
-
+  bsModalRef = inject(BsModalRef);
   // 🔹 Base signals (unchanged)
   fkCompanyId = 1;
   ticketTypeId = signal<number | null>(null);
@@ -37,6 +39,9 @@ export class AddTicketModal {
     fkAssignUser: [null],
     fkDepartmentId: [[]],
     files: [[]],
+    fkRootCauseId: [null],
+    fkTicketTypeId: [null],
+    fkRelocationId: [null],
   });
 
   selectedFiles: File[] = [];
@@ -153,7 +158,7 @@ export class AddTicketModal {
       fkDepartmentId: this.form.value.fkDepartmentId,
       files: this.form.value.files,
       fkTicketTypeId: 0,
-      subFrom: [], // todo: this.form.value.subForm,
+      subFrom: [],
       fkRelocationId: 0,
       fkRootCauseId: 0,
     };
@@ -166,5 +171,12 @@ export class AddTicketModal {
         this.isSubmitting.set(false);
       },
     });
+  }
+  onTicketTypeChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.ticketTypeId.set(Number(value));
+  }
+  closeModal() {
+    this.bsModalRef.hide();
   }
 }
