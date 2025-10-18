@@ -1,19 +1,26 @@
 <div class="ticket-create-modal">
   <div class="modal-header d-flex align-items-center justify-content-between mb-3">
     <h3 class="fw-bold mb-0">Create New Ticket</h3>
+    <button type="button" class="btn-minimize" (click)="toggleMinimize()">
+      @if (isMinimized()) {
+        <i class="bi bi-arrows-fullscreen"></i>
+        <!-- maximize -->
+      } @else {
+        <i class="bi bi-dash-lg"></i>
+        <!-- minimize -->
+      }
+    </button>
     <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form">
-
     <!-- 🧾 Basic Information -->
     <section class="ticket-section">
       <h5 class="section-title">🧾 Basic Information</h5>
 
       <div class="form-grid">
-
         <!-- conditional company select  if company is multiple companies-->
-        <div class="form-group" >
+        <div class="form-group">
           <p>Company</p>
           <select class="form-select" [value]="fkCompanyId" disabled>
             <option [value]="fkCompanyId">Company #{{ fkCompanyId }}</option>
@@ -22,7 +29,12 @@
 
         <div class="form-group">
           <p>Subject</p>
-          <input type="text" formControlName="subject" class="form-control" placeholder="Enter ticket subject..." />
+          <input
+            type="text"
+            formControlName="subject"
+            class="form-control"
+            placeholder="Enter ticket subject..."
+          />
         </div>
 
         <div class="form-group full">
@@ -51,36 +63,36 @@
 
         <div class="form-group">
           <p>Customer</p>
-            <ng-select
-              class="select-dropdown"
-              [items]="customers()"
-              bindLabel="fullName"
-              bindValue="id"
-              [formControlName]="'fkCustomerId'"
-              [searchable]="true"
-              placeholder="Select customer"
-            >
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.fullName }}</span>
-              </ng-template>
-            </ng-select>
+          <ng-select
+            class="select-dropdown"
+            [items]="customers()"
+            bindLabel="fullName"
+            bindValue="id"
+            [formControlName]="'fkCustomerId'"
+            [searchable]="true"
+            placeholder="Select customer"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.fullName }}</span>
+            </ng-template>
+          </ng-select>
         </div>
 
         <div class="form-group">
           <p>Project</p>
-            <ng-select
-              class="select-dropdown"
-              [items]="projects()"
-              bindLabel="referenceNumber"
-              bindValue="id"
-              [formControlName]="'fkProjectId'"
-              [searchable]="true"
-              placeholder="Select project"
-            >
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.referenceNumber }}</span>
-              </ng-template>
-            </ng-select>
+          <ng-select
+            class="select-dropdown"
+            [items]="projects()"
+            bindLabel="referenceNumber"
+            bindValue="id"
+            [formControlName]="'fkProjectId'"
+            [searchable]="true"
+            placeholder="Select project"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.referenceNumber }}</span>
+            </ng-template>
+          </ng-select>
         </div>
       </div>
     </section>
@@ -94,59 +106,59 @@
       <div class="form-grid">
         <div class="form-group">
           <p>Ticket Type</p>
-            <ng-select
-              class="select-dropdown"
-              [items]="ticketTypes()"
-              bindLabel="name"
-              bindValue="id"
-              [formControlName]="'fkTicketTypeId'"
-              [searchable]="true"
-              placeholder="Select ticket type"
-              (change)="onTicketTypeChange($event)"
-            >
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.name }}</span>
-              </ng-template>
-            </ng-select>
+          <ng-select
+            class="select-dropdown"
+            [items]="ticketTypes()"
+            bindLabel="name"
+            bindValue="id"
+            [formControlName]="'fkTicketTypeId'"
+            [searchable]="true"
+            placeholder="Select ticket type"
+            (change)="onTicketTypeChange($event)"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.name }}</span>
+            </ng-template>
+          </ng-select>
         </div>
 
         <div class="form-group">
           <p>Relocation</p>
-            <ng-select
-              class="select-dropdown"
-              [items]="rootCauses()"
-              bindLabel="name"
-              bindValue="id"
-              [formControlName]="'fkRelocationId'"
-              [searchable]="true"
-              placeholder="Select relocation"
-            >
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.name }}</span>
-              </ng-template>
-            </ng-select>
+          <ng-select
+            class="select-dropdown"
+            [items]="rootCauses()"
+            bindLabel="name"
+            bindValue="id"
+            [formControlName]="'fkRelocationId'"
+            [searchable]="true"
+            placeholder="Select relocation"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.name }}</span>
+            </ng-template>
+          </ng-select>
         </div>
 
         <div class="form-group">
           <p>Root Cause</p>
-            <ng-select
-              class="select-dropdown"
-              [items]="rootCauses()"
-              bindLabel="name"
-              bindValue="id"
-              [formControlName]="'fkRootCauseId'"
-              [searchable]="true"
-              placeholder="Select root cause"
-            >
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.name }}</span>
-              </ng-template>
-            </ng-select>
+          <ng-select
+            class="select-dropdown"
+            [items]="rootCauses()"
+            bindLabel="name"
+            bindValue="id"
+            [formControlName]="'fkRootCauseId'"
+            [searchable]="true"
+            placeholder="Select root cause"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.name }}</span>
+            </ng-template>
+          </ng-select>
         </div>
       </div>
 
       <!-- Dynamic Subform -->
-  <!-- @if (subforms().length > 0) {
+      <!-- @if (subforms().length > 0) {
         <div class="subform mt-3">
           <h6 class="text-muted mb-2">Additional Fields</h6>
           <div class="form-grid">
@@ -175,45 +187,47 @@
       <div class="form-grid">
         <div class="form-group">
           <p>Assign User</p>
-            <ng-select
-              class="select-dropdown"
-              [items]="users()"
-              bindLabel="name"
-              bindValue="id"
-              [formControlName]="'fkAssignUser'"
-              [searchable]="true"
-              placeholder="Select user"
-            >
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.name }}</span>
-              </ng-template>
-            </ng-select>
+          <ng-select
+            class="select-dropdown"
+            [items]="users()"
+            bindLabel="name"
+            bindValue="id"
+            [formControlName]="'fkAssignUser'"
+            [searchable]="true"
+            placeholder="Select user"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.name }}</span>
+            </ng-template>
+          </ng-select>
         </div>
 
-    <!-- Departments (multi-select) -->
-    <div class="form-group full">
-      <p>Departments</p>
-      <ng-select
-        class="select-dropdown"
-        [items]="departments()"
-        [multiple]="true"
-        bindLabel="name"
-        bindValue="id"
-        [formControlName]="'fkDepartmentId'"
-        [searchable]="true"
-        placeholder="Select departments"
-      >
-        <ng-template ng-option-tmp let-item="item">
-          <span>{{ item.name }}</span>
-        </ng-template>
-      </ng-select>
-    </div>
+        <!-- Departments (multi-select) -->
+        <div class="form-group full">
+          <p>Departments</p>
+          <ng-select
+            class="select-dropdown"
+            [items]="departments()"
+            [multiple]="true"
+            bindLabel="name"
+            bindValue="id"
+            [formControlName]="'fkDepartmentId'"
+            [searchable]="true"
+            placeholder="Select departments"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.name }}</span>
+            </ng-template>
+          </ng-select>
+        </div>
 
         <div class="form-group full">
           <p>Attachments</p>
           <div class="upload-box">
             <input type="file" multiple (change)="onFileSelected($event)" />
-            <button type="button" class="btn btn-outline-primary mt-2" (click)="uploadFiles()">Upload Files</button>
+            <button type="button" class="btn btn-outline-primary mt-2" (click)="uploadFiles()">
+              Upload Files
+            </button>
           </div>
 
           @if (uploadedFileIds.length > 0) {
@@ -231,7 +245,9 @@
 
     <!-- Submit -->
     <div class="modal-footer d-flex justify-content-end">
-      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">Create Ticket</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+        Create Ticket
+      </button>
     </div>
   </form>
 </div>

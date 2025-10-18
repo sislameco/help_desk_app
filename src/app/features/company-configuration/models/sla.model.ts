@@ -1,4 +1,4 @@
-import { EnumRStatus } from "../../user-management/models/user-list-model";
+import { EnumRStatus } from '../../user-management/models/user-list-model';
 
 export enum EnumUnit {
   Minutes = 1,

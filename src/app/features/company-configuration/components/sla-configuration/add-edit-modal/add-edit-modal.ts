@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
 import { EnumPriority, EnumQMSType, EnumUnit, SLAOutputDto } from '../../../models/sla.model';
 import { SLAService } from '../../../services/sla.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';

@@ -55,8 +55,6 @@ export class CustomFieldModalComponent {
   }
 
   submit() {
-    debugger;
-
     this.service.createMany(this.form.value).subscribe({
       next: () => {
         this.saved.emit();

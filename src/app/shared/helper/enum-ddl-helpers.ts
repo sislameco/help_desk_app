@@ -1,9 +1,11 @@
-// Generic helper to convert Enum to array of { key, value }
-export function enumToArray<T extends object>(enumObj: T): { key: string; value: any }[] {
+// ✅ Type-safe version without 'any'
+export function enumToArray<T extends Record<string, string | number>>(
+  enumObj: T,
+): { key: string; value: T[keyof T] }[] {
   return Object.keys(enumObj)
     .filter((key) => isNaN(Number(key))) // remove reverse numeric keys
     .map((key) => ({
       key,
-      value: (enumObj as Record<string, unknown>)[key],
+      value: enumObj[key as keyof T],
     }));
 }

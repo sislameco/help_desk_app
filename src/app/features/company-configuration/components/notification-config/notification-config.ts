@@ -42,11 +42,11 @@ export class NotificationConfig implements OnInit, OnDestroy {
 
   // ✅ Enum View Models (safe iteration)
   notificationEvents = Object.entries(NotificationEvent)
-    .filter(([key, value]) => isNaN(Number(key)))
+    .filter(([key]) => isNaN(Number(key)))
     .map(([key, value]) => ({ key, value: value as NotificationEvent }));
 
   notificationTypes = Object.entries(NotificationType)
-    .filter(([key, value]) => isNaN(Number(key)))
+    .filter(([key]) => isNaN(Number(key)))
     .map(([key, value]) => ({ key, value: value as NotificationType }));
 
   template: NotificationInputDto = {
@@ -73,6 +73,7 @@ export class NotificationConfig implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadNotifications();
     this.editorRef = new Editor();
+    this.notificationTypes.sort((a, b) => a.value - b.value);
   }
   ngOnDestroy() {
     this.editorRef.destroy();

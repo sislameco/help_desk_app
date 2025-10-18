@@ -7,11 +7,13 @@ import { SlaConfiguration } from '../components/sla-configuration/sla-configurat
 import { UserSetting } from '../components/user-setting/user-setting';
 import { CustomDefineDataSourceComponent } from '../components/custom-define-data-source/custom-define-data-source';
 import { EnumDataType } from './company.model';
+import { TicketTypeComponent } from '../components/ticket-type-component/ticket-type-component';
 
 export const tabs: TabConfig[] = [
   { label: 'Company Detail', component: CompanyDetail },
   { label: 'Notifications', component: NotificationConfig },
   { label: 'Email Settings', component: EmailConfig },
+  { label: 'Ticket Types', component: TicketTypeComponent },
   { label: 'SLA Settings', component: SlaConfiguration },
   { label: 'Departments', component: DepartmentSetting },
   { label: 'Users', component: UserSetting },

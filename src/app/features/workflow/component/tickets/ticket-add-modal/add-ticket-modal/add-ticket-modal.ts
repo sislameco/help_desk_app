@@ -23,6 +23,8 @@ export class AddTicketModal {
   private readonly ticketRef = inject(TicketReferenceService);
   private readonly ticketService = inject(TicketService);
   bsModalRef = inject(BsModalRef);
+  // 🟦 New signal to toggle minimize state
+  isMinimized = signal(false);
   // 🔹 Base signals (unchanged)
   fkCompanyId = 1;
   ticketTypeId = signal<number | null>(null);
@@ -178,5 +180,8 @@ export class AddTicketModal {
   }
   closeModal() {
     this.bsModalRef.hide();
+  }
+  toggleMinimize() {
+    this.isMinimized.update((v) => !v);
   }
 }

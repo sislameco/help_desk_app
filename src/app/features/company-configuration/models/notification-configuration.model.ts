@@ -25,4 +25,3 @@ export interface NotificationInputDto {
   ccList: string;
 }
 export { NotificationEvent };
-

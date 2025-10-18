@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CustomFieldOutputDto } from '../../models/data-config.model';
 import { CustomDefineDataSourceService } from '../../services/custom-define-data-source.service';

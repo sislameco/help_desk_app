@@ -28,7 +28,7 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BsModalService],
 })
-export class SlaConfiguration {
+export class SlaConfiguration implements OnInit {
   private readonly service = inject(SLAService);
   private readonly modalService = inject(BsModalService);
   enumPriority: typeof EnumPriority = EnumPriority;
@@ -46,6 +46,20 @@ export class SlaConfiguration {
   readonly slas = derivedAsync(() => this.service.getAll(), {
     initialValue: [],
   });
+
+  ngOnInit(): void {
+    this.enumPriority = EnumPriority;
+    this.enumQMSType = EnumQMSType;
+    this.enumUnit = EnumUnit;
+    this.enumRstatus = EnumRStatus;
+    this.avgResponse = 0;
+    this.totalRules = 0;
+    this.activeRules = 0;
+    this.criticalRules = 0;
+    this.avgResponse = 0;
+    this.avgResolution = 0;
+    this.isLoading.set(true);
+  }
 
   openAdd() {
     const modalConfig = {
