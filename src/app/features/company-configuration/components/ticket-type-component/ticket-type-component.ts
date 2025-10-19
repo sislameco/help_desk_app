@@ -10,11 +10,18 @@ import { map, of } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { enumToArray, getPriorityColor } from '@shared/helper/enum-ddl-helpers';
 import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+import { NgxControlError } from 'ngxtension/control-error';
 
 @Component({
   selector: 'app-ticket-type-component',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgSelectComponent, EnumToStringPipe],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NgSelectComponent,
+    EnumToStringPipe,
+    NgxControlError,
+  ],
   templateUrl: './ticket-type-component.html',
   styleUrls: ['./ticket-type-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,9 +68,9 @@ export class TicketTypeComponent implements OnInit {
   initForm(): void {
     this.form = this.fb.group({
       title: ['', Validators.required],
-      description: [''],
+      description: ['', Validators.required],
       fkAssignedUserId: [null],
-      priority: [EnumPriority.Medium],
+      priority: [null, Validators.required],
       isEnabled: [true],
       fkDepartmentIds: [[]],
       fkCompanyId: [1], // company fixed for now
