@@ -8,6 +8,7 @@ export interface TicketTypeCommonDto {
   isEnabled: boolean;
   fkDepartmentIds: number[];
   fkCompanyId: number;
+  qmsType: EnumQMSType;
 }
 
 export type TicketTypeInputDto = TicketTypeCommonDto;

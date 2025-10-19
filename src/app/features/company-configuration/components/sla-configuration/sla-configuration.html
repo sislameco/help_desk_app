@@ -48,6 +48,7 @@
   <thead class="table-light">
     <tr>
       <th>QMS Type</th>
+      <th>Ticket Type</th>
       <th>Priority</th>
       <th>Response Time</th>
       <th>Resolution Time</th>
@@ -58,7 +59,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let item of slas()">
-      <td>{{ item.type | enumToString: enumQMSType }}</td>
+      <td>{{ item.qmsType | enumToString: enumQMSType }}</td>
+      <td>{{ item.typeTitle }}</td>
       <td>
         <span [class]="'badge bg-' + getPriorityColor(item.priority)">
           {{ item.priority | enumToString: enumPriority }}
@@ -69,12 +71,8 @@
       <td>{{ item.escalationTime }} {{ item.unit | enumToString: enumUnit }}</td>
       <td>{{ item.status | enumToString: enumRstatus }}</td>
       <td>
-        <button class="btn btn-sm btn-outline-primary me-2" (click)="openEdit(item)">
-          Edit
-        </button>
-        <button class="btn btn-sm btn-outline-danger" (click)="delete(item.id!)">
-          Delete
-        </button>
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="openEdit(item)">Edit</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="delete(item.id!)">Delete</button>
       </td>
     </tr>
   </tbody>

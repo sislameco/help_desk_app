@@ -43,7 +43,7 @@ export class SlaConfiguration implements OnInit {
   criticalRules = 0;
   avgResponse = 0;
   avgResolution = 0;
-  readonly slas = derivedAsync(() => this.service.getAll(), {
+  readonly slas = derivedAsync(() => this.service.getAll(1), {
     initialValue: [],
   });
 

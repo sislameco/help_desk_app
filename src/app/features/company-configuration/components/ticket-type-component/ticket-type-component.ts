@@ -33,6 +33,7 @@ export class TicketTypeComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   priorities = enumToArray(EnumPriority);
   enumPriority: typeof EnumPriority = EnumPriority;
+  qmsType: typeof EnumQMSType = EnumQMSType;
   fkCompanyId = 1;
   // ✅ Signals for reactive UI state
   ticketTypes = signal<TicketTypeOutputDto[]>([]);

@@ -9,10 +9,12 @@ import { TicketReferenceService } from '../../../services/ticket-reference-servi
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+import { TicketTypeDDL } from '../../../models/ddl.model';
 
 @Component({
   selector: 'app-add-edit-modal',
-  imports: [ReactiveFormsModule, CommonModule, NgSelectComponent],
+  imports: [ReactiveFormsModule, CommonModule, NgSelectComponent, EnumToStringPipe],
   templateUrl: './add-edit-modal.html',
   styleUrl: './add-edit-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,15 +28,13 @@ export class AddEditModal implements OnInit {
   private readonly service = inject(SLAService);
   private readonly ticketRefService = inject(TicketReferenceService);
   bsModalRef = inject(BsModalRef);
-  EnumUnit = EnumUnit;
-  EnumPriority = EnumPriority;
-  EnumQMSType = EnumQMSType;
+  enumUnit = EnumUnit;
+  enumPriority = EnumPriority;
+  enumQMSType = EnumQMSType;
 
   // 🔹 Dropdown data
-  priorities = enumToArray(EnumPriority);
   units = enumToArray(EnumUnit);
   // Use derivedAsync signal for ticketTypes dropdown
-
   ticketTypes = derivedAsync(
     () =>
       this.companyId
@@ -47,9 +47,10 @@ export class AddEditModal implements OnInit {
 
   constructor() {
     this.slaForm = this.fb.group({
+      fkTicketTypeId: [null, Validators.required],
       fkCompanyId: this.companyId,
-      type: [null, Validators.required],
-      priority: [EnumPriority.Medium, Validators.required],
+      qmsType: [null, Validators.required],
+      priority: [null, Validators.required],
       unit: [EnumUnit.Hours, Validators.required],
       responseTime: [0, [Validators.required, Validators.min(0)]],
       resolutionTime: [0, [Validators.required, Validators.min(0)]],
@@ -59,8 +60,9 @@ export class AddEditModal implements OnInit {
   ngOnInit(): void {
     if (this.mode === 'edit' && this.sla) {
       this.slaForm.patchValue({
+        fkTicketTypeId: this.sla.fkTicketTypeId ?? null,
         fkCompanyId: this.companyId,
-        type: this.sla.type ?? null,
+        qmsType: this.sla.qmsType ?? EnumQMSType.Ticket,
         priority: this.sla.priority ?? EnumPriority.Medium,
         unit: this.sla.unit ?? EnumUnit.Hours,
         responseTime: this.sla.responseTime ?? 0,
@@ -77,6 +79,18 @@ export class AddEditModal implements OnInit {
       this.service
         .update(this.sla!.id!, this.slaForm.value)
         .subscribe(() => this.bsModalRef.hide());
+    }
+  }
+
+  onTicketTypeSelected(selected: TicketTypeDDL) {
+    const ticketTypes = this.ticketTypes();
+    const selectedType = ticketTypes.find((t) => t === selected);
+    if (selectedType) {
+      this.slaForm.patchValue({
+        fkTicketTypeId: selectedType.id,
+        qmsType: selectedType.qmsType,
+        priority: selectedType.priority,
+      });
     }
   }
 }

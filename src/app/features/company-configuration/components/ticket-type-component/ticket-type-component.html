@@ -140,6 +140,7 @@
       <tr>
         <th>Title</th>
         <th>Description</th>
+        <th>QMS Type</th>
         <th>Priority</th>
         <th>Default Assign User</th>
         <th>Default Assign Departments</th>
@@ -151,6 +152,7 @@
       <tr *ngFor="let t of ticketTypes()">
         <td>{{ t.title }}</td>
         <td>{{ t.description }}</td>
+        <td>{{ t.qmsType | enumToString: qmsType }}</td>
         <td>
           <span [class]="'badge bg-' + getPriorityColor(t.priority)">
             {{ t.priority | enumToString: enumPriority }}

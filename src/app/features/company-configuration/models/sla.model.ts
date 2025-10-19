@@ -22,9 +22,10 @@ export enum EnumQMSType {
   Complaints = 4,
 }
 export interface SLAInputDto {
-  type: EnumQMSType;
+  qmsType: EnumQMSType;
   priority: EnumPriority;
   fkCompanyId: number;
+  fkTicketTypeId: number;
   unit: EnumUnit;
   responseTime: number;
   resolutionTime: number;
@@ -34,6 +35,7 @@ export interface SLAInputDto {
 
 export interface SLAOutputDto extends SLAInputDto {
   id: number;
+  typeTitle: string;
 }
 
 // You may need to define QMSType, TicketPriority, EnumUnit elsewhere or import them.

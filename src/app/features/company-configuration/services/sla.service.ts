@@ -10,8 +10,8 @@ export class SLAService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.apiBaseUrl}/api/sla`;
 
-  getAll(): Observable<SLAOutputDto[]> {
-    return this.http.get<SLAOutputDto[]>(`${this.baseUrl}`);
+  getAll(fkCompanyId: number): Observable<SLAOutputDto[]> {
+    return this.http.get<SLAOutputDto[]>(`${this.baseUrl}?fkCompanyId=${fkCompanyId}`);
   }
 
   getById(id: number): Observable<SLAOutputDto> {

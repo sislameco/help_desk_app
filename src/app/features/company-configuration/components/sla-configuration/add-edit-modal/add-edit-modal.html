@@ -8,32 +8,58 @@
 
   <form [formGroup]="slaForm">
     <div class="row g-3">
-      <div class="form-group">
+      <div class="form-group mb-3">
         <p>Ticket Type</p>
         <ng-select
           class="select-dropdown"
           [items]="ticketTypes()"
-          bindLabel="name"
+          bindLabel="title"
           bindValue="id"
-          [formControlName]="'type'"
+          formControlName="fkTicketTypeId"
           [searchable]="true"
           placeholder="Select ticket type"
+          (change)="onTicketTypeSelected($event)"
         >
           <ng-template ng-option-tmp let-item="item">
-            <span>{{ item.name }}</span>
+            <span>{{ item.title }}</span>
           </ng-template>
         </ng-select>
       </div>
 
-      <div class="col-md-6">
-        <label for="priorityLevel">Priority Level</label>
-        <select id="priorityLevel" class="form-select" formControlName="priority">
-          <option *ngFor="let priority of priorities" [value]="priority.value">
-            {{ priority.key }}
-          </option>
-        </select>
-      </div>
+      <!-- ✅ Show QMS Type & Priority in the same row -->
+      <div class="row g-2 mt-2 align-items-center">
+        <!-- ✅ Display only when ticket type is selected -->
+        @if (slaForm.get('fkTicketTypeId')?.value) {
+          <div class="row g-2 mt-2 align-items-center">
+            <div class="col-md-6">
+              <div class="d-flex align-items-center border rounded p-2">
+                <strong class="me-2">QMS Type:</strong>
+                <span class="badge bg-primary">{{
+                  slaForm.get('qmsType')?.value | enumToString: enumQMSType
+                }}</span>
+              </div>
+            </div>
 
+            <div class="col-md-6">
+              <div class="d-flex align-items-center border rounded p-2">
+                <strong class="me-2">Priority:</strong>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-danger text-danger':
+                      slaForm.get('priority')?.value === enumPriority.Highest,
+                    'bg-danger': slaForm.get('priority')?.value === enumPriority.High,
+                    'bg-warning text-dark': slaForm.get('priority')?.value === enumPriority.Medium,
+                    'bg-success': slaForm.get('priority')?.value === enumPriority.Low,
+                  }"
+                >
+                  {{ slaForm.get('priority')?.value | enumToString: enumPriority }}
+                </span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
       <div class="col-md-6">
         <label for="timeUnit">Time Unit</label>
         <select id="timeUnit" class="form-select" formControlName="unit">

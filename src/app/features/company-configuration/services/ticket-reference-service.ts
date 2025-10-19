@@ -7,6 +7,7 @@ import {
   DropdownOutputDto,
   FieldOutputDto,
   ProjectOutputDto,
+  TicketTypeDDL,
 } from '../models/ddl.model';
 
 @Injectable({ providedIn: 'root' })
@@ -19,9 +20,9 @@ export class TicketReferenceService {
     return this.http.get<DropdownOutputDto>(`${this.baseUrl}/department`, { params });
   }
 
-  getTicketTypes(fkCompanyId: number): Observable<DropdownOutputDto> {
+  getTicketTypes(fkCompanyId: number): Observable<TicketTypeDDL> {
     const params = new HttpParams().set('fkCompanyId', fkCompanyId);
-    return this.http.get<DropdownOutputDto>(`${this.baseUrl}/ticket-type`, { params });
+    return this.http.get<TicketTypeDDL>(`${this.baseUrl}/ticket-type`, { params });
   }
 
   getRootCauses(fkCompanyId: number): Observable<DropdownOutputDto> {

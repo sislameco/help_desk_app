@@ -1,4 +1,5 @@
 import { EnumDataType } from './company.model';
+import { EnumPriority, EnumQMSType } from './sla.model';
 
 export interface CustomerOutputDto {
   id: number;
@@ -27,4 +28,11 @@ export interface FieldOutputDto {
   isRequired: boolean;
   description: string;
   isMultiSelect: boolean;
+}
+
+export interface TicketTypeDDL {
+  id: number;
+  title: string;
+  qmsType: EnumQMSType;
+  priority: EnumPriority;
 }
