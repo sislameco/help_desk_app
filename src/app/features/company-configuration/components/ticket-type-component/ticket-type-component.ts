@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { TicketTypeService } from '../../services/ticket-type-service';
 import { TicketTypeInputDto, TicketTypeOutputDto } from '../../models/ticket-type.model';
-import { EnumPriority } from '../../models/sla.model';
+import { EnumPriority, EnumQMSType } from '../../models/sla.model';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { TicketReferenceService } from '../../services/ticket-reference-service';
 import { map, of } from 'rxjs';
@@ -39,6 +39,7 @@ export class TicketTypeComponent implements OnInit {
   isEditing = signal<boolean>(false);
   selectedId = signal<number | null>(null);
   loading = signal<boolean>(false);
+  qmsTypes = enumToArray(EnumQMSType);
   users = derivedAsync(
     () =>
       this.fkCompanyId
@@ -71,6 +72,7 @@ export class TicketTypeComponent implements OnInit {
       description: ['', Validators.required],
       fkAssignedUserId: [null],
       priority: [null, Validators.required],
+      qmsType: [null, Validators.required],
       isEnabled: [true],
       fkDepartmentIds: [[]],
       fkCompanyId: [1], // company fixed for now

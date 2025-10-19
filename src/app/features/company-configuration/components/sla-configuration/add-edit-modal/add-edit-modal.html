@@ -8,17 +8,29 @@
 
   <form [formGroup]="slaForm">
     <div class="row g-3">
-      <div class="col-md-6">
-        <label for="qmsType">QMS Type</label>
-        <select id="qmsType" class="form-select" formControlName="type">
-          <option *ngFor="let type of qmsTypes" [value]="type.value">{{ type.key }}</option>
-        </select>
+      <div class="form-group">
+        <p>Ticket Type</p>
+        <ng-select
+          class="select-dropdown"
+          [items]="ticketTypes()"
+          bindLabel="name"
+          bindValue="id"
+          [formControlName]="'type'"
+          [searchable]="true"
+          placeholder="Select ticket type"
+        >
+          <ng-template ng-option-tmp let-item="item">
+            <span>{{ item.name }}</span>
+          </ng-template>
+        </ng-select>
       </div>
 
       <div class="col-md-6">
         <label for="priorityLevel">Priority Level</label>
         <select id="priorityLevel" class="form-select" formControlName="priority">
-          <option *ngFor="let priority of priorities" [value]="priority.value">{{ priority.key }}</option>
+          <option *ngFor="let priority of priorities" [value]="priority.value">
+            {{ priority.key }}
+          </option>
         </select>
       </div>
 
@@ -31,17 +43,32 @@
 
       <div class="col-md-4">
         <label for="responseTime">Response Time</label>
-        <input id="responseTime" type="number" class="form-control" formControlName="responseTime" />
+        <input
+          id="responseTime"
+          type="number"
+          class="form-control"
+          formControlName="responseTime"
+        />
       </div>
 
       <div class="col-md-4">
         <label for="resolutionTime">Resolution Time</label>
-        <input id="resolutionTime" type="number" class="form-control" formControlName="resolutionTime" />
+        <input
+          id="resolutionTime"
+          type="number"
+          class="form-control"
+          formControlName="resolutionTime"
+        />
       </div>
 
       <div class="col-md-4">
         <label for="escalationTime">Escalation Time</label>
-        <input id="escalationTime" type="number" class="form-control" formControlName="escalationTime" />
+        <input
+          id="escalationTime"
+          type="number"
+          class="form-control"
+          formControlName="escalationTime"
+        />
       </div>
     </div>
   </form>

@@ -1,3 +1,5 @@
+import { EnumQMSType } from './sla.model';
+
 export interface TicketTypeCommonDto {
   title: string;
   description: string;
@@ -13,4 +15,5 @@ export interface TicketTypeOutputDto extends TicketTypeCommonDto {
   id: number;
   departmentNames: string[];
   userName: string;
+  qmsType: EnumQMSType;
 }

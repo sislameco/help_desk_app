@@ -60,6 +60,20 @@
         </strong>
       </div>
 
+      <!-- 🟩 QMS type -->
+      <div class="col-md-6">
+        <label for="qmsType" class="form-label">QMS Type <span class="text-danger">*</span></label>
+        <select id="qmsType" class="form-select" formControlName="qmsType">
+          <option value="" disabled selected>Select QMS type</option>
+          <option *ngFor="let qms of qmsTypes" [value]="qms.value">
+            {{ qms.key }}
+          </option>
+        </select>
+        <strong class="text-danger" *ngxControlError="form.controls['qmsType']; track: 'required'">
+          QMS type is required.
+        </strong>
+      </div>
+
       <div class="form-group">
         <p>Default Assign User</p>
         <ng-select
