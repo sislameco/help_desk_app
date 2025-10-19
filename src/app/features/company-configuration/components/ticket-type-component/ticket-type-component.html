@@ -19,7 +19,7 @@
           formControlName="title"
           placeholder="Enter title"
         />
-        <strong *ngxControlError="form.controls.title; track: 'required'">
+        <strong class="text-danger" *ngxControlError="form.controls['title']; track: 'required'">
           Title is required.
         </strong>
       </div>
@@ -36,7 +36,10 @@
           formControlName="description"
           placeholder="Enter description"
         />
-        <strong *ngxControlError="form.controls.description; track: 'required'">
+        <strong
+          class="text-danger"
+          *ngxControlError="form.controls['description']; track: 'required'"
+        >
           Description is required.
         </strong>
       </div>
@@ -52,7 +55,7 @@
             {{ priority.key }}
           </option>
         </select>
-        <strong *ngxControlError="form.controls.priority; track: 'required'">
+        <strong class="text-danger" *ngxControlError="form.controls['priority']; track: 'required'">
           Priority level is required.
         </strong>
       </div>
