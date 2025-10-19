@@ -1,3 +1,5 @@
+import { EnumPriority } from '../../features/company-configuration/models/sla.model';
+
 // ✅ Type-safe version without 'any'
 export function enumToArray<T extends Record<string, string | number>>(
   enumObj: T,
@@ -8,4 +10,20 @@ export function enumToArray<T extends Record<string, string | number>>(
       key,
       value: enumObj[key as keyof T],
     }));
+}
+
+/** ✅ Add this function */
+export function getPriorityColor(priority: EnumPriority): string {
+  switch (priority) {
+    case EnumPriority.Highest:
+      return 'danger'; // red
+    case EnumPriority.High:
+      return 'warning'; // yellow
+    case EnumPriority.Medium:
+      return 'info'; // blue
+    case EnumPriority.Low:
+      return 'secondary'; // gray
+    default:
+      return 'light';
+  }
 }

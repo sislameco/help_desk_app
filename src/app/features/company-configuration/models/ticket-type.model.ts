@@ -12,4 +12,5 @@ export type TicketTypeInputDto = TicketTypeCommonDto;
 export interface TicketTypeOutputDto extends TicketTypeCommonDto {
   id: number;
   departmentNames: string[];
+  userName: string;
 }

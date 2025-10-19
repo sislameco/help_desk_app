@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TicketTypeInputDto, TicketTypeOutputDto } from '../models/ticket-type.model';
+import { environment } from '../../../../environments/environment';
 
 // =======================
 // 💼 Service
@@ -10,8 +11,8 @@ import { TicketTypeInputDto, TicketTypeOutputDto } from '../models/ticket-type.m
   providedIn: 'root',
 })
 export class TicketTypeService {
-  private readonly baseUrl = '/ticket-type'; // as per TicketTypeController route
-  private readonly http = inject(HttpClient); // ✅ constructor এর বদলে inject()
+  private readonly baseUrl = `${environment.apiBaseUrl}/api/ticket-type`; // as per TicketTypeController route
+  private readonly http = inject(HttpClient); // ✅ constructor inject()
 
   constructor() {}
 
