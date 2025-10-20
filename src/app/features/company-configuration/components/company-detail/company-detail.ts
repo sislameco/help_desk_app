@@ -17,6 +17,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CommonModule } from '@angular/common';
 import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+import { RootResolution } from './root-resolution/root-resolution';
 
 @Component({
   selector: 'app-company-detail',
@@ -28,6 +29,7 @@ import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe
     ReactiveFormsModule,
     CommonModule,
     EnumToStringPipe,
+    RootResolution,
   ],
   templateUrl: './company-detail.html',
   styleUrls: ['./company-detail.scss'],

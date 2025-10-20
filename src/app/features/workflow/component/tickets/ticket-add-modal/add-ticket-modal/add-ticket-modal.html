@@ -109,7 +109,7 @@
           <ng-select
             class="select-dropdown"
             [items]="ticketTypes()"
-            bindLabel="name"
+            bindLabel="title"
             bindValue="id"
             [formControlName]="'fkTicketTypeId'"
             [searchable]="true"
@@ -117,7 +117,7 @@
             (change)="onTicketTypeChange($event)"
           >
             <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.name }}</span>
+              <span>{{ item.title }}</span>
             </ng-template>
           </ng-select>
         </div>

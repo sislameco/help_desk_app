@@ -1,0 +1,109 @@
+<div class="container mt-4">
+  <h3 class="fw-bold">🧩 Root / Resolution Setup</h3>
+
+  <!-- Type Selector -->
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <label for="typeSelect" class="form-label fw-bold me-2">Select Type:</label>
+      <select
+        id="typeSelect"
+        class="form-select d-inline-block w-auto"
+        [(ngModel)]="selectedType"
+        (change)="onTypeChange(selectedType)"
+      >
+        <option [value]="enumRootResolutionType.RootCause">Root Cause</option>
+        <option [value]="enumRootResolutionType.Resolution">Resolution</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary" (click)="openModal(addEditTemplate, 'add')">➕ Add New</button>
+  </div>
+
+  <!-- Data Table -->
+  <table class="table table-bordered table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Type</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of rootResolutions(); index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.type | enumToString: enumRootResolutionType }}</td>
+        <td class="text-center">
+          <button
+            class="btn btn-sm btn-outline-info me-1"
+            (click)="openModal(addEditTemplate, 'view', item)"
+          >
+            👁️
+          </button>
+          <button
+            class="btn btn-sm btn-outline-warning me-1"
+            (click)="openModal(addEditTemplate, 'edit', item)"
+          >
+            ✏️
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="delete(item.id)">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!rootResolutions().length" class="text-muted text-center mt-3">
+    No records found for
+    <strong>{{
+      selectedType === enumRootResolutionType.RootCause ? 'Root Cause' : 'Resolution'
+    }}</strong
+    >.
+  </p>
+</div>
+
+<!-- Modal Template -->
+<ng-template #addEditTemplate>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      {{ isViewMode ? '👁️ View Details' : formModel.id ? '✏️ Edit Item' : '➕ Add New Item' }}
+    </h5>
+    <button type="button" class="btn-close" (click)="modalRef?.hide()">
+      <span class="visually-hidden">Close</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <p class="form-label fw-bold">Name</p>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="formModel.name"
+          name="name"
+          [readonly]="isViewMode"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <p class="form-label fw-bold">Description</p>
+        <textarea
+          class="form-control"
+          rows="3"
+          [(ngModel)]="formModel.description"
+          name="description"
+          [readonly]="isViewMode"
+        ></textarea>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer" *ngIf="!isViewMode">
+    <button class="btn btn-secondary" (click)="modalRef?.hide()">Cancel</button>
+    <button class="btn btn-success" (click)="save()">Save</button>
+  </div>
+</ng-template>

@@ -159,10 +159,10 @@ export class AddTicketModal {
       fkAssignUser: this.form.value.fkAssignUser,
       fkDepartmentId: this.form.value.fkDepartmentId,
       files: this.form.value.files,
-      fkTicketTypeId: 0,
+      fkTicketTypeId: this.form.value.fkTicketTypeId,
       subFrom: [],
-      fkRelocationId: 0,
-      fkRootCauseId: 0,
+      fkRelocationId: this.form.value.fkRelocationId,
+      fkRootCauseId: this.form.value.fkRootCauseId,
     };
 
     this.ticketService.createTicket(input).subscribe({
