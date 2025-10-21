@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import { map, of } from 'rxjs';
 import { DepartmentSettingService } from '../../../services/department-setting.service';
 import {
   DepartmentMenu,
@@ -11,22 +12,28 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { MenuAccess } from '../../../../user-management/models/menu.model';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
+import { TicketReferenceService } from '../../../services/ticket-reference-service';
+import { DropdownOutputDto } from '../../../models/ddl.model';
+import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-update-department-setup',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NgSelectComponent],
   templateUrl: './update-department-setup.html',
   styleUrl: './update-department-setup.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpdateDepartmentSetup {
   bsModalRef = inject(BsModalRef);
+  fkCompanyId = 1;
   private readonly departmentService = inject(DepartmentSettingService);
+  private readonly ticketReferenceService = inject(TicketReferenceService);
   departmentId = 0;
   department = signal<DepartmentSetupOutputDto | null>(null);
   roleMenuActions: DepartmentMenu[] = [];
   private fb = new FormBuilder();
   readonly isSubmitting = signal(false);
+  readonly userTicketReferences = signal([]);
 
   constructor() {
     this.loadDepartment();
@@ -68,6 +75,15 @@ export class UpdateDepartmentSetup {
     },
   );
 
+  loadManagers = derivedAsync(
+    () =>
+      this.fkCompanyId
+        ? this.ticketReferenceService
+            .getUsers(this.fkCompanyId)
+            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
+        : of([]),
+    { initialValue: [] },
+  );
   submit() {
     if (this.form.invalid) {
       return;
