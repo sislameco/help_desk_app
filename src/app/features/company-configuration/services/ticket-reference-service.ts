@@ -13,7 +13,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class TicketReferenceService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiBaseUrl}/api/ticket`;
+  private readonly baseUrl = `${environment.apiBaseUrl}/api/ticket-reference"`;
 
   getDepartments(fkCompanyId: number): Observable<DropdownOutputDto> {
     const params = new HttpParams().set('fkCompanyId', fkCompanyId);
