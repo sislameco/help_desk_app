@@ -3,9 +3,9 @@
   <button type="button" (click)="bsModalRef.hide()">&times;</button>
 </div>
 <div class="modal-body">
-  <form [formGroup]="form" (ngSubmit)="submit()">
+  <form [formGroup]="form" class="app-form" (ngSubmit)="submit()">
     <div class="form-group mb-3">
-      <label for="firstName" class="form-label"
+      <label for="firstName" class="input-label"
         >First Name <span class="text-danger">*</span></label
       >
       <input
@@ -20,7 +20,7 @@
       >
     </div>
     <div class="form-group mb-3">
-      <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+      <label for="lastName" class="input-label">Last Name <span class="text-danger">*</span></label>
       <input
         type="text"
         id="lastName"
@@ -33,7 +33,7 @@
       >
     </div>
     <div class="form-group mb-3">
-      <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+      <label for="email" class="input-label">Email <span class="text-danger">*</span></label>
       <input
         type="email"
         id="email"
@@ -46,7 +46,7 @@
       >
     </div>
     <div class="form-group mb-3">
-      <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+      <label for="phone" class="input-label">Phone <span class="text-danger">*</span></label>
       <input
         type="text"
         id="phone"
@@ -59,7 +59,7 @@
       >
     </div>
     <div class="form-group mb-3">
-      <label for="roleId" class="form-label">Role <span class="text-danger">*</span></label>
+      <label for="roleId" class="input-label">Role <span class="text-danger">*</span></label>
       <ng-select
         class="select-dropdown"
         placeholder="All"
@@ -78,7 +78,9 @@
     </div>
     @if (!user) {
       <div class="form-group mb-3">
-        <label for="userName" class="form-label">Username <span class="text-danger">*</span></label>
+        <label for="userName" class="input-label"
+          >Username <span class="text-danger">*</span></label
+        >
         <input
           type="text"
           id="userName"
@@ -92,7 +94,7 @@
         >
       </div>
       <div class="form-group mb-3">
-        <label for="passwordHash" class="form-label"
+        <label for="passwordHash" class="input-label"
           >Password <span class="text-danger">*</span></label
         >
         <input
@@ -110,7 +112,7 @@
         >
       </div>
       <div class="form-group mb-3">
-        <label for="confirmPassword" class="form-label"
+        <label for="confirmPassword" class="input-label"
           >Confirm Password <span class="text-danger">*</span></label
         >
         <input
