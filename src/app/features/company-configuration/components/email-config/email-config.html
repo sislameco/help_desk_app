@@ -4,69 +4,158 @@
   <!-- ======================== -->
   <!-- Email Config Form -->
   <!-- ======================== -->
-  <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 mb-4">
-    <div class="col-md-4">
-      <label>User Name
-      <input type="text" class="form-control" formControlName="userName" />
-    </label>
-    </div>
-
-    <div class="col-md-4">
-      <label>Password
-      <input type="password" class="form-control" formControlName="password" />
-    </label>
-    </div>
-
-    <div class="col-md-4">
-      <label>Host
-      <input type="text" class="form-control" formControlName="host" />
-    </label>
-    </div>
-
-    <div class="col-md-3">
-      <label>SMTP Port
-      <input type="number" class="form-control" formControlName="smtpPort" />
-    </label>
-    </div>
-
-    <div class="col-md-3">
-      <label>IMAP Port
-      <input type="number" class="form-control" formControlName="imapPort" />
-   </label>
-    </div>
-
-    <div class="col-md-3">
-      <label>Name
-      <input type="text" class="form-control" formControlName="name" />
-    </label>
-    </div>
-
-    <div class="col-md-3">
-      <label>BCC
-      <input type="text" class="form-control" formControlName="bcc" />
-    </label>
-    </div>
-
-    <div class="col-md-3">
-      <label>
-        <input type="checkbox" formControlName="isDefault" />
-        Set as Default
-      </label>
-    </div>
-
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary me-2">
-        {{ selectedId ? 'Update' : 'Save' }}
-      </button>
-      <button type="button" class="btn btn-secondary" (click)="resetForm()">Reset</button>
+  <form [formGroup]="form" (ngSubmit)="save()" class="app-form">
+    <div class="row">
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['userName'].invalid &&
+          (form.controls['userName'].dirty || form.controls['userName'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="userName">User Name</label>
+          <input
+            id="userName"
+            type="text"
+            class="form-control"
+            formControlName="userName"
+            placeholder="User Name"
+          />
+        </div>
+      </div>
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['password'].invalid &&
+          (form.controls['password'].dirty || form.controls['password'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="password"
+            id="password"
+            placeholder="Password"
+          />
+        </div>
+      </div>
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['host'].invalid &&
+          (form.controls['host'].dirty || form.controls['host'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="host">Host</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="host"
+            id="host"
+            placeholder="Host"
+          />
+        </div>
+      </div>
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['smtpPort'].invalid &&
+          (form.controls['smtpPort'].dirty || form.controls['smtpPort'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="smtpPort">SMTP Port</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="smtpPort"
+            id="smtpPort"
+            placeholder="SMTP Port"
+          />
+        </div>
+      </div>
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['imapPort'].invalid &&
+          (form.controls['imapPort'].dirty || form.controls['imapPort'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="imapPort">IMAP Port</label>
+          <input
+            type="number"
+            class="form-control"
+            formControlName="imapPort"
+            id="imapPort"
+            placeholder="IMAP Port"
+          />
+        </div>
+      </div>
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['name'].invalid &&
+          (form.controls['name'].dirty || form.controls['name'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            id="name"
+            placeholder="Name"
+          />
+        </div>
+      </div>
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['bcc'].invalid &&
+          (form.controls['bcc'].dirty || form.controls['bcc'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="bcc">BCC</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="bcc"
+            id="bcc"
+            placeholder="BCC"
+          />
+        </div>
+      </div>
+      <div class="col-lg-6 form-group d-flex align-items-center">
+        <label class="app-form--checkbox" for="isDefault"
+          ><input type="checkbox" formControlName="isDefault" id="isDefault" /><span
+            class="d-flex align-items-center justify-content-center"
+            ><svg viewBox="0 0 10 8" fill="none" width="10">
+              <use xlink:href="assets/sprite.svg#svg-check"></use></svg
+          ></span>
+          <p>Set as Default</p></label
+        >
+      </div>
+      <div class="col-lg-12 text-end mb-4">
+        <button type="submit" class="ch-btn ch-btn-green me-2" [disabled]="form.invalid">
+          {{ selectedId ? 'Update' : 'Save' }}
+        </button>
+        <button type="button" class="ch-btn ch-btn-red-border" (click)="resetForm()">Reset</button>
+      </div>
     </div>
   </form>
 
   <!-- ======================== -->
   <!-- Config List Table -->
   <!-- ======================== -->
-  <table class="table table-bordered table-sm">
-    <thead class="table-light">
+  <table class="app-table">
+    <thead class="fixed-thead">
       <tr>
         <th>#</th>
         <th>User</th>
@@ -78,34 +167,30 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let cfg of emailConfigs(); let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ cfg.userName }}</td>
-        <td>{{ cfg.host }}</td>
-        <td>{{ cfg.smtpPort }}</td>
-        <td>{{ cfg.imapPort }}</td>
-        <td>
-          <span
-            class="badge"
-            [class.bg-success]="cfg.isDefault"
-            [class.bg-secondary]="!cfg.isDefault"
-          >
-            {{ cfg.isDefault ? 'Yes' : 'No' }}
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-outline-primary me-2" (click)="edit(cfg)">
-            Edit
-          </button>
-          <button
-            class="btn btn-sm btn-outline-success"
-            [disabled]="cfg.isDefault"
-            (click)="setDefault(cfg.id)"
-          >
-            Set Default
-          </button>
-        </td>
-      </tr>
+      @for (cfg of emailConfigs(); track cfg.id; let i = $index) {
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ cfg.userName }}</td>
+          <td>{{ cfg.host }}</td>
+          <td>{{ cfg.smtpPort }}</td>
+          <td>{{ cfg.imapPort }}</td>
+          <td>
+            <span class="ch-btn small disabled-hover" [class.ch-btn-green]="cfg.isDefault">
+              {{ cfg.isDefault ? 'Yes' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <button class="ch-btn ch-btn-green h-30 me-2" (click)="edit(cfg)">Edit</button>
+            <button
+              class="ch-btn ch-btn-green-border h-30"
+              [disabled]="cfg.isDefault"
+              (click)="setDefault(cfg.id)"
+            >
+              Set Default
+            </button>
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
 </div>
