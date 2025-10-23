@@ -29,7 +29,7 @@ export class UserListTable {
   private readonly userRoleService = inject(UserRoleService);
 
   UserStatusEnum = UserStatusEnum;
-  EnumRStatus = EnumRStatus;
+  enumRStatus = EnumRStatus;
   selectedUser: Users | null = null;
   isViewOpen = false;
   // Query param management

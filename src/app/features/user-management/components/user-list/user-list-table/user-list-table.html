@@ -19,7 +19,7 @@
         [items]="roleDropdown() ?? []"
         bindLabel="roleName"
         bindValue="roleId"
-        class="multi-form-select md-multi-select rounded"
+        class="select-dropdown select-dropdown-circle mr-2 w-100"
         placeholder="Select user..."
       >
       </ng-select>
@@ -32,7 +32,7 @@
         clearable="false"
         searchable="false"
         [multiple]="true"
-        class="multi-form-select md-multi-select rounded"
+        class="select-dropdown select-dropdown-circle mr-2 w-100"
       >
         <ng-option value="All">All</ng-option>
         <ng-option value="Cherry Orchard">Cherry Orchard</ng-option>
@@ -40,7 +40,13 @@
     </div>
     <div class="form-group min-width-150 ng-select-md">
       <label for="warehouse">Status</label>
-      <ng-select placeholder="All" id="warehouse" clearable="false" searchable="false">
+      <ng-select
+        class="select-dropdown select-dropdown-circle mr-2 w-100"
+        placeholder="All"
+        id="warehouse"
+        clearable="false"
+        searchable="false"
+      >
         <ng-option value="All">All</ng-option>
         <ng-option value="All">All</ng-option>
         <ng-option value="All">All</ng-option>
@@ -69,25 +75,25 @@
 <table class="table app-table mt-3">
   <thead>
     <tr>
-      <th>
+      <!-- <th>
         <label class="custom-checkbox">
           <input type="checkbox" [checked]="allSelected()" (change)="onSelectAll($event)" />
           <span></span>
         </label>
-      </th>
+      </th> -->
       <th>Name</th>
       <th>Email</th>
       <th>Phone</th>
       <th>Status</th>
       <th>Roles</th>
-      <th>Department</th>
+      <!-- <th>Department</th> -->
       <th>Action</th>
     </tr>
   </thead>
   <tbody>
     @for (user of userList(); track $index) {
       <tr>
-        <td>
+        <!-- <td>
           <label class="custom-checkbox">
             <input
               type="checkbox"
@@ -96,21 +102,21 @@
             />
             <span></span>
           </label>
-        </td>
+        </td> -->
         <td class="text-nowrap">{{ user.fullName }}</td>
         <td class="text-nowrap">{{ user.email }}</td>
         <td class="text-nowrap">{{ user.phone }}</td>
         <td>
-          @if (user.status === EnumRStatus.Inactive) {
-            <span class="badge badge-secondary">{{ user.status }}</span>
-          } @else if (user.status === EnumRStatus.Pending) {
-            <span class="badge badge-warning">{{ user.status }}</span>
-          } @else if (user.status === EnumRStatus.Active) {
-            <span class="badge badge-success">{{ user.status }}</span>
+          @if (user.status === enumRStatus.Inactive) {
+            <span class="badge badge-secondary">Inactive</span>
+          } @else if (user.status === enumRStatus.Pending) {
+            <span class="badge badge-warning">Pending</span>
+          } @else if (user.status === enumRStatus.Active) {
+            <span class="badge badge-success">Active</span>
           }
         </td>
         <td>{{ user.roles }}</td>
-        <td>{{ user.departments }}</td>
+        <!-- <td>{{ user.departments }}</td> -->
         <td>
           <div class="dropdown-action" dropdown placement="bottom right">
             <button dropdownToggle type="button" class="active-btn">
@@ -135,7 +141,7 @@
                   Edit
                 </button>
               </li>
-              @if (user.status === EnumRStatus.Pending) {
+              @if (user.status === enumRStatus.Pending) {
                 <li>
                   <button class="dropdown-item">
                     <svg width="11" viewBox="0 0 11 11" fill="currentColor">
@@ -150,7 +156,7 @@
                   <svg width="12" viewBox="0 0 12 12" fill="currentColor">
                     <use href="assets/sprite.svg#delete-s-icon"></use>
                   </svg>
-                  >Delete
+                  Delete
                 </button>
               </li>
             </ul>
