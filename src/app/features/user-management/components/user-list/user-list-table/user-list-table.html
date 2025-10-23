@@ -3,7 +3,7 @@
   <div class="table-filter">
     <div class="form-group min-width-150">
       <label for="roles">Roles</label>
-      <ng-select
+      <!-- <ng-select
         placeholder="All"
         id="roles"
         clearable="false"
@@ -11,8 +11,17 @@
         [multiple]="true"
         class="multi-form-select md-multi-select rounded"
       >
-        <ng-option value="All">All</ng-option>
-        <ng-option value="Super Admins">Super Admins</ng-option>
+      @for (role of roleDropdown(); track role.roleId) {
+        <ng-option [value]="role.roleId">{{ role.roleName }}</ng-option>
+      }
+      </ng-select> -->
+      <ng-select
+        [items]="roleDropdown() ?? []"
+        bindLabel="roleName"
+        bindValue="roleId"
+        class="multi-form-select md-multi-select rounded"
+        placeholder="Select user..."
+      >
       </ng-select>
     </div>
     <div class="form-group min-width-150">
@@ -38,13 +47,21 @@
         <ng-option value="All">All</ng-option>
       </ng-select>
     </div>
-    <a [routerLink]="'/pages/user-management/users/invite-user'" class="icon-sm-btn bg-primary">
+    <!-- <a [routerLink]="'/pages/user-management/users/invite-user'" class="icon-sm-btn bg-primary">
       <span class="icon">
         <svg width="12" viewBox="0 0 18 18" fill="currentColor">
           <use href="assets/sprite.svg#svg-plus"></use>
         </svg>
       </span>
       Invite User
+    </a> -->
+    <a href="javascript:void(0);" (click)="createUpdateRoleModal()" class="icon-sm-btn bg-primary">
+      <span class="icon">
+        <svg width="12" viewBox="0 0 18 18" fill="currentColor">
+          <use href="assets/sprite.svg#svg-plus"></use>
+        </svg>
+      </span>
+      Create User
     </a>
   </div>
 </div>
@@ -105,30 +122,34 @@
               <li>
                 <button class="dropdown-item" (click)="viewUser(user)">
                   <svg width="14" viewBox="0 0 16 16" fill="currentColor">
-                    <use href="assets/sprite.svg#svg-eye-outline"></use></svg>
+                    <use href="assets/sprite.svg#svg-eye-outline"></use>
+                  </svg>
                   View
                 </button>
               </li>
               <li>
-                <button class="dropdown-item">
+                <button class="dropdown-item" (click)="updateRoleModal(user)">
                   <svg width="11" viewBox="0 0 11 10" fill="currentColor">
-                    <use href="assets/sprite.svg#edit-s-icon"></use></svg>
-                  >Edit
+                    <use href="assets/sprite.svg#edit-s-icon"></use>
+                  </svg>
+                  Edit
                 </button>
               </li>
               @if (user.status === EnumRStatus.Pending) {
                 <li>
                   <button class="dropdown-item">
                     <svg width="11" viewBox="0 0 11 11" fill="currentColor">
-                      <use href="assets/sprite.svg#svg-re-active"></use></svg>
-                    >Resend Invite
+                      <use href="assets/sprite.svg#svg-re-active"></use>
+                    </svg>
+                    Resend Invite
                   </button>
                 </li>
               }
               <li>
                 <button class="dropdown-item">
                   <svg width="12" viewBox="0 0 12 12" fill="currentColor">
-                    <use href="assets/sprite.svg#delete-s-icon"></use></svg>
+                    <use href="assets/sprite.svg#delete-s-icon"></use>
+                  </svg>
                   >Delete
                 </button>
               </li>
@@ -155,7 +176,7 @@
     <div class="custom-modal">
       <div class="custom-modal-header">
         <h5>User Details</h5>
-      <button class="close-btn" (click)="closeView()">×</button>
+        <button class="close-btn" (click)="closeView()">×</button>
       </div>
       @if (selectedUser; as user) {
         <div class="custom-modal-body">
@@ -168,7 +189,7 @@
         </div>
       }
       <div class="custom-modal-footer">
-      <button class="btn btn-sm btn-secondary" (click)="closeView()">Close</button>
+        <button class="btn btn-sm btn-secondary" (click)="closeView()">Close</button>
       </div>
     </div>
   </div>

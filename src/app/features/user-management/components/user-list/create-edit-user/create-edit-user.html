@@ -1,0 +1,138 @@
+<div class="modal-header">
+  <h2>{{ user ? 'Edit' : 'Create' }} User</h2>
+  <button type="button" (click)="bsModalRef.hide()">&times;</button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group mb-3">
+      <label for="firstName" class="form-label"
+        >First Name <span class="text-danger">*</span></label
+      >
+      <input
+        type="text"
+        id="firstName"
+        class="form-control"
+        placeholder="First Name"
+        formControlName="firstName"
+      />
+      <strong class="text-danger" *ngxControlError="form.controls['firstName']; track: 'required'"
+        >First name is required.</strong
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+      <input
+        type="text"
+        id="lastName"
+        class="form-control"
+        placeholder="Last Name"
+        formControlName="lastName"
+      />
+      <strong class="text-danger" *ngxControlError="form.controls['lastName']; track: 'required'"
+        >Last name is required.</strong
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        placeholder="Email"
+        formControlName="email"
+      />
+      <strong class="text-danger" *ngxControlError="form.controls['email']; track: 'required'"
+        >Email is required.</strong
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
+      <input
+        type="text"
+        id="phone"
+        class="form-control"
+        placeholder="Phone"
+        formControlName="phone"
+      />
+      <strong class="text-danger" *ngxControlError="form.controls['phone']; track: 'required'"
+        >Phone is required.</strong
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="roleId" class="form-label">Role <span class="text-danger">*</span></label>
+      <ng-select
+        class="form-control"
+        placeholder="All"
+        clearable="false"
+        searchable="false"
+        [multiple]="false"
+        formControlName="roleId"
+      >
+        @for (role of roles; track role.roleId) {
+          <ng-option [value]="role.roleId">{{ role.roleName }}</ng-option>
+        }
+      </ng-select>
+      <strong class="text-danger" *ngxControlError="form.controls['roleId']; track: 'required'"
+        >Role is required.</strong
+      >
+    </div>
+    @if (!user) {
+      <div class="form-group mb-3">
+        <label for="userName" class="form-label">Username <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          id="userName"
+          class="form-control"
+          autocomplete="off"
+          placeholder="Username"
+          formControlName="userName"
+        />
+        <strong class="text-danger" *ngxControlError="form.controls['userName']; track: 'required'"
+          >Username is required.</strong
+        >
+      </div>
+      <div class="form-group mb-3">
+        <label for="passwordHash" class="form-label"
+          >Password <span class="text-danger">*</span></label
+        >
+        <input
+          type="password"
+          id="passwordHash"
+          autocomplete="off"
+          class="form-control"
+          placeholder="Password"
+          formControlName="passwordHash"
+        />
+        <strong
+          class="text-danger"
+          *ngxControlError="form.controls['passwordHash']; track: 'required'"
+          >Password is required.</strong
+        >
+      </div>
+      <div class="form-group mb-3">
+        <label for="confirmPassword" class="form-label"
+          >Confirm Password <span class="text-danger">*</span></label
+        >
+        <input
+          type="password"
+          id="confirmPassword"
+          class="form-control"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+        />
+        <strong
+          class="text-danger"
+          *ngxControlError="form.controls['confirmPassword']; track: 'required'"
+          >Confirm password is required.</strong
+        >
+        @if (form.hasError('passwordMismatch') && form.get('confirmPassword')?.touched) {
+          <strong class="text-danger">Passwords do not match.</strong>
+        }
+      </div>
+    }
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button class="btn btn-outline-danger" type="button" (click)="back()">Cancel</button>
+      <button class="btn btn-theme" type="submit" [disabled]="isSubmitting()">Save</button>
+    </div>
+  </form>
+</div>
