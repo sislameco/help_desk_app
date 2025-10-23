@@ -16,11 +16,19 @@ import {
 } from '../../../models/root-resolution.model';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-root-resolution',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, EnumToStringPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    EnumToStringPipe,
+    NgSelectComponent,
+    NgOptionComponent,
+  ],
   templateUrl: './root-resolution.html',
   styleUrls: ['./root-resolution.scss'],
   providers: [BsModalService],

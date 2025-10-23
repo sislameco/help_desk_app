@@ -28,6 +28,7 @@ import { Editor, NgxEditorModule } from 'ngx-editor';
 export class NotificationConfig implements OnInit, OnDestroy {
   editorRef!: Editor;
   html = signal<string>('');
+  availableVariables: string[] = [];
   subject = signal<string>('');
   private readonly service = inject(NotificationConfigurationService);
   NotificationEvent = NotificationEvent;
@@ -56,19 +57,6 @@ export class NotificationConfig implements OnInit, OnDestroy {
     bodyTemplate: '',
     ccList: '',
   };
-
-  availableVariables: string[] = [
-    '[ticket_id]',
-    '[ticket_title]',
-    '[ticket_type]',
-    '[ticket_priority]',
-    '[ticket_status]',
-    '[assigned_to]',
-    '[created_date]',
-    '[due_date]',
-    '[department]',
-    '[description]',
-  ];
 
   ngOnInit(): void {
     this.loadNotifications();
@@ -102,6 +90,7 @@ export class NotificationConfig implements OnInit, OnDestroy {
     };
     this.html.set(evt.bodyTemplate);
     this.subject.set(evt.subjectTemplate);
+    this.availableVariables = evt.variables;
   }
 
   saveChanges(): void {

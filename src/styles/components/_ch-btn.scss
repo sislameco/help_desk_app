@@ -1,0 +1,457 @@
+.ch-btn {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  background: #989898;
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 0px 15px;
+  min-height: 40px;
+  color: #fff;
+  display: inline-block;
+  text-align: center;
+  line-height: 38px;
+  min-width: 100px;
+  outline: none;
+  box-shadow: none;
+  transition: all 300ms linear;
+  border-color: #989898;
+  &.h-30 {
+    min-height: 30px;
+    line-height: 28px;
+  }
+  &-green {
+    background: #00c17b;
+    color: #fff;
+    border-color: #00c17b;
+    &:hover {
+      background: #00a86b;
+      color: #fff;
+      border-color: #00a86b;
+    }
+    &.disabled-hover {
+      &:hover {
+        background: #00c17b;
+        color: #fff;
+        border-color: #00c17b;
+      }
+    }
+  }
+  &-yellow {
+    background-color: #ffd540;
+    border-color: #ffd540;
+    color: white;
+  }
+  &-red {
+    background: #ff647c;
+    &:hover {
+      background: transparent;
+      color: #ff647c;
+    }
+    &.disabled-hover {
+      background: #ff647c;
+      color: #fff;
+      border-color: #ff647c;
+    }
+  }
+  &-blue {
+    background: #08a8ff;
+    border-color: #08a8ff;
+    &:hover {
+      background: #0097e8;
+      color: #fff;
+      border-color: #0097e8;
+    }
+    &.disabled-hover {
+      background: #08a8ff;
+      color: #fff;
+      border-color: #08a8ff;
+    }
+  }
+  &-dark-blue {
+    background: #204971;
+    color: #fff;
+    border-color: #204971;
+    &:hover {
+      background: #204971;
+      color: #fff;
+      border-color: #204971;
+    }
+    &.disabled-hover {
+      &:hover {
+        background: #204971;
+        color: #fff;
+        border-color: #204971;
+      }
+    }
+  }
+  &-green-border {
+    background: transparent;
+    color: #00c17b;
+    border-color: #00c17b;
+    &:hover {
+      background: #00c17b;
+      color: #fff;
+      border-color: #00c17b;
+    }
+    &.disabled-hover {
+      &:hover {
+        background: transparent;
+        color: #00c17b;
+        border-color: #00c17b;
+      }
+    }
+  }
+  &-red-border {
+    background: transparent;
+    color: #ff647c;
+    border-color: #ff647c;
+    &:hover {
+      background: #ff647c;
+      color: #fff;
+      border-color: #ff647c;
+    }
+    &.disabled-hover {
+      &:hover {
+        background: transparent;
+        color: #ff647c;
+        border-color: #ff647c;
+      }
+    }
+  }
+  &-dark-blue-border {
+    background: transparent;
+    color: #204971;
+    border-color: #204971;
+    &:hover {
+      background: #204971;
+      color: #fff;
+      border-color: #204971;
+    }
+    &.disabled-hover {
+      &:hover {
+        background: transparent;
+        color: #204971;
+        border-color: #204971;
+      }
+    }
+  }
+  &-blue-border {
+    background: transparent;
+    color: #08a8ff;
+    border-color: #08a8ff;
+    &:hover {
+      background: #08a8ff;
+      color: #fff;
+      border-color: #08a8ff;
+    }
+    &.disabled-hover {
+      &:hover {
+        background: transparent;
+        color: #08a8ff;
+        border-color: #08a8ff;
+      }
+    }
+  }
+  &-yellow {
+    background: #ffb92d;
+    &:hover {
+      background: #f6a400;
+      color: #fff;
+      border-color: #f6a400;
+    }
+    &.disabled-hover {
+      background: #ffb92d;
+      color: #fff;
+      border-color: #ffb92d;
+    }
+  }
+  &-purple {
+    background: #ca97f4;
+    border-color: #ca97f4;
+    &:hover {
+      background: transparent;
+      color: #ca97f4;
+      border-color: #ca97f4;
+    }
+    &.disabled-hover {
+      background: #ca97f4;
+      color: #fff;
+      border-color: #ca97f4;
+    }
+  }
+  &-white {
+    background: #fff;
+    color: #204971;
+    border-color: #fff;
+    &:hover {
+      color: #204971;
+    }
+  }
+  &-gray {
+  }
+  &-circle {
+    line-height: 15px;
+    font-size: 12px;
+    border-radius: 20px;
+    min-width: 125px;
+  }
+  &-dubble {
+    min-height: 40px;
+    line-height: 15px;
+  }
+  &.small {
+    min-width: auto;
+    padding: 2px 10px;
+    border-radius: 3px;
+    min-height: auto;
+    font-size: 10px;
+    line-height: 14px;
+  }
+  &.disabled {
+    background: #d2d1d4;
+    color: #767676;
+    pointer-events: none;
+    border-color: #d2d1d4;
+  }
+  &:disabled {
+    background: #d2d1d4;
+    color: #767676;
+    pointer-events: none;
+    border-color: #d2d1d4;
+  }
+}
+
+// Icon Button Css
+.ch-icon-btn {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color: #444444;
+  border: 1px solid #d2d1d4;
+  background: #fff;
+  text-align: center;
+  padding: 7px 15px;
+  outline: none !important;
+  box-shadow: none;
+  display: inline-flex;
+  border-radius: 10px;
+  align-items: center;
+  .icon {
+    width: 12px;
+    text-align: center;
+    margin-right: 6px;
+    line-height: 0px;
+    &.mr-0 {
+      margin-left: 6px;
+    }
+  }
+  &:hover {
+    background: #08a8ff;
+    color: #fff;
+    border-color: #08a8ff;
+  }
+  &.btn-secondary {
+    background: #08a8ff;
+    color: #fff;
+    border-color: #08a8ff;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  &.ch-icon-single {
+    padding: 6.5px 8.5px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    height: 30px;
+    vertical-align: middle;
+  }
+  &-red {
+    color: #ff647c;
+    &:hover {
+      color: #fff;
+    }
+  }
+  &.disabled-hover {
+    background: #fff;
+    border-color: #fff;
+  }
+  &.disabled {
+    background: #d2d1d4;
+    color: #767676;
+  }
+}
+
+// Down and up icon Button
+.ch-price-btn {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  color: #fff;
+  background: transparent;
+  text-align: center;
+  line-height: 10px;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  vertical-align: middle;
+  cursor: auto !important;
+}
+
+// Add Employee Button
+.ch-add-btn {
+  height: 27px;
+  width: 27px;
+  border-radius: 50%;
+  transition: all 300ms linear;
+  color: #767676;
+  border: 0px;
+  outline: none;
+  background: #fff;
+  text-align: center;
+  padding: 0px;
+  svg {
+    position: relative;
+    top: -1px;
+  }
+  &:hover {
+    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Remove Field Button
+.ch-btn-fields-remove {
+  background: #ffeded;
+  border-radius: 3px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  position: relative;
+  &:before {
+    content: '';
+    background: #fe445a;
+    border-radius: 50%;
+    height: 14px;
+    width: 14px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  &:after {
+    content: '';
+    height: 3px;
+    width: 8px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    margin-left: -4px;
+    top: 50%;
+    margin-top: -1.5px;
+  }
+}
+
+// Text Button
+.text-btn {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  text-align: right;
+  color: #444444;
+  .icon {
+    margin-right: 2px;
+    display: inline-block;
+    text-align: left;
+  }
+}
+
+// Toggle Button
+.toggle-button {
+  li {
+    display: inline-block;
+    background: #ffffff;
+    border: 1px solid #c0c0c0;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 38px;
+    text-align: center;
+    color: #989898;
+    width: 90px;
+    height: 40px;
+    margin: 0 -13px 0 0;
+    transition: all 300ms linear;
+    cursor: pointer;
+    &.selected {
+      background: #ff647c;
+      border-color: #ff647c;
+      color: #fff;
+      z-index: 2;
+      position: relative;
+    }
+    &:last-child {
+      &.selected {
+        background: #00c17b;
+        border-color: #00c17b;
+        color: #fff;
+        z-index: 2;
+        position: relative;
+      }
+    }
+  }
+}
+
+// Border Button
+.border-btn {
+  background: #fafafa;
+  border: 1px solid #d2d1d4;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: #444;
+  padding: 0px 12px;
+  line-height: 28px;
+  display: inline-block;
+  height: 30px;
+  cursor: pointer;
+  svg {
+    fill: #444;
+    transition: 0.4s;
+    margin-right: 5px;
+  }
+  &:hover {
+    color: #fff;
+    background: #08a8ff;
+    border: 1px solid #08a8ff;
+    svg {
+      fill: white;
+    }
+  }
+  &.fill {
+    svg {
+      stroke: none;
+      fill: #444;
+      transition: all 300ms linear;
+    }
+    &:hover {
+      svg {
+        fill: #fff;
+      }
+    }
+  }
+}

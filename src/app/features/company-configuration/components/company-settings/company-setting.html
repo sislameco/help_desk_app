@@ -2,20 +2,11 @@
   <ul class="nav nav-tabs mb-3">
     @for (tab of tabs(); track tab.label) {
       <li class="nav-item">
-      <a role="button"
-        tabindex="0"
-        class="nav-link"
-        [class.active]="activeTab() === tab.component"
-        (click)="selectTab(tab)"
-        (keydown.enter)="selectTab(tab)"
-        (keydown.space)="selectTab(tab)">
-        {{ tab.label }}
-</a>
+        <a class="nav-link" [routerLink]="[tab.route]" routerLinkActive="active">{{ tab.label }}</a>
       </li>
     }
   </ul>
-
   <div class="tab-content mt-3">
-    <ng-container *ngComponentOutlet="activeTab()"></ng-container>
+    <router-outlet></router-outlet>
   </div>
 </div>
