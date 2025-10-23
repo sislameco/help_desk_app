@@ -8,7 +8,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { CollapseDirective } from 'ngx-bootstrap/collapse';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { RoleInput, RoleMenuAction, RoleMenuUpsert } from '../../../models/role.model';
 import { derivedAsync } from 'ngxtension/derived-async';
@@ -19,7 +18,7 @@ import { MenuAccess, MenuItem, MenuResource } from '../../../models/menu.model';
 
 @Component({
   selector: 'app-create-user-role-modal',
-  imports: [NgSelectModule, CollapseDirective, NgxControlError, ReactiveFormsModule, FormsModule],
+  imports: [NgSelectModule, NgxControlError, ReactiveFormsModule, FormsModule],
   templateUrl: './create-user-role-modal.html',
   styleUrl: './create-user-role-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

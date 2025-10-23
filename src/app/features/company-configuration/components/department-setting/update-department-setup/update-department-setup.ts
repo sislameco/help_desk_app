@@ -13,7 +13,6 @@ import { MenuAccess } from '../../../../user-management/models/menu.model';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { TicketReferenceService } from '../../../services/ticket-reference-service';
-import { DropdownOutputDto } from '../../../models/ddl.model';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({

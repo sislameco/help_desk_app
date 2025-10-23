@@ -42,4 +42,10 @@ export class UserRoleService {
   deleteRole(roleId: number): Observable<void> {
     return this.http.delete<void>(`${environment.apiBaseUrl}/api/role/${roleId}`);
   }
+
+  getRoleDropdown(): Observable<{ roleId: number; roleName: string }[]> {
+    return this.http.get<{ roleId: number; roleName: string }[]>(
+      environment.apiBaseUrl + '/api/role/dropdown',
+    );
+  }
 }

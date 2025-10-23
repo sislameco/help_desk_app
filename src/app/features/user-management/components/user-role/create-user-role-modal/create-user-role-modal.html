@@ -32,46 +32,46 @@
         >Description is required.</strong
       >
     </div>
-   
-@if (menuResource()?.menus?.length) {
-  @for (parent of menuResource().menus; track parent.menuId) {
-    <table class="app-table mb-3">
-      <thead>
-        <tr>
-          <th style="width: 40%">{{ parent.menu }}</th>
-          @for (action of menuResource().actions; track action.id) {
-            <th class="text-center" style="width: 12%">{{ action.httpVerb }}</th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (child of parent.childs; track child.menuId) {
-          <tr>
-            <td style="width: 40%">
-              <span class="pl-4 d-block">{{ child.menu }}</span>
-            </td>
-            @for (action of menuResource().actions; track action.id) {
-              <td class="text-center">
-                <label class="app-form--checkbox p-2 my-1 mx-auto d-table">
-                  <input
-                    type="checkbox"
-                    [checked]="togglePermission(child, action.id)"
-                    (change)="setPermission(child, action.id, $event.target.checked)"
-                  />
-                  <span class="d-flex justify-content-center align-items-center">
-                    <svg viewBox="0 0 10 8" fill="none" width="10">
-                      <use xlink:href="assets/sprite.svg#svg-check"></use>
-                    </svg>
-                  </span>
-                </label>
-              </td>
+
+    @if (menuResource().menus.length) {
+      @for (parent of menuResource().menus; track parent.menuId) {
+        <table class="app-table mb-3">
+          <thead>
+            <tr>
+              <th style="width: 40%">{{ parent.menu }}</th>
+              @for (action of menuResource().actions; track action.id) {
+                <th class="text-center" style="width: 12%">{{ action.httpVerb }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (child of parent.childs; track child.menuId) {
+              <tr>
+                <td style="width: 40%">
+                  <span class="pl-4 d-block">{{ child.menu }}</span>
+                </td>
+                @for (action of menuResource().actions; track action.id) {
+                  <td class="text-center">
+                    <label class="app-form--checkbox p-2 my-1 mx-auto d-table">
+                      <input
+                        type="checkbox"
+                        [checked]="togglePermission(child, action.id)"
+                        (change)="setPermission(child, action.id, $event.target.checked)"
+                      />
+                      <span class="d-flex justify-content-center align-items-center">
+                        <svg viewBox="0 0 10 8" fill="none" width="10">
+                          <use xlink:href="assets/sprite.svg#svg-check"></use>
+                        </svg>
+                      </span>
+                    </label>
+                  </td>
+                }
+              </tr>
             }
-          </tr>
-        }
-      </tbody>
-    </table>
-  }
-}
+          </tbody>
+        </table>
+      }
+    }
     <div class="d-flex justify-content-center gap-3 mt-4">
       <button class="btn btn-outline-danger" type="button" (click)="bsModalRef.hide()">
         Cancel

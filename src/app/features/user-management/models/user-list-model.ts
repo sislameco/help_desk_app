@@ -7,10 +7,14 @@ export interface UserModel {
   warehouse: string;
 }
 export interface Users {
+  id: number;
   fullName: string;
+  firstName: string;
+  lastname: string;
   email: string;
   phone: string;
   roles: string;
+  roleId: number;
   status: EnumRStatus;
   departments: string;
 }
@@ -41,4 +45,22 @@ export interface UserFilterDto extends PagedInputDto {
   companyId: number;
   roleIds: number[];
   departmentIds: number[];
+}
+
+export interface UserCreateUpdateDto extends UserProfileDto {
+  userName: string;
+  passwordHash: string;
+}
+
+export interface UserProfileDto {
+  id?: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  roleId?: number;
+}
+export interface UserChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
 }

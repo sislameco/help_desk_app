@@ -28,23 +28,23 @@
     <!-- Manager -->
     <div class="form-group mb-3">
       <label for="managerId" class="form-label"> Manager <span class="text-danger">*</span> </label>
-        <ng-select
-          id="managerId"
-          class="select-dropdown"
-          [items]="loadManagers()"
-          bindLabel="name"
-          bindValue="id"
-          [formControlName]="'managerId'"
-          [searchable]="true"
-          placeholder="-- Select Manager --"
-        >
-          <ng-template ng-option-tmp let-item="item">
-            <span>{{ item.name }}</span>
-          </ng-template>
-        </ng-select>
+      <ng-select
+        id="managerId"
+        class="select-dropdown"
+        [items]="loadManagers()"
+        bindLabel="name"
+        bindValue="id"
+        [formControlName]="'managerId'"
+        [searchable]="true"
+        placeholder="-- Select Manager --"
+      >
+        <ng-template ng-option-tmp let-item="item">
+          <span>{{ item.name }}</span>
+        </ng-template>
+      </ng-select>
     </div>
 
-    @if (loadDepartment()?.menus?.length) {
+    @if (loadDepartment().menus.length) {
       @for (parent of loadDepartment().menus; track parent) {
         <table class="app-table mb-3">
           <thead>

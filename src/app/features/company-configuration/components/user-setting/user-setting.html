@@ -55,7 +55,7 @@
               </td>
               <td>{{ user.email }}</td>
               <td>
-                @for (role of user.roleName ?? []; track role) {
+                @for (role of user.roleName; track role) {
                   <span class="badge bg-dark me-1">{{ role }}</span>
                 }
               </td>
