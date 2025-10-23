@@ -8,6 +8,7 @@ import { TicketService } from '../../../../services/ticket.service';
 import { AddTicketInputDto } from '../../../../models/ticket.model.model';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { EnumDataType } from '../../../../../company-configuration/models/company.model';
 
 @Component({
   selector: 'app-add-ticket-modal',
@@ -28,7 +29,9 @@ export class AddTicketModal {
   // 🔹 Base signals (unchanged)
   fkCompanyId = 1;
   ticketTypeId = signal<number | null>(null);
-
+  showCustomer = false;
+  showProject = false;
+  EnumDataType = EnumDataType;
   // =======================================
   // 🔹 Reactive form
   // =======================================
@@ -177,6 +180,10 @@ export class AddTicketModal {
   onTicketTypeChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     this.ticketTypeId.set(Number(value));
+  }
+  onIsCustomerChanged(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.showCustomer = checked;
   }
   closeModal() {
     this.bsModalRef.hide();

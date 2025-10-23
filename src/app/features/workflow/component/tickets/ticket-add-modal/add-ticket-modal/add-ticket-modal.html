@@ -58,42 +58,47 @@
       <div class="form-grid">
         <div class="form-group">
           <p>Is Related to a Customer?</p>
-          <input type="checkbox" formControlName="isCustomer" />
+          <input
+            type="checkbox"
+            formControlName="isCustomer"
+            (change)="onIsCustomerChanged($event)"
+          />
         </div>
-
-        <div class="form-group">
-          <p>Customer</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="customers()"
-            bindLabel="fullName"
-            bindValue="id"
-            [formControlName]="'fkCustomerId'"
-            [searchable]="true"
-            placeholder="Select customer"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.fullName }}</span>
-            </ng-template>
-          </ng-select>
-        </div>
-
-        <div class="form-group">
-          <p>Project</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="projects()"
-            bindLabel="referenceNumber"
-            bindValue="id"
-            [formControlName]="'fkProjectId'"
-            [searchable]="true"
-            placeholder="Select project"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.referenceNumber }}</span>
-            </ng-template>
-          </ng-select>
-        </div>
+        @if (showCustomer) {
+          <div class="form-group">
+            <p>Customer</p>
+            <ng-select
+              class="select-dropdown"
+              [items]="customers()"
+              bindLabel="fullName"
+              bindValue="id"
+              [formControlName]="'fkCustomerId'"
+              [searchable]="true"
+              placeholder="Select customer"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.fullName }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        } @else {
+          <div class="form-group">
+            <p>Project</p>
+            <ng-select
+              class="select-dropdown"
+              [items]="projects()"
+              bindLabel="referenceNumber"
+              bindValue="id"
+              [formControlName]="'fkProjectId'"
+              [searchable]="true"
+              placeholder="Select project"
+            >
+              <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.referenceNumber }}</span>
+              </ng-template>
+            </ng-select>
+          </div>
+        }
       </div>
     </section>
 
@@ -122,7 +127,7 @@
           </ng-select>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <p>Relocation</p>
           <ng-select
             class="select-dropdown"
@@ -137,7 +142,7 @@
               <span>{{ item.name }}</span>
             </ng-template>
           </ng-select>
-        </div>
+        </div> -->
 
         <div class="form-group">
           <p>Root Cause</p>
@@ -157,25 +162,62 @@
         </div>
       </div>
 
-      <!-- Dynamic Subform -->
-      <!-- @if (subforms().length > 0) {
+      <!-- 🧩 Dynamic Subform -->
+      @if (subforms().length > 0) {
         <div class="subform mt-3">
           <h6 class="text-muted mb-2">Additional Fields</h6>
-          <div class="form-grid">
-            @for (field of subforms(); track field.id) {
+          <div formArrayName="subForm" class="form-grid">
+            @for (field of subforms(); track field.id; let i = $index) {
               <div class="form-group">
                 <p>{{ field.displayName }}</p>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Enter {{ field.displayName }}"
-                  [formControlName]="'subForm'"
-                />
+
+                @switch (field.dataType) {
+                  @case (EnumDataType.textInput) {
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter {{ field.displayName }}"
+                      [formControlName]="i"
+                    />
+                  }
+                  @case (EnumDataType.number) {
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="Enter {{ field.displayName }}"
+                      [formControlName]="i"
+                    />
+                  }
+
+                  @case (EnumDataType.textArea) {
+                    <textarea
+                      rows="3"
+                      class="form-control"
+                      placeholder="Enter {{ field.displayName }}"
+                      [formControlName]="i"
+                    ></textarea>
+                  }
+
+                  @case (EnumDataType.dropdownList) {
+                    <ng-select
+                      class="select-dropdown"
+                      [items]="field.ddlValue"
+                      [formControlName]="i"
+                      bindLabel="label"
+                      bindValue="value"
+                      placeholder="Select {{ field.displayName }}"
+                    ></ng-select>
+                  }
+
+                  @default {
+                    <input type="text" class="form-control" [formControlName]="i" />
+                  }
+                }
               </div>
             }
           </div>
         </div>
-      } -->
+      }
     </section>
 
     <hr />
