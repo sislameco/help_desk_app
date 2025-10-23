@@ -1,5 +1,6 @@
+@use '../base/variable';
 .modal-content {
-  border-radius: 4px;
+  // border-radius: 4px;
   border: none;
 }
 .modal-header {
@@ -32,4 +33,152 @@
 }
 .modal-body {
   padding: 40px;
+}
+
+.app-modal {
+  &--content-box {
+    background-color: #f0f7f9;
+    border: 1px solid variable.$blue-light;
+    border-radius: 3px;
+    padding: 14px;
+
+    .row {
+      margin: 0 -4px;
+
+      [class*='col-'] {
+        padding: 0 4px;
+      }
+    }
+  }
+
+  .modal-content {
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+  }
+
+  .modal-header {
+    padding: 14px 30px 14px 20px;
+    position: relative;
+    background: variable.$blue-dark;
+    color: #fff;
+
+    .modal-title {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 15px;
+    }
+
+    button.close {
+      align-items: center;
+      display: flex;
+      height: 24px;
+      justify-content: center;
+      outline: none !important;
+      padding: 0;
+      position: absolute;
+      right: 10px;
+      top: calc(50% - 12px);
+      width: 24px;
+      transition: 0.4s;
+
+      > svg {
+        fill: white;
+        width: 12px;
+        transition: 0.4s;
+      }
+
+      &:hover {
+        background-color: rgb(255 255 255);
+        > svg {
+          fill: rgba(32, 73, 113, 0.88);
+        }
+      }
+    }
+  }
+
+  .modal-body {
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 26px;
+      margin: 0 0 25px;
+      color: #444444;
+    }
+
+    p {
+      font-size: 14px;
+      letter-spacing: 0.025em;
+      line-height: 1.35;
+      margin: 0 0 15px;
+    }
+  }
+
+  .modal-sm {
+    max-width: 450px;
+
+    .modal-header {
+      padding-left: 20px;
+    }
+
+    .modal-body {
+      padding: 25px 20px;
+    }
+  }
+  &.alert-modal {
+    .modal-body {
+      padding-bottom: 36px;
+      padding-top: 36px;
+
+      > p {
+        color: variable.$blue-dark;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.025em;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0 30px;
+
+        span {
+          color: variable.$blue-light;
+        }
+      }
+    }
+  }
+}
+.modal-sm {
+  max-width: 450px;
+}
+.modal-md {
+  max-width: 630px;
+}
+.modal-xl {
+  max-width: 850px;
+}
+.modal-xxl {
+  max-width: 1100px;
+}
+.modal-backdrop {
+  backdrop-filter: blur(2px);
+}
+
+// datepicker fix
+modal-container ~ bs-datepicker-container {
+  z-index: 999999;
+}
+
+modal-container + modal-container {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog.fullscreen {
+  max-width: 100%;
+  margin: 0px;
+  .modal-content {
+    height: 100%;
+    .modal-body {
+      iframe {
+        height: 100% !important;
+        min-height: calc(100vh - 144px);
+      }
+    }
+  }
 }

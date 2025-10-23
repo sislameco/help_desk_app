@@ -5,6 +5,8 @@ $font: 'Mulish', serif;
 $themeColor: #59b96b;
 $hover: #00688f;
 $fontColor: #444;
+$blue-dark: #204971;
+$blue-light: #00b3f1;
 
 // Mixins
 @mixin transition($property: all, $duration: 300ms, $animate: linear, $delay: 0s) {

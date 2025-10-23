@@ -1,97 +1,182 @@
-<form [formGroup]="form" (ngSubmit)="submit()" class="card shadow-sm p-3">
-  <!-- ================== -->
-  <!-- Company Detail     -->
-  <!-- ================== -->
-  <h5 class="mb-3">Company Detail</h5>
-  <div class="row g-3 align-items-center">
-    <div class="col-md-4">
-      <label>
-        Company Name
-        <input type="text" formControlName="name" />
-      </label>
+<div class="company-details card shadow-sm p-3">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="app-form">
+    <!-- ================== -->
+    <!-- Company Detail     -->
+    <!-- ================== -->
+    <div class="row">
+      <div class="form-group col-lg-12">
+        <h5>Company Detail</h5>
+      </div>
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['name'].invalid &&
+          (form.controls['name'].dirty || form.controls['name'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="companyName"> Company Name </label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            name="companyName"
+            placeholder="Company Name"
+          />
+        </div>
+      </div>
+
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['shortName'].invalid &&
+          (form.controls['shortName'].dirty || form.controls['shortName'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="shortName"> Short Name </label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="shortName"
+            name="shortName"
+            placeholder="Short Name"
+          />
+        </div>
+      </div>
+
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['description'].invalid &&
+          (form.controls['description'].dirty || form.controls['description'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="description"> Description </label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="description"
+            name="description"
+            placeholder="Description"
+          />
+        </div>
+      </div>
+
+      <div
+        class="form-group col-lg-6"
+        [class.form-error]="
+          form.controls['prefixTicket'].invalid &&
+          (form.controls['prefixTicket'].dirty || form.controls['prefixTicket'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="prefixTicket"> Prefix Ticket </label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="prefixTicket"
+            name="prefixTicket"
+            placeholder="Prefix Ticket"
+          />
+        </div>
+      </div>
     </div>
 
-    <div class="col-md-4">
-      <label>
-        Short Name
-        <input type="text" formControlName="shortName" />
-      </label>
+    <!-- ================== -->
+    <!-- Authentication     -->
+    <!-- ================== -->
+    <div class="row">
+      <div class="form-group col-lg-12">
+        <h5 class="">Authentication</h5>
+      </div>
+      <div
+        class="form-group col-md-6"
+        [class.form-error]="
+          form.controls['accessKey'].invalid &&
+          (form.controls['accessKey'].dirty || form.controls['accessKey'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="accessKey"> Access Key </label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="accessKey"
+            name="accessKey"
+            placeholder="Access Key"
+            readonly
+          />
+        </div>
+      </div>
+
+      <div
+        class="form-group col-md-6"
+        [class.form-error]="
+          form.controls['secretKey'].invalid &&
+          (form.controls['secretKey'].dirty || form.controls['secretKey'].touched)
+        "
+      >
+        <div class="position-relative">
+          <label class="input-label" for="secretKey"> Secret Key </label>
+          <input
+            type="password"
+            class="form-control"
+            formControlName="secretKey"
+            name="secretKey"
+            placeholder="Secret Key"
+            readonly
+          />
+        </div>
+      </div>
     </div>
 
-    <div class="col-md-4">
-      <label>
-        Description
-        <input type="text" formControlName="description" />
-      </label>
+    <div class="text-end">
+      <button type="submit" class="ch-btn ch-btn-green" [disabled]="form.invalid">
+        Save Changes
+      </button>
     </div>
-
-    <div class="col-md-4">
-      <label>
-        Prefix Ticket
-        <input type="text" formControlName="prefixTicket" />
-      </label>
-    </div>
-  </div>
-
-  <!-- ================== -->
-  <!-- Authentication     -->
-  <!-- ================== -->
-  <h5 class="mt-4 mb-3">Authentication</h5>
-  <div class="row g-3 align-items-center">
-    <div class="col-md-6">
-      <label>
-        Access Key
-        <input type="text" formControlName="accessKey" readonly />
-      </label>
-    </div>
-
-    <div class="col-md-6">
-      <label>
-        Secret Key
-        <input type="password" class="form-control" formControlName="secretKey" readonly />
-      </label>
-    </div>
-  </div>
-
-  <div class="mt-4 text-end">
-    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Save Changes</button>
-  </div>
-</form>
+  </form>
+</div>
 @if ((company?.defineDataSources?.length ?? 0) > 0) {
-  <h5 class="mt-4 mb-3">Data Sources</h5>
-  <table class="table table-bordered table-striped">
-    <thead class="table-light">
-      <tr>
-        <th style="width: 10%">Type</th>
-        <th style="width: 60%">Source</th>
-        <th style="width: 30%" class="text-center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (source of company?.defineDataSources ?? []; track source.id) {
+  <div class="data-source card shadow-sm p-3 mt-4">
+    <h5 class="mb-3" style="font-weight: 600">Data Sources</h5>
+    <table class="app-table rounded-border">
+      <thead class="fixed-thead">
         <tr>
-          <td>{{ source.type | enumToString: enumDataSource }}</td>
-          <td>{{ source.source }}</td>
-          <td class="text-center">
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-success me-2"
-              (click)="downloadJson(source)"
-            >
-              ⬇ Download JSON
-            </button>
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-primary"
-              (click)="syncSource(source)"
-            >
-              🔄 Sync
-            </button>
-          </td>
+          <th style="width: 10%">Type</th>
+          <th style="width: 60%">Source</th>
+          <th style="width: 30%" class="text-center">Actions</th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (source of company?.defineDataSources ?? []; track source.id) {
+          <tr>
+            <td>{{ source.type | enumToString: enumDataSource }}</td>
+            <td>{{ source.source }}</td>
+            <td class="text-center">
+              <button type="button" class="ch-icon-btn me-2" (click)="downloadJson(source)">
+                <span class="icon">
+                  <svg width="11" viewBox="0 0 11 12" fill="currentColor">
+                    <use xlink:href="assets/sprite.svg#download-icon"></use>
+                  </svg>
+                </span>
+                Download JSON
+              </button>
+              <button type="button" class="ch-icon-btn" (click)="syncSource(source)">
+                <span class="icon"
+                  ><svg width="12" viewBox="0 0 13 16" fill="currentColor">
+                    <use xlink:href="assets/sprite.svg#svg-refresh-double"></use></svg
+                ></span>
+                Sync
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
 } @else {
   <p class="text-muted">No Data Sources available.</p>
 }

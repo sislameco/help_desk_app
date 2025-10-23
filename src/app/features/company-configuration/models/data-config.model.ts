@@ -10,17 +10,18 @@ import { EnumDataType } from './company.model';
 import { TicketTypeComponent } from '../components/ticket-type-component/ticket-type-component';
 
 export const tabs: TabConfig[] = [
-  { label: 'Company Detail', component: CompanyDetail },
-  { label: 'Notifications', component: NotificationConfig },
-  { label: 'Email Settings', component: EmailConfig },
-  { label: 'Ticket Types', component: TicketTypeComponent },
-  { label: 'SLA Settings', component: SlaConfiguration },
-  { label: 'Departments', component: DepartmentSetting },
-  { label: 'Users', component: UserSetting },
-  { label: 'Custom Fields', component: CustomDefineDataSourceComponent },
+  { label: 'Company Detail', route: 'company-detail', component: CompanyDetail },
+  { label: 'Notifications', route: 'notifications', component: NotificationConfig },
+  { label: 'Email Settings', route: 'email-settings', component: EmailConfig },
+  { label: 'Ticket Types', route: 'ticket-types', component: TicketTypeComponent },
+  { label: 'SLA Settings', route: 'sla-settings', component: SlaConfiguration },
+  { label: 'Departments', route: 'departments', component: DepartmentSetting },
+  { label: 'Users', route: 'users', component: UserSetting },
+  { label: 'Custom Fields', route: 'custom-fields', component: CustomDefineDataSourceComponent },
 ];
 export interface TabConfig {
   label: string;
+  route: string;
   component: Type<unknown>;
 }
 // ✅ Match your C# DTO

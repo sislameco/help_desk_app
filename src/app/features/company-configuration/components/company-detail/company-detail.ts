@@ -18,6 +18,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CommonModule } from '@angular/common';
 import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
 import { RootResolution } from './root-resolution/root-resolution';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-company-detail',
@@ -41,6 +42,7 @@ export class CompanyDetail implements OnInit {
   private fb = inject(FormBuilder);
   private modalService = inject(BsModalService);
   private companyService = inject(CompanyService);
+  private toast = inject(ToastrService);
   private route = inject(ActivatedRoute);
   id = Number(this.route.snapshot.paramMap.get('id'));
   company: CompanyDto | null = null;
@@ -172,7 +174,8 @@ export class CompanyDetail implements OnInit {
   syncSource(ds: CompanyDefineDataSourceDto) {
     this.companyService.syncDataSource(ds.id, this.company?.id ?? 0, ds.type).subscribe({
       next: (res) => {
-        alert('Sync initiated successfully.');
+        this.toast.success('Sync initiated successfully.');
+        // alert('Sync initiated successfully.');
         return res;
       },
     });
@@ -197,7 +200,8 @@ export class CompanyDetail implements OnInit {
       // Cleanup
       window.URL.revokeObjectURL(url);
     } catch {
-      alert('This datasource has invalid JSON data.');
+      this.toast.error('This datasource has invalid JSON data.');
+      // alert('This datasource has invalid JSON data.');
     }
   }
 }

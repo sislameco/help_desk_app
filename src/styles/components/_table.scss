@@ -45,12 +45,13 @@
   }
 }
 .app-table {
+  min-width: 100%;
   thead {
     tr {
       th {
         color: #00688f;
         font-family: Mulish;
-        font-size: 14px;
+        font-size: 12px;
         font-style: normal;
         font-weight: 700;
         line-height: normal;
@@ -58,6 +59,9 @@
         background: #f6fbf7;
         border: 1px solid #e8e8e8;
         vertical-align: middle;
+        @media (min-width: 768px) {
+          padding: 11px 15px;
+        }
       }
     }
   }
@@ -66,7 +70,7 @@
       td {
         color: #444;
         font-family: Mulish;
-        font-size: 14px;
+        font-size: 12px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
@@ -74,6 +78,9 @@
         padding: 12px 15px;
         background: #fff;
         vertical-align: middle;
+        @media (min-width: 768px) {
+          padding: 11px 15px;
+        }
       }
       &:nth-child(even) {
         td {

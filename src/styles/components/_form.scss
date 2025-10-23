@@ -164,3 +164,132 @@
     }
   }
 }
+
+.app-form {
+  .row {
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+  [class*='col'] {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .form-group {
+    // Styles for form-group container
+    margin-bottom: 25px;
+    position: relative;
+    // Default styles for input of form-group
+    input {
+      font-family: 'Mulish', sans-serif;
+      border: 1px solid #d2d1d4;
+      box-sizing: border-box;
+      border-radius: 3px;
+      outline: none;
+      box-shadow: none;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 15px;
+      letter-spacing: 0.03em;
+      color: #444;
+      height: 45px;
+      padding: 10px 10px;
+      &::placeholder {
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 15px;
+        letter-spacing: 0.03em;
+        color: #989898;
+      }
+      &:focus {
+        border-color: #989898;
+        color: #444;
+      }
+      &.ng-invalid.ng-touched {
+        border-color: #ff3f41;
+        color: #444;
+        &::placeholder {
+          color: #444;
+        }
+      }
+      &[readonly] {
+        opacity: 0.5;
+      }
+      &:disabled {
+        background: transparent;
+      }
+    }
+
+    &.form-error {
+      label {
+        color: #ff3f41;
+        font-weight: bold;
+      }
+      input,
+      textarea {
+        border: 2px solid #ff3f41;
+        color: #444;
+        &::placeholder {
+          color: #444;
+        }
+      }
+      .form-error-text {
+        display: inline-block;
+        color: #ff3f41;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 15px;
+        margin-top: 2px;
+        small {
+          font-weight: bold;
+          font-size: 12px;
+          line-height: 15px;
+        }
+      }
+
+      .select-dropdown {
+        .ng-select-container {
+          border: 2px solid #ff3f41 !important;
+        }
+      }
+
+      .radio-group {
+        border: 2px solid #ff3f41;
+      }
+      .ch-btn-green {
+        color: #fff;
+      }
+    }
+
+    &.button-group {
+      margin-bottom: 0px;
+      margin-top: 15px;
+    }
+    .input-label {
+      font-family: 'Mulish', sans-serif;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 15px;
+      color: #989898;
+      position: absolute;
+      top: -8px;
+      left: 9px;
+      background: #fff;
+      padding: 0px 4px;
+      border-radius: 2px;
+      margin-bottom: 0px;
+      z-index: 2;
+      &.ng-invalid {
+        color: #ff3f41;
+      }
+      &.input-label-view {
+        position: relative;
+        left: 0px;
+        top: 0px;
+      }
+    }
+    h5,
+    h6 {
+      font-weight: 600;
+    }
+  }
+}

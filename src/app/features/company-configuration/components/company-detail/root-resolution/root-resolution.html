@@ -1,11 +1,11 @@
-<div class="container mt-4">
-  <h3 class="fw-bold">🧩 Root / Resolution Setup</h3>
+<div class="card shadow-sm p-3 mt-4">
+  <h5>Root / Resolution Setup</h5>
 
   <!-- Type Selector -->
-  <div class="d-flex align-items-center justify-content-between mb-3">
-    <div>
-      <label for="typeSelect" class="form-label fw-bold me-2">Select Type:</label>
-      <select
+  <div class="d-flex align-items-center justify-content-between my-3">
+    <div class="d-flex align-items-center">
+      <label for="typeSelect" class="form-label me-2 mb-0">Select Type:</label>
+      <!-- <select
         id="typeSelect"
         class="form-select d-inline-block w-auto"
         [(ngModel)]="selectedType"
@@ -13,21 +13,41 @@
       >
         <option [value]="enumRootResolutionType.RootCause">Root Cause</option>
         <option [value]="enumRootResolutionType.Resolution">Resolution</option>
-      </select>
+      </select> -->
+
+      <ng-select
+        class="select-dropdown select-dropdown-circle"
+        id="typeSelect"
+        [clearable]="false"
+        [(ngModel)]="selectedType"
+        (change)="onTypeChange(selectedType)"
+        style="min-width: 150px"
+      >
+        <ng-option [value]="0">All</ng-option>
+        <ng-option [value]="enumRootResolutionType.RootCause">Root Cause</ng-option>
+        <ng-option [value]="enumRootResolutionType.Resolution">Resolution</ng-option>
+      </ng-select>
     </div>
 
-    <button class="btn btn-primary" (click)="openModal(addEditTemplate, 'add')">➕ Add New</button>
+    <button type="button" class="ch-icon-btn" (click)="openModal(addEditTemplate, 'add')">
+      <span class="icon">
+        <svg width="11" viewBox="0 0 11 11" fill="currentColor">
+          <use xlink:href="assets/sprite.svg#plus-icon"></use>
+        </svg>
+      </span>
+      Add New
+    </button>
   </div>
 
   <!-- Data Table -->
-  <table class="table table-bordered table-hover align-middle">
-    <thead class="table-light">
+  <table class="app-table">
+    <thead class="fixed-thead">
       <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Type</th>
-        <th class="text-center">Actions</th>
+        <th style="width: 10%">#</th>
+        <th style="width: 20%">Name</th>
+        <th style="width: 35%">Description</th>
+        <th style="width: 15%">Type</th>
+        <th class="text-center" style="width: 20%">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -66,44 +86,49 @@
 
 <!-- Modal Template -->
 <ng-template #addEditTemplate>
-  <div class="modal-header">
-    <h5 class="modal-title">
-      {{ isViewMode ? '👁️ View Details' : formModel.id ? '✏️ Edit Item' : '➕ Add New Item' }}
-    </h5>
-    <button type="button" class="btn-close" (click)="modalRef?.hide()">
-      <span class="visually-hidden">Close</span>
-    </button>
-  </div>
+  <div class="app-modal">
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{ isViewMode ? 'View Details' : formModel.id ? 'Edit Item' : 'Add New Item' }}
+      </h5>
+      <button class="close" (click)="modalRef?.hide()">
+        <svg width="10" viewBox="0 0 10 10">
+          <use href="assets/sprite.svg#svg-close"></use>
+        </svg>
+      </button>
+    </div>
 
-  <div class="modal-body">
-    <form>
-      <div class="mb-3">
-        <p class="form-label fw-bold">Name</p>
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="formModel.name"
-          name="name"
-          [readonly]="isViewMode"
-          required
-        />
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+          <p class="form-label fw-bold">Name*</p>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="formModel.name"
+            name="name"
+            [readonly]="isViewMode"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <p class="form-label fw-bold">Description*</p>
+          <textarea
+            class="form-control"
+            rows="3"
+            [(ngModel)]="formModel.description"
+            name="description"
+            [readonly]="isViewMode"
+          ></textarea>
+        </div>
+      </form>
+      <div class="form-group text-nowrap text-center mt-4" *ngIf="!isViewMode">
+        <button type="button" class="ch-btn ch-btn-red-border" (click)="modalRef?.hide()">
+          Cancel
+        </button>
+        <button type="submit" class="ch-btn ch-btn-green ms-3" (click)="save()">Save</button>
       </div>
-
-      <div class="mb-3">
-        <p class="form-label fw-bold">Description</p>
-        <textarea
-          class="form-control"
-          rows="3"
-          [(ngModel)]="formModel.description"
-          name="description"
-          [readonly]="isViewMode"
-        ></textarea>
-      </div>
-    </form>
-  </div>
-
-  <div class="modal-footer" *ngIf="!isViewMode">
-    <button class="btn btn-secondary" (click)="modalRef?.hide()">Cancel</button>
-    <button class="btn btn-success" (click)="save()">Save</button>
+    </div>
   </div>
 </ng-template>
