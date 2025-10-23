@@ -1,3 +1,4 @@
+@use '../base/variable';
 .icon-sm-btn {
   color: #444;
   text-align: center;
@@ -17,8 +18,8 @@
     line-height: 12px;
   }
   &.bg-primary {
-    background-color: #59b96b !important;
-    border-color: #59b96b;
+    background-color: variable.$blue-light !important;
+    border-color: variable.$blue-light;
     color: #fff;
   }
 }
