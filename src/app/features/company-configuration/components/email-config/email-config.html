@@ -174,20 +174,22 @@
           <td>{{ cfg.host }}</td>
           <td>{{ cfg.smtpPort }}</td>
           <td>{{ cfg.imapPort }}</td>
-          <td>
-            <span class="ch-btn small disabled-hover" [class.ch-btn-green]="cfg.isDefault">
-              {{ cfg.isDefault ? 'Yes' : 'No' }}
-            </span>
+          <td class="text-center">
+            <label class="app-form--checkbox" [for]="i"
+              ><input
+                type="checkbox"
+                [id]="i"
+                [checked]="cfg.isDefault"
+                (change)="!cfg.isDefault && setDefault(cfg.id)"
+                [disabled]="cfg.isDefault"
+                title="Set as Default" /><span
+                class="d-flex align-items-center justify-content-center"
+                ><svg viewBox="0 0 10 8" fill="none" width="10">
+                  <use xlink:href="assets/sprite.svg#svg-check"></use></svg></span
+            ></label>
           </td>
           <td>
             <button class="ch-btn ch-btn-green h-30 me-2" (click)="edit(cfg)">Edit</button>
-            <button
-              class="ch-btn ch-btn-green-border h-30"
-              [disabled]="cfg.isDefault"
-              (click)="setDefault(cfg.id)"
-            >
-              Set Default
-            </button>
           </td>
         </tr>
       }
