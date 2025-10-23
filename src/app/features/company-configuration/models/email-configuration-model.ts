@@ -24,4 +24,6 @@ export enum NotificationEvent {
   Closed = 4,
   SLADue = 5,
   SLAOverdue = 6,
+  RecoveryPassword = 7,
+  UserInvitation = 8,
 }
