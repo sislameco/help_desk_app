@@ -8,6 +8,8 @@ export interface NotificationOutputDto {
   bodyTemplate: string;
   headerTemplate: string;
   footerTemplate: string;
+  variables: string[];
+  isEnabled: boolean;
 }
 
 export enum NotificationType {
