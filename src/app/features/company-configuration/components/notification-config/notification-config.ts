@@ -63,7 +63,6 @@ export class NotificationConfig implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    // eslint-disable-next-line dot-notation
     this.fkCompanyId = +this.route.snapshot.parent?.params['id'] || 0;
     this.loadNotifications();
     this.editorRef = new Editor();

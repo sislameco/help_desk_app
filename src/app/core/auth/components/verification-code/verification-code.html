@@ -1,33 +1,32 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="d-grid gap-3">
-  <h2 class="text-center mb-3">Forgot Password</h2>
+  <h2 class="text-center mb-3">Confirm OTP</h2>
   @if (sent()) {
     <div class="alert alert-success text-center">Reset link sent! Check your email.</div>
   } @else {
     <label class="form-label">
-      <b>Username</b>
+      <b>OTP</b>
       <input
-        id="userName"
-        type="userName"
+        id="otp"
+        type="otp"
         class="form-control"
-        [formControl]="form.controls.userName"
-        placeholder="Enter your email"
+        [formControl]="form.controls.otp"
+        placeholder="Enter your otp"
         required
       />
-      <strong *ngxControlError="form.controls.userName; track: 'required'"
-        >Username is required.</strong
-      >
+      <strong *ngxControlError="form.controls.otp; track: 'required'">otp is required.</strong>
       <!-- <strong *ngxControlError="form.controls.email; track: 'email'">Invalid email address.</strong> -->
     </label>
     <button class="btn btn-warning w-100" type="submit" [disabled]="loading() || form.invalid">
       @if (loading()) {
         <span class="spinner-border spinner-border-sm me-2"></span> Sending...
       } @else {
-        Send Reset Link
+        Verify OTP
       }
     </button>
   }
   <div class="text-center mt-3">
-    <a [routerLink]="['../login']" [relativeTo]="route" class="small">Back to Login</a>
+    <a [routerLink]="['../forgot-password']" [relativeTo]="route" class="small"
+      >Back to forget password</a
+    >
   </div>
 </form>
->
