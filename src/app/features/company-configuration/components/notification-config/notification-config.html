@@ -7,9 +7,21 @@
   <div class="row">
     <!-- LEFT PANEL -->
     <div class="col-md-4">
-      <div class="card p-3 shadow-sm">
-        <h6 class="fw-semibold mb-3">Notification Events</h6>
+      <div class="card p-3">
+        <h6 class="fw-semibold mb-3">Notification Types</h6>
 
+        <ng-select
+          class="select-dropdown"
+          id="typeSelect"
+          [clearable]="false"
+          [(ngModel)]="selectedType"
+          (change)="loadNotifications()"
+          style="min-width: 150px"
+        >
+          <ng-option [value]="enumNotificationType.Email">Email</ng-option>
+          <ng-option [value]="enumNotificationType.App">App</ng-option>
+          <ng-option [value]="enumNotificationType.System">System</ng-option>
+        </ng-select>
         <div
           *ngFor="let evt of notifications()"
           class="border rounded p-2 mb-2"
@@ -43,44 +55,45 @@
     <div class="col-md-8" *ngIf="selectedEvent()">
       <div class="card p-3 shadow-sm">
         <h6 class="fw-semibold mb-3">
-          Editing: {{ getEventName(selectedEvent()?.event!) }}
-          ({{ getTypeName(selectedEvent()?.notificationType!) }})
+          Editing: {{ getEventName(selectedEvent()?.event!) }} ({{
+            getTypeName(selectedEvent()?.notificationType!)
+          }})
         </h6>
 
         <div class="mb-3">
-          <label class="form-label fw-semibold">Subject
-          <input
-            type="text"
-            class="form-control"
-            [(ngModel)]="template.subjectTemplate"
-            placeholder="Enter subject template"
-          />
+          <label class="form-label fw-semibold"
+            >Subject
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="template.subjectTemplate"
+              placeholder="Enter subject template"
+            />
           </label>
         </div>
 
         <div class="mb-3">
           <label class="form-label fw-semibold" for="bodyEditor">Body</label>
-            <ngx-editor-menu [editor]="editorRef"></ngx-editor-menu>
-  <ngx-editor
-    [(ngModel)]="html"
-    [editor]="editorRef"
-    placeholder="Write email template here..."
-  ></ngx-editor>
-         
+          <ngx-editor-menu [editor]="editorRef"></ngx-editor-menu>
+          <ngx-editor
+            [(ngModel)]="html"
+            [editor]="editorRef"
+            placeholder="Write email template here..."
+          ></ngx-editor>
         </div>
 
         <div>
           <h6 class="fw-semibold mb-2">Available Variables</h6>
-           <div class="d-flex flex-wrap gap-2">
-      <button
-        *ngFor="let v of availableVariables"
-        type="button"
-        class="btn btn-outline-secondary btn-sm"
-        (click)="copyVariable(v)"
-      >
-        {{ v }}
-      </button>
-    </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button
+              *ngFor="let v of availableVariables"
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="copyVariable(v)"
+            >
+              {{ v }}
+            </button>
+          </div>
         </div>
       </div>
     </div>

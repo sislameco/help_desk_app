@@ -31,7 +31,12 @@ export class NotificationConfigurationService {
   /**
    * ✅ Get all active notifications by company
    */
-  getAllActiveByCompanyId(fkCompanyId: number): Observable<NotificationOutputDto[]> {
-    return this.http.get<NotificationOutputDto[]>(`${this.baseUrl}/all/${fkCompanyId}`);
+  getAllActiveByCompanyId(
+    fkCompanyId: number,
+    typeId: number,
+  ): Observable<NotificationOutputDto[]> {
+    return this.http.get<NotificationOutputDto[]>(
+      `${this.baseUrl}/all/${fkCompanyId}?type=${typeId}`,
+    );
   }
 }
