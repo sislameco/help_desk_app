@@ -16,11 +16,13 @@ import {
   NotificationType,
 } from '../../models/notification-configuration.model';
 import { Editor, NgxEditorModule } from 'ngx-editor';
+import { ActivatedRoute } from '@angular/router';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-notification-config',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxEditorModule],
+  imports: [CommonModule, FormsModule, NgxEditorModule, NgSelectComponent, NgOptionComponent],
   styleUrls: ['./notification-config.scss'],
   templateUrl: './notification-config.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,11 +32,13 @@ export class NotificationConfig implements OnInit, OnDestroy {
   html = signal<string>('');
   availableVariables: string[] = [];
   subject = signal<string>('');
+  enumNotificationType = NotificationType;
   private readonly service = inject(NotificationConfigurationService);
+  private readonly route = inject(ActivatedRoute);
   NotificationEvent = NotificationEvent;
   NotificationType = NotificationType;
 
-  fkCompanyId = 1;
+  fkCompanyId = 0;
 
   notifications = signal<NotificationOutputDto[]>([]);
   selectedEvent = signal<NotificationOutputDto | null>(null);
@@ -59,6 +63,8 @@ export class NotificationConfig implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
+    // eslint-disable-next-line dot-notation
+    this.fkCompanyId = +this.route.snapshot.parent?.params['id'] || 0;
     this.loadNotifications();
     this.editorRef = new Editor();
     this.notificationTypes.sort((a, b) => a.value - b.value);
@@ -68,7 +74,7 @@ export class NotificationConfig implements OnInit, OnDestroy {
   }
   loadNotifications(): void {
     this.isLoading.set(true);
-    this.service.getAllActiveByCompanyId(this.fkCompanyId).subscribe({
+    this.service.getAllActiveByCompanyId(this.fkCompanyId, this.selectedType()).subscribe({
       next: (res) => {
         this.notifications.set(res);
         this.isLoading.set(false);
