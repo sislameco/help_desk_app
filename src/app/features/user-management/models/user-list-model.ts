@@ -64,3 +64,11 @@ export interface UserChangePasswordDto {
   currentPassword: string;
   newPassword: string;
 }
+
+export interface UserFilterParams
+  extends Record<string, string | number | number[] | boolean | undefined> {
+  page: number;
+  pageSize: number;
+  roleIds?: string;
+  warehouseIds?: string;
+}

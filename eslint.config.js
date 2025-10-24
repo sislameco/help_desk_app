@@ -66,7 +66,7 @@ module.exports = tseslint.config(
 
       // === ESLint core rules ===
       curly: 'error',
-      'dot-notation': 'error',
+      'dot-notation': 'off',
       'eol-last': 'error',
       'no-console': 'error',
       'no-debugger': 'error',

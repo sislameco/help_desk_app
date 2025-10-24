@@ -52,14 +52,5 @@
     <h3>User Management</h3>
     <span> User / </span>
   </div>
-  <div class="action-group">
-    <div class="form-group">
-      <div class="search-box w-195">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" class="m-0">
-          <use href="assets/sprite.svg#svg-search"></use>
-        </svg>
-        <input type="text" class="form-control" placeholder="Search by keyword" />
-      </div>
-    </div>
-  </div>
+  <app-search (searchString)="searchAction($event)"></app-search>
 </div>
