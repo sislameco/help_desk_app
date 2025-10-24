@@ -1,6 +1,7 @@
 import { NotificationEvent } from './email-configuration-model';
 
 export interface NotificationOutputDto {
+  notificationName: string;
   id: number;
   event: NotificationEvent;
   notificationType: NotificationType;
@@ -25,5 +26,6 @@ export interface NotificationInputDto {
   subjectTemplate: string;
   bodyTemplate: string;
   ccList: string;
+  isEnabled: boolean;
 }
 export { NotificationEvent };

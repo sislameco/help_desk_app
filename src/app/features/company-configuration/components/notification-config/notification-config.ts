@@ -18,6 +18,7 @@ import {
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { ActivatedRoute } from '@angular/router';
 import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-notification-config',
@@ -35,6 +36,7 @@ export class NotificationConfig implements OnInit, OnDestroy {
   enumNotificationType = NotificationType;
   private readonly service = inject(NotificationConfigurationService);
   private readonly route = inject(ActivatedRoute);
+  private readonly toast = inject(ToastrService);
   NotificationEvent = NotificationEvent;
   NotificationType = NotificationType;
 
@@ -60,6 +62,7 @@ export class NotificationConfig implements OnInit, OnDestroy {
     subjectTemplate: '',
     bodyTemplate: '',
     ccList: '',
+    isEnabled: false,
   };
 
   ngOnInit(): void {
@@ -73,30 +76,34 @@ export class NotificationConfig implements OnInit, OnDestroy {
     this.editorRef.destroy();
   }
   loadNotifications(): void {
+    this.selectedEvent.set(null);
     this.isLoading.set(true);
     this.service.getAllActiveByCompanyId(this.fkCompanyId, this.selectedType()).subscribe({
       next: (res) => {
-        this.notifications.set(res);
+        const patched = this.patchNotificationNames(res);
+        this.notifications.set(patched);
         this.isLoading.set(false);
+        if (patched.length) {
+          this.selectEvent(patched[0]);
+        }
       },
       error: () => this.isLoading.set(false),
     });
   }
 
-  // ✅ Select event/type
-  selectEvent(evt: NotificationOutputDto, type: NotificationType): void {
-    this.selectedEvent.set(evt);
-    this.selectedType.set(type);
+  selectEvent(evt: NotificationOutputDto): void {
     this.template = {
       id: evt.id,
       emailConfigurationId: 0,
       subjectTemplate: evt.subjectTemplate,
       bodyTemplate: evt.bodyTemplate,
       ccList: '',
+      isEnabled: evt.isEnabled,
     };
     this.html.set(evt.bodyTemplate);
     this.subject.set(evt.subjectTemplate);
     this.availableVariables = evt.variables;
+    this.selectedEvent.set(evt);
   }
 
   saveChanges(): void {
@@ -107,14 +114,44 @@ export class NotificationConfig implements OnInit, OnDestroy {
     this.template.subjectTemplate = this.subject();
     this.template.id = this.selectedEvent()!.id;
     this.service.updateTemplate(this.template).subscribe({
-      next: () => alert('Notification template updated successfully!'),
+      next: () => {
+        this.toast.success('Notification template updated successfully!');
+        this.notifications.update((notifs) =>
+          notifs.map((notif) =>
+            notif.id === this.template.id
+              ? {
+                  ...notif,
+                  bodyTemplate: this.template.bodyTemplate,
+                  subjectTemplate: this.template.subjectTemplate,
+                }
+              : notif,
+          ),
+        );
+      },
     });
   }
 
   toggleEnabled(id: number, enabled: boolean): void {
     this.service.updateIsEnabled(id, enabled).subscribe({
-      next: () => alert(`Notification ${enabled ? 'enabled' : 'disabled'}`),
+      next: () => {
+        this.toast.success(`Notification ${enabled ? 'enabled' : 'disabled'}`);
+        const updatedNotifications = this.notifications().map((notif) =>
+          notif.id === id ? { ...notif, isEnabled: enabled } : notif,
+        );
+        this.notifications.set(updatedNotifications);
+        const changedNotification = this.notifications().find((n) => n.id === id) || null;
+        this.selectedEvent.set(changedNotification);
+      },
     });
+  }
+
+  patchNotificationNames(notifications: NotificationOutputDto[]): NotificationOutputDto[] {
+    return notifications.map((notification) => ({
+      ...notification,
+      notificationName: `${this.getEventName(notification.event)} (${this.getTypeName(
+        notification.notificationType,
+      )})`,
+    }));
   }
 
   getEventName(event: NotificationEvent): string {
@@ -126,6 +163,6 @@ export class NotificationConfig implements OnInit, OnDestroy {
   }
   copyVariable(variable: string) {
     navigator.clipboard.writeText(variable);
-    alert(`Copied: ${variable}`);
+    this.toast.success(`Copied: ${variable}`);
   }
 }
