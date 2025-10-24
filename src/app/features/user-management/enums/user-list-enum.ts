@@ -3,3 +3,6 @@ export enum UserStatusEnum {
   Inactive = 'Inactive',
   Pending = 'Pending',
 }
+export enum EnumCompanyValue {
+  CHS = 'Churchfield Home Services',
+}

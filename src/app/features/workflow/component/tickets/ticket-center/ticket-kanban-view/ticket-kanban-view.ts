@@ -1,8 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, Input } from '@angular/core';
-import { TicketListViewDto } from '../../../../models/ticket.model.model';
+import {
+  EnumPriority,
+  EnumTicketStatus,
+  TicketListViewDto,
+} from '../../../../models/ticket.model.model';
+import { enumToArray } from '@shared/helper/enum-ddl-helpers';
+import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
+import { CustomDatePipe } from '@shared/helper/pipes/pipes/custom-date-pipe';
 @Component({
   selector: 'app-ticket-kanban-view',
-  imports: [],
+  imports: [EnumToStringPipe, CustomDatePipe],
   templateUrl: './ticket-kanban-view.html',
   styleUrl: './ticket-kanban-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,11 +18,17 @@ export class TicketKanbanView {
   @Input() tickets: TicketListViewDto[] = [];
   @Input() viewMode: 'list' | 'kanban' = 'list';
 
-  readonly statuses = ['Open', 'In Progress', 'Planning', 'Resolved', 'Closed'];
+  statuses = enumToArray(EnumTicketStatus);
+  EnumPriority = EnumPriority;
+  EnumTicketStatus = EnumTicketStatus;
+  readonly filteredTicketsByStatus = computed(() => {
+    const tickets = this.tickets;
+    const grouped: Record<string, TicketListViewDto[]> = {};
 
-  filteredTicketsByStatus = computed(() => {
-    const result: Record<string, TicketListViewDto[]> = {};
-    // Filtering logic should be implemented here if tickets are available
-    return result;
+    this.statuses.forEach((status) => {
+      grouped[status.value] = tickets.filter((t) => t.status === status.value);
+    });
+
+    return grouped;
   });
 }

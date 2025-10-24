@@ -23,15 +23,21 @@
           </label>
         </div>
 
-        <div class="col-md-6">
-          <label class="form-label fw-medium"
-            >Ticket Type
-            <select class="form-select form-select-sm rounded-2" formControlName="fkTicketTypeId">
-              <option [value]="0">Tickets</option>
-              <option [value]="1">Complaints</option>
-              <option [value]="2">CAPA</option>
-            </select>
-          </label>
+        <div class="form-group">
+          <p>Ticket Type</p>
+          <ng-select
+            class="select-dropdown"
+            [items]="ticketTypes()"
+            bindLabel="title"
+            bindValue="id"
+            [formControlName]="'fkTicketTypeId'"
+            [searchable]="true"
+            placeholder="Select ticket type"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.title }}</span>
+            </ng-template>
+          </ng-select>
         </div>
       </div>
 

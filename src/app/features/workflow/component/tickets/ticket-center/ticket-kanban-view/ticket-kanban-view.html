@@ -2,21 +2,37 @@
   @for (status of statuses; track status) {
     <div class="kanban-column">
       <div class="kanban-header">
-        {{ status }} <span class="count">({{ filteredTicketsByStatus()[status].length }})</span>
+        <span
+          class="badge"
+          [class.high]="status.value === EnumTicketStatus.Open"
+          [class.medium]="status.value === EnumTicketStatus.InProgress"
+          [class.low]="status.value === EnumTicketStatus.Resolved"
+          [class.critical]="status.value === EnumTicketStatus.Closed"
+        >
+          {{ status.value | enumToString: EnumTicketStatus }}
+        </span>
+        <span
+          class="count"
+          [class.high]="status.value === EnumTicketStatus.Open"
+          [class.medium]="status.value === EnumTicketStatus.InProgress"
+          [class.low]="status.value === EnumTicketStatus.Resolved"
+          [class.critical]="status.value === EnumTicketStatus.Closed"
+          >({{ filteredTicketsByStatus()[status.value]?.length || 0 }})</span
+        >
       </div>
 
-      @for (t of filteredTicketsByStatus()[status]; track t.id) {
+      @for (t of filteredTicketsByStatus()[status.value]; track t.id) {
         <div class="ticket-card">
           <div class="ticket-card-header">
             <span class="ticket-id">{{ t.ticketNumber }}</span>
             <span
               class="badge"
-              [class.high]="t.priority === 'High'"
-              [class.medium]="t.priority === 'Medium'"
-              [class.low]="t.priority === 'Low'"
-              [class.critical]="t.priority === 'Critical'"
+              [class.high]="t.priority === EnumPriority.High"
+              [class.medium]="t.priority === EnumPriority.Medium"
+              [class.low]="t.priority === EnumPriority.Low"
+              [class.critical]="t.priority === EnumPriority.Highest"
             >
-              {{ t.priority }}
+              {{ t.priority | enumToString: EnumPriority }}
             </span>
           </div>
 
@@ -25,10 +41,13 @@
             <div class="ticket-subject">{{ t.subject }}</div>
             <div class="ticket-desc">{{ t.description }}</div>
           </div>
-
           <div class="ticket-card-footer">
-            <span class="assignee">{{ t.assignee }}</span>
-            <span class="date">{{ t.createdDate }}</span>
+            <span class="assignee">Submitted By {{ t.reporter }}</span>
+            <span class="date">{{ t.createdDate | customDate }}</span>
+          </div>
+          <div class="ticket-card-footer">
+            <span class="assignee">Assigned To {{ t.assignee }}</span>
+            <span class="date"> {{ t.createdDate | customDate }}</span>
           </div>
         </div>
       }

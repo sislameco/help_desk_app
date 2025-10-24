@@ -11,7 +11,8 @@
             <p class="card-text text-muted">{{ company.shortName }}</p>
             <button
               class="btn btn-outline-primary btn-sm"
-              (click)="selectCompany(company)"
+              (click)="company.id === 1 ? selectCompany(company) : null"
+              [disabled]="company.id !== 1"
             >
               Manage Configuration &rsaquo;
             </button>
