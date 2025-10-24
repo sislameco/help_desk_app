@@ -6,15 +6,41 @@
         <th>Title</th>
         <th>Status</th>
         <th>Priority</th>
+        <th>Assignee</th>
+        <th>Created Date</th>
       </tr>
     </thead>
     <tbody>
       @for (t of tickets; track t.id) {
         <tr>
-          <td>{{ t.id }}</td>
+          <td>{{ t.ticketNumber }}</td>
           <td>{{ t.title }}</td>
-          <td>{{ t.status }}</td>
-          <td>{{ t.priority }}</td>
+          <td>{{ t.status | enumToString: EnumTicketStatus }}</td>
+          <td>
+            <span
+              class="badge"
+              [class.high]="t.status === EnumTicketStatus.Open"
+              [class.medium]="t.status === EnumTicketStatus.InProgress"
+              [class.low]="t.status === EnumTicketStatus.Resolved"
+              [class.critical]="t.status === EnumTicketStatus.Closed"
+            >
+              {{ t.priority | enumToString: EnumPriority }}
+            </span>
+          </td>
+
+          <td>
+            <span
+              class="badge"
+              [class.high]="t.priority === EnumPriority.High"
+              [class.medium]="t.priority === EnumPriority.Medium"
+              [class.low]="t.priority === EnumPriority.Low"
+              [class.critical]="t.priority === EnumPriority.Highest"
+            >
+              {{ t.priority | enumToString: EnumPriority }}
+            </span>
+          </td>
+          <td>{{ t.assignee }}</td>
+          <td>{{ t.createdDate | customDate }}</td>
         </tr>
       }
     </tbody>

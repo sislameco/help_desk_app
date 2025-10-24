@@ -3,17 +3,22 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of } from 'rxjs';
 import { TicketReferenceService } from '../../../../../company-configuration/services/ticket-reference-service';
-import { FieldOutputDto } from '../../../../../company-configuration/models/ddl.model';
+import {
+  FieldOutputDto,
+  TicketTypeDDL,
+} from '../../../../../company-configuration/models/ddl.model';
 import { TicketService } from '../../../../services/ticket.service';
 import { AddTicketInputDto } from '../../../../models/ticket.model.model';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { EnumDataType } from '../../../../../company-configuration/models/company.model';
+import { NgxControlError } from 'ngxtension/control-error';
+import { FileManagementService } from '../../../../services/file-manager-service';
 
 @Component({
   selector: 'app-add-ticket-modal',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectComponent],
+  imports: [ReactiveFormsModule, NgSelectComponent, NgxControlError],
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +28,7 @@ export class AddTicketModal {
   private readonly fb = inject(FormBuilder);
   private readonly ticketRef = inject(TicketReferenceService);
   private readonly ticketService = inject(TicketService);
+  private readonly fileService = inject(FileManagementService);
   bsModalRef = inject(BsModalRef);
   // 🟦 New signal to toggle minimize state
   isMinimized = signal(false);
@@ -32,10 +38,14 @@ export class AddTicketModal {
   showCustomer = false;
   showProject = false;
   EnumDataType = EnumDataType;
+  companyValues = [{ id: 1, value: 'Churchfield Home Services' }];
+
+  subforms: FieldOutputDto[] = [];
   // =======================================
   // 🔹 Reactive form
   // =======================================
   form: FormGroup = this.fb.group({
+    fkCompanyId: [1],
     subject: [''],
     description: [''],
     isCustomer: [false],
@@ -114,14 +124,6 @@ export class AddTicketModal {
     { initialValue: [] },
   );
 
-  subforms = derivedAsync<FieldOutputDto[]>(
-    () =>
-      this.fkCompanyId
-        ? this.ticketRef.getSubforms(1).pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
-    { initialValue: [] },
-  );
-
   // =======================================
   // 🔹 File upload handling
   // =======================================
@@ -135,12 +137,12 @@ export class AddTicketModal {
       return;
     }
 
-    // this.fileService.uploadFiles(this.selectedFiles).subscribe({
-    //   next: (res) => {
-    //     this.uploadedFileIds = res.map((f) => f.id);
-    //     this.form.patchValue({ files: this.uploadedFileIds });
-    //   },
-    // });
+    this.fileService.uploadFiles(this.selectedFiles).subscribe({
+      next: (res) => {
+        this.uploadedFileIds = res; // Assuming the API returns { fileIds: number[] }
+        this.form.patchValue({ files: this.uploadedFileIds });
+      },
+    });
   }
 
   // =======================================
@@ -177,9 +179,22 @@ export class AddTicketModal {
       },
     });
   }
-  onTicketTypeChange(event: Event) {
-    const value = (event.target as HTMLSelectElement).value;
-    this.ticketTypeId.set(Number(value));
+  onTicketTypeChange(selected: TicketTypeDDL) {
+    const value = Number(selected.id);
+    if (isNaN(value)) {
+      return;
+    }
+
+    this.ticketTypeId.set(value);
+
+    const ticketTypeIdValue = this.ticketTypeId();
+    if (ticketTypeIdValue !== null) {
+      this.ticketRef.getSubforms(ticketTypeIdValue).subscribe({
+        next: (subforms) => {
+          this.subforms = Array.isArray(subforms) ? subforms : [subforms];
+        },
+      });
+    }
   }
   onIsCustomerChanged(event: Event) {
     const checked = (event.target as HTMLInputElement).checked;

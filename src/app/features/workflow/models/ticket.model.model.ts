@@ -4,9 +4,10 @@ export interface TicketListViewDto {
   subject: string;
   title: string;
   description: string;
-  status: string;
-  priority: string;
+  status: EnumTicketStatus;
+  priority: EnumPriority;
   assignee: string;
+  reporter: string;
   createdDate: Date;
   lastUpdate: Date;
 }
@@ -37,4 +38,18 @@ export interface AddTicketInputDto {
 export interface SubFromInputDto {
   id: number;
   value: string;
+}
+
+export enum EnumTicketStatus {
+  Open = 1,
+  InProgress = 2,
+  Resolved = 3,
+  Closed = 4,
+}
+
+export enum EnumPriority {
+  Highest = 1,
+  High = 2,
+  Medium = 3,
+  Low = 4,
 }

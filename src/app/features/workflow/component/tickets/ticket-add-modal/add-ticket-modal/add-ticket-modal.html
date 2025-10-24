@@ -19,12 +19,28 @@
       <h5 class="section-title">🧾 Basic Information</h5>
 
       <div class="form-grid">
-        <!-- conditional company select  if company is multiple companies-->
         <div class="form-group">
           <p>Company</p>
-          <select class="form-select" [value]="fkCompanyId" disabled>
-            <option [value]="fkCompanyId">Company #{{ fkCompanyId }}</option>
-          </select>
+          <ng-select
+            class="select-dropdown"
+            [items]="companyValues"
+            bindLabel="value"
+            bindValue="id"
+            formControlName="fkCompanyId"
+            [searchable]="true"
+            placeholder="Select company"
+          >
+            <ng-template ng-option-tmp let-item="item">
+              <span>{{ item.value }}</span>
+            </ng-template>
+          </ng-select>
+
+          <strong
+            class="text-danger"
+            *ngxControlError="form.controls['fkCompanyId']; track: 'required'"
+          >
+            Company is required.
+          </strong>
         </div>
 
         <div class="form-group">
@@ -114,7 +130,7 @@
           <ng-select
             class="select-dropdown"
             [items]="ticketTypes()"
-            bindLabel="name"
+            bindLabel="title"
             bindValue="id"
             [formControlName]="'fkTicketTypeId'"
             [searchable]="true"
@@ -163,11 +179,11 @@
       </div>
 
       <!-- 🧩 Dynamic Subform -->
-      @if (subforms().length > 0) {
+      @if (subforms && subforms.length > 0) {
         <div class="subform mt-3">
           <h6 class="text-muted mb-2">Additional Fields</h6>
           <div formArrayName="subForm" class="form-grid">
-            @for (field of subforms(); track field.id; let i = $index) {
+            @for (field of subforms; track field.id; let i = $index) {
               <div class="form-group">
                 <p>{{ field.displayName }}</p>
 
