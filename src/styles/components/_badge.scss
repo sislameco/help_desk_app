@@ -1,0 +1,225 @@
+@use '../base/variable' as *;
+// Card Callout
+.card-callout {
+  border-radius: 4px;
+  padding-left: 16px;
+  min-height: 100px;
+  h5 {
+    font-family: $font;
+    font-size: 13px;
+    font-weight: 600;
+    .badge {
+      padding: 5px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+  h3 {
+    font-family: $font;
+    font-size: 19px;
+    font-weight: 800;
+    margin-top: 4px;
+  }
+  &-left {
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    text-align: center;
+  }
+  &-secondary {
+    background: rgba($blue-light, 0.15);
+    border-left: 4px solid $blue-light;
+    h5 {
+      color: $blue-light;
+      .badge {
+        background: rgba($blue-light, 0.15);
+        color: $blue-light;
+      }
+    }
+    h3 {
+      color: $blue-light;
+    }
+    .card-callout-left {
+      background: rgba($blue-light, 0.15);
+      place-content: center;
+      color: $blue-light;
+    }
+  }
+  &-danger {
+    background: rgba($red, 0.15);
+    border-left: 4px solid $red;
+    h5 {
+      color: $red;
+      .badge {
+        background: rgba($red, 0.15);
+        color: $red;
+      }
+    }
+    h3 {
+      color: $red;
+    }
+    .card-callout-left {
+      background: rgba($red, 0.15);
+      place-content: center;
+      color: $red;
+    }
+  }
+  &-success {
+    background: rgba($green, 0.15);
+    border-left: 4px solid $green;
+    h5 {
+      color: $green;
+      .badge {
+        background: rgba($green, 0.15);
+        color: $green;
+      }
+    }
+    h3 {
+      color: $green;
+    }
+    .card-callout-left {
+      background: rgba($green, 0.15);
+      place-content: center;
+      color: $green;
+    }
+  }
+  &-dark {
+    background: rgba($dark, 0.15);
+    border-left: 4px solid $dark;
+    h5 {
+      color: $dark;
+      .badge {
+        background: rgba($dark, 0.15);
+        color: $dark;
+      }
+    }
+    h3 {
+      color: $dark;
+    }
+    .card-callout-left {
+      background: rgba($dark, 0.15);
+      place-content: center;
+      color: $dark;
+    }
+  }
+  &-dark-light {
+    background: rgba(#989898, 0.15);
+    border-left: 4px solid #989898;
+    h5 {
+      color: $dark;
+      .badge {
+        background: rgba(#989898, 0.15);
+        color: $dark;
+      }
+    }
+    h3 {
+      color: $dark;
+    }
+    .card-callout-left {
+      background: rgba($dark, 0.15);
+      place-content: center;
+      color: $dark;
+    }
+  }
+  &-blueviolet {
+    background: rgba(#262a89, 0.15);
+    border-left: 4px solid #262a89;
+    h5 {
+      color: #262a89;
+      .badge {
+        background: rgba(#262a89, 0.15);
+        color: #262a89;
+      }
+    }
+    h3 {
+      color: #262a89;
+    }
+    .card-callout-left {
+      background: rgba(#262a89, 0.15);
+      place-content: center;
+      color: #262a89;
+    }
+  }
+  &-chocolate {
+    background: rgba(#cd8d7a, 0.15);
+    border-left: 4px solid #cd8d7a;
+    h5 {
+      color: #cd8d7a;
+      .badge {
+        background: rgba(#cd8d7a, 0.15);
+        color: #cd8d7a;
+      }
+    }
+    h3 {
+      color: #cd8d7a;
+    }
+    .card-callout-left {
+      background: rgba(#cd8d7a, 0.15);
+      place-content: center;
+      color: #cd8d7a;
+    }
+  }
+  &-warning {
+    background: rgba($warning, 0.15);
+    border-left: 4px solid $warning;
+    h5 {
+      color: $warning;
+      .badge {
+        background: rgba($warning, 0.15);
+        color: $warning;
+      }
+    }
+    h3 {
+      color: $warning;
+    }
+    .card-callout-left {
+      background: rgba($warning, 0.15);
+      place-content: center;
+      color: $warning;
+    }
+  }
+
+  &-primary {
+    background: rgba($blue-dark, 0.15);
+    border-left: 4px solid $blue-dark;
+    h5 {
+      color: $blue-dark;
+      .badge {
+        background: rgba($blue-dark, 0.15);
+        color: $blue-dark;
+      }
+    }
+    h3 {
+      color: $blue-dark;
+    }
+    .card-callout-left {
+      background: rgba($blue-dark, 0.15);
+      place-content: center;
+      color: $blue-dark;
+    }
+  }
+
+  &.user-box {
+    background: $blue-dark;
+    .media {
+      &-left {
+        .rounded-circle {
+          width: 67px;
+          border: 1px solid #fff;
+        }
+      }
+      &-body {
+        h5 {
+          font-size: 16px;
+          color: #fff;
+          text-transform: uppercase;
+        }
+        p {
+          color: rgba(#fff, 0.7);
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
