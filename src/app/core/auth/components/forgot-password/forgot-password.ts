@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgxControlError } from 'ngxtension/control-error';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '@core/auth/services/auth.service';
 
 @Component({
   selector: 'app-auth-forgot-password',
@@ -13,13 +15,18 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 })
 export class ForgotPassword {
   protected readonly loading = signal(false);
-  protected readonly sent = signal(false);
+  auth = inject(AuthService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
+  userName = input('userName');
+  toastr = inject(ToastrService);
+
+  protected readonly sent = signal(false);
   protected readonly fb = inject(FormBuilder);
   protected readonly form = this.fb.group({
-    email: this.fb.control<string>('', {
+    userName: this.fb.control<string>('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required],
     }),
   });
 
@@ -27,10 +34,17 @@ export class ForgotPassword {
     if (this.form.invalid) {
       return;
     }
-    this.loading.set(true);
-    setTimeout(() => {
-      this.loading.set(false);
-      this.sent.set(true);
-    }, 1200);
+
+    this.auth.forgetPassword(this.form.controls.userName.value).subscribe({
+      next: (res) => {
+        this.toastr.success('Email sent successfully!');
+        this.router.navigate(['/auth/verification-code'], {
+          queryParams: {
+            token: res.data,
+            userName: this.form.controls.userName.value,
+          },
+        });
+      },
+    });
   }
 }

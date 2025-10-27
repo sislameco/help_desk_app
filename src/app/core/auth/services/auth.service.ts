@@ -17,4 +17,31 @@ export class AuthService {
   getSidebarItems(): Observable<UserMenuItem[]> {
     return this.http.get<UserMenuItem[]>(environment.apiBaseUrl + '/api/permission/get-menus');
   }
+  forgetPassword(userName: string) {
+    return this.http.post<{ data: string }>(
+      `${environment.apiBaseUrl}/api/helpdesk/forgot-password`,
+      {
+        userName,
+      },
+    );
+  }
+
+  verifyOtp(code: string, userToken: string) {
+    return this.http.post<{ data: string }>(
+      `${environment.apiBaseUrl}/api/helpdesk/password-recovery-otp-verification`,
+      {
+        code,
+        userToken,
+      },
+    );
+  }
+  setNewPassword(userToken: string, newPassword: string, userId: number) {
+    return this.http.post<{ data: string }>(
+      `${environment.apiBaseUrl}/api/helpdesk/change-password/${userId}`,
+      {
+        userToken,
+        newPassword,
+      },
+    );
+  }
 }

@@ -1,5 +1,8 @@
 <div class="table-header">
-  <p>Showing 10-15 of 452 results</p>
+  <p>
+    Showing {{ (currentPage() - 1) * pageSize() + 1 }}-{{ lastItemIndex() }} of
+    {{ totalItems() }} results
+  </p>
   <div class="table-filter">
     <div class="form-group min-width-150">
       <label for="roles">Roles</label>
@@ -17,40 +20,39 @@
       </ng-select> -->
       <ng-select
         [items]="roleDropdown() ?? []"
+        [(ngModel)]="filters.value()['roleIds']"
         bindLabel="roleName"
+        (ngModelChange)="onMultiChange('roleIds', $event)"
+        (clear)="onMultiChange('roleIds', [])"
         bindValue="roleId"
+        [multiple]="true"
         class="select-dropdown select-dropdown-circle mr-2 w-100"
         placeholder="Select user..."
       >
       </ng-select>
     </div>
-    <div class="form-group min-width-150">
+    <!-- <div class="form-group min-width-150">
       <label for="department">Department</label>
-      <ng-select
-        placeholder="All"
-        id="Department"
-        clearable="false"
-        searchable="false"
-        [multiple]="true"
-        class="select-dropdown select-dropdown-circle mr-2 w-100"
-      >
+      <ng-select placeholder="All" id="Department" clearable="false" searchable="false" [multiple]="true"
+        class="select-dropdown select-dropdown-circle mr-2 w-100">
         <ng-option value="All">All</ng-option>
         <ng-option value="Cherry Orchard">Cherry Orchard</ng-option>
       </ng-select>
-    </div>
+    </div> -->
     <div class="form-group min-width-150 ng-select-md">
       <label for="warehouse">Status</label>
       <ng-select
         class="select-dropdown select-dropdown-circle mr-2 w-100"
         placeholder="All"
-        id="warehouse"
-        clearable="false"
-        searchable="false"
+        id="status"
+        [searchable]="false"
+        [items]="statusOptions"
+        bindLabel="label"
+        bindValue="value"
+        [clearable]="true"
+        [ngModel]="filters.value()['status']"
+        (ngModelChange)="onStatusChange($event)"
       >
-        <ng-option value="All">All</ng-option>
-        <ng-option value="All">All</ng-option>
-        <ng-option value="All">All</ng-option>
-        <ng-option value="All">All</ng-option>
       </ng-select>
     </div>
     <!-- <a [routerLink]="'/pages/user-management/users/invite-user'" class="icon-sm-btn bg-primary">
@@ -91,7 +93,7 @@
     </tr>
   </thead>
   <tbody>
-    @for (user of userList(); track $index) {
+    @for (user of filterData().items; track $index) {
       <tr>
         <!-- <td>
           <label class="custom-checkbox">
@@ -166,15 +168,22 @@
     }
   </tbody>
 </table>
+<app-pagination
+  [total]="totalItems()"
+  [page]="currentPage()"
+  [pageSize]="pageSize()"
+  (pageChange)="setPage($event)"
+  (pageSizeChange)="setPageSize($event)"
+></app-pagination>
 <!-- </div> -->
-@if (selectedRows().length > 0) {
+<!-- @if (selectedRows().length > 0) {
   <div class="d-flex justify-content-end gap-3 mt-3">
     <a href="javascript:void(0);" class="btn btn-outline-danger">Cancel</a>
     <a href="javascript:void(0);" class="btn btn-danger" (click)="removeAlert()">Delete</a>
     <a href="javascript:void(0);" class="btn btn-outline-blue">Deactivate</a>
     <a href="javascript:void(0);" class="btn btn-theme">Activate</a>
   </div>
-}
+} -->
 
 <!-- Angular modal (popup) -->
 @if (isViewOpen) {
@@ -200,7 +209,7 @@
     </div>
   </div>
 }
-<div class="app-pagination bottom-fixed px-3">
+<!-- <div class="app-pagination bottom-fixed px-3">
   <div class="d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center gap-4">
       <p>Items per page</p>
@@ -254,4 +263,4 @@
       </li>
     </ul>
   </div>
-</div>
+</div> -->

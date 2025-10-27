@@ -1,0 +1,58 @@
+.search-box {
+  position: relative;
+  span {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    align-content: center;
+    height: 32px;
+    width: 46px;
+    border-radius: 6px;
+    background: #f9fafa;
+    color: #596881;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21.333px;
+    text-align: center;
+    transform: translate(0, -50%);
+  }
+  svg {
+    color: #c5cfdd;
+    left: 12px;
+    top: 50%;
+    position: absolute;
+    transform: translate(0, -50%);
+  }
+  .form-control {
+    border-radius: 10px;
+    border: 1px solid #dcdede;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21.333px;
+    height: 40px;
+    padding-right: 50px;
+    padding-left: 30px;
+    box-shadow: none;
+    &::placeholder {
+      color: #c5cfdd;
+    }
+  }
+  .close-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: transparent;
+    color: #ff3f41;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+  }
+}

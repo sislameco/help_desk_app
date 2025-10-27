@@ -1,0 +1,57 @@
+<div class="app-pagination">
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+      <ng-select
+        class="form-control-md"
+        clearable="false"
+        [searchable]="false"
+        placeholder="10"
+        [ngModel]="pageSize()"
+        (ngModelChange)="setPageSize($event)"
+      >
+        @for (size of pageSizeOptions(); track size) {
+          <ng-option [value]="size">{{ size }}</ng-option>
+        }
+      </ng-select>
+      <p>Of {{ total() }}</p>
+    </div>
+    <ul class="nav">
+      <li>
+        <a
+          class="btn btn-sm btn-icon"
+          href="javascript:void(0);"
+          (click)="setPage(page() - 1)"
+          [class.disabled]="page() === 1"
+        >
+          <svg width="8" viewBox="0 0 8 13" fill="currentColor">
+            <use href="assets/sprite.svg#svg-left-arrow-sm"></use>
+          </svg>
+        </a>
+      </li>
+      @for (item of pageNumbers(); track item) {
+        <li>
+          <a
+            class="btn btn-sm btn-icon"
+            href="javascript:void(0);"
+            [class.active]="item === pageNum()"
+            (click)="setPage(item)"
+          >
+            <span>{{ item }}</span>
+          </a>
+        </li>
+      }
+      <li>
+        <a
+          class="btn btn-sm btn-icon"
+          href="javascript:void(0);"
+          (click)="setPage(page() + 1)"
+          [class.disabled]="page() === totalPages()"
+        >
+          <svg width="8" viewBox="0 0 8 13" fill="currentColor">
+            <use href="assets/sprite.svg#svg-right-arrow-sm"></use>
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

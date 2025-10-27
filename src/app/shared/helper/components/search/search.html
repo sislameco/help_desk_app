@@ -1,0 +1,16 @@
+<div class="search-box">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="m-0">
+    <use href="assets/sprite.svg#svg-search"></use>
+  </svg>
+  <input
+    type="text"
+    class="form-control form-control-lg"
+    placeholder="Search by keyword"
+    [formControl]="searchControl"
+  />
+  @if (searchText()) {
+    <button class="close-icon" (click)="clearSearch()" type="button">✕</button>
+  } @else {
+    <!-- <span>⌘+K</span> -->
+  }
+</div>
