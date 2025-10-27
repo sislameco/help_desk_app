@@ -10,8 +10,8 @@ export class SortInputDirective {
   // ✅ signal-based inputs
   sortInput = input<number | string>('');
   isDefault = input<boolean>();
-  sortColumn = input<string | number | boolean | undefined>('');
-  sortBy = input<string | number | boolean | undefined>('');
+  sortColumn = input<string | number | number[] | boolean | undefined>('');
+  sortBy = input<string | number | number[] | boolean | undefined>('');
 
   // ✅ signal-based output
   appSortChange = output<SortAction>();

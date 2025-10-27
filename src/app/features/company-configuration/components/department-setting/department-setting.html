@@ -31,7 +31,7 @@
           <div class="card-callout card-callout-warning d-flex align-items-center">
             <div class="cursor-pointer card-callout-inner">
               <h5>Total Departments</h5>
-              <h3>{{ departmentStatistics()?.totalDepartments }}</h3>
+              <h3>{{ departmentStatistics()?.total }}</h3>
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
                 Active Departments
                 <!-- <span class="badge ml-1">{{ tiles.reviewCount }}</span> -->
               </h5>
-              <h3>{{ departmentStatistics()?.activeDepartments }}</h3>
+              <h3>{{ departmentStatistics()?.active }}</h3>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@
                 Total Users
                 <!-- <span class="badge ml-1">{{ tiles.rejectedCount }}</span> -->
               </h5>
-              <h3>{{ departmentStatistics()?.totalUsers }}</h3>
+              <h3>{{ departmentStatistics()?.totalUser }}</h3>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@
                 Avg Users/Dept
                 <!-- <span class="badge ml-1">{{ tiles.approvedCount }}</span> -->
               </h5>
-              <h3>{{ departmentStatistics()?.avgUsersPerDepartment }}</h3>
+              <h3>{{ departmentStatistics()?.avgPerDept }}</h3>
             </div>
           </div>
         </div>
@@ -83,33 +83,52 @@
     }
   </div>
 
-  <div class="table-filter">
+  <div class="table-filter mb-3">
     <div class="form-group min-width-150">
-      <label for="roles">Users</label>
-      <!-- <ng-select
-          placeholder="All"
-          id="roles"
-          clearable="false"
-          searchable="false"
-          [multiple]="true"
-          class="multi-form-select md-multi-select rounded"
-        >
-        @for (role of roleDropdown(); track role.roleId) {
-          <ng-option [value]="role.roleId">{{ role.roleName }}</ng-option>
-        }
-        </ng-select> -->
-      <!-- <ng-select [items]="userDropdown() ?? []" [(ngModel)]="filters.value()['roleIds']" bindLabel="roleName"
-        (ngModelChange)="onMultiChange('roleIds', $event)" (clear)="onMultiChange('roleIds', [])" bindValue="roleId"
+      <label for="roles">Search</label>
+      <app-search (searchString)="searchAction($event)"></app-search>
+      <!-- <ng-select [items]="userDropdown() ?? []" [(ngModel)]="filters.value()['userIds']" bindLabel="fullName"
+        (ngModelChange)="onMultiChange('userIds', $event)" (clear)="onMultiChange('userIds', [])" bindValue="id"
         [multiple]="true" class="select-dropdown select-dropdown-circle mr-2 w-100" placeholder="Select user...">
       </ng-select> -->
     </div>
-    <div class="form-group min-width-150 ng-select-md">
+    <div class="form-group min-width-150">
+      <label for="roles">Module</label>
+      <ng-select
+        [items]="modules() ?? []"
+        [(ngModel)]="filters.value()['moduleIds']"
+        bindLabel="name"
+        (ngModelChange)="onMultiChange('moduleIds', $event)"
+        (clear)="onMultiChange('moduleIds', [])"
+        bindValue="id"
+        [multiple]="true"
+        class="select-dropdown select-dropdown-circle mr-2 w-100"
+        placeholder="Select module..."
+      >
+      </ng-select>
+    </div>
+    <div class="form-group min-width-150">
+      <label for="roles">Users</label>
+      <ng-select
+        [items]="userDropdown() ?? []"
+        [(ngModel)]="filters.value()['userIds']"
+        bindLabel="fullName"
+        (ngModelChange)="onMultiChange('userIds', $event)"
+        (clear)="onMultiChange('userIds', [])"
+        bindValue="id"
+        [multiple]="true"
+        class="select-dropdown select-dropdown-circle mr-2 w-100"
+        placeholder="Select user..."
+      >
+      </ng-select>
+    </div>
+    <!-- <div class="form-group min-width-150 ng-select-md">
       <label for="warehouse">Status</label>
-      <!-- <ng-select class="select-dropdown select-dropdown-circle mr-2 w-100" placeholder="All" id="status"
+      <ng-select class="select-dropdown select-dropdown-circle mr-2 w-100" placeholder="All" id="status"
         [searchable]="false" [items]="statusOptions" bindLabel="label" bindValue="value" [clearable]="true"
         [ngModel]="filters.value()['status']" (ngModelChange)="onStatusChange($event)">
-      </ng-select> -->
-    </div>
+      </ng-select>
+    </div> -->
   </div>
 
   <!-- Departments Table -->
@@ -120,9 +139,23 @@
     <div>
       <table class="app-table">
         <thead class="table-light">
-          <tr>
-            <th>Department</th>
-            <th>Manager</th>
+          <tr appSortTableDirective (appSortChange)="sortData($event)">
+            <th
+              appSortInputDirective
+              [sortInput]="'name'"
+              [sortColumn]="filters.value()['sortColumn']"
+              [sortBy]="filters.value()['sortBy']"
+            >
+              Department
+            </th>
+            <th
+              appSortInputDirective
+              [sortInput]="'managerName'"
+              [sortColumn]="filters.value()['sortColumn']"
+              [sortBy]="filters.value()['sortBy']"
+            >
+              Manager
+            </th>
             <th>Users</th>
             <th>Module</th>
             <!-- <th>Status</th> -->
@@ -201,8 +234,13 @@
           }
         </tbody>
       </table>
-      <!-- <app-pagination [total]="totalItems()" [page]="currentPage()" [pageSize]="pageSize()" (pageChange)="setPage($event)"
-        (pageSizeChange)="setPageSize($event)"></app-pagination> -->
+      <app-pagination
+        [total]="totalItems()"
+        [page]="currentPage()"
+        [pageSize]="pageSize()"
+        (pageChange)="setPage($event)"
+        (pageSizeChange)="setPageSize($event)"
+      ></app-pagination>
     </div>
   </div>
 </div>

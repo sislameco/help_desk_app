@@ -9,8 +9,8 @@ import {
   DepartmentSetupOutputDto,
   DepartmentUpdateDto,
 } from '../models/department-setting.model';
+import { EnumSortBy } from '@shared/enums/sort-by.enum';
 
-@Injectable({ providedIn: 'root' })
 export class DepartmentSettingService {
   private http = inject(HttpClient);
   private baseUrl = `${environment.apiBaseUrl}/api/department-setting`;
@@ -25,18 +25,25 @@ export class DepartmentSettingService {
         params = params.append('UserIds', id.toString());
       });
     }
-    if (input.searchText) {
-      params = params.set('SearchText', input.searchText);
+    if (input.moduleIds) {
+      input.moduleIds.forEach((id) => {
+        params = params.append('moduleIds', id.toString());
+      });
+    }
+    if (input.search) {
+      params = params.set('SearchText', input.search);
     }
     if (input.status !== undefined) {
       params = params.set('Status', input.status.toString());
     }
-    if (input.pageNo !== undefined) {
-      params = params.set('PageNo', input.pageNo.toString());
+    if (input.page !== undefined) {
+      params = params.set('PageNo', input.page.toString());
     }
-    if (input.itemsPerPage !== undefined) {
-      params = params.set('ItemsPerPage', input.itemsPerPage.toString());
+    if (input.pageSize !== undefined) {
+      params = params.set('ItemsPerPage', input.pageSize.toString());
     }
+    params = params.set('sortColumn', input.sortColumn?.toString() ?? 'name');
+    params = params.set('sortBy', input.sortBy?.toString() ?? EnumSortBy.ASC);
 
     return this.http.get<PaginationResponse<DepartmentSettingOutputDto>>(
       `${this.baseUrl}/all/${companyId}`,
@@ -50,18 +57,52 @@ export class DepartmentSettingService {
     return this.http.get<DepartmentSetupOutputDto>(`${this.baseUrl}/${id}`);
   }
 
-  getDepartmentStatistics(): Observable<{
-    totalDepartments: number;
-    activeDepartments: number;
-    totalUsers: number;
-    avgUsersPerDepartment: number;
+  getDepartmentStatistics(
+    companyId: number,
+    input: DepartmentSettingInputDto,
+  ): Observable<{
+    total: number;
+    active: number;
+    totalUser: number;
+    avgPerDept: number;
   }> {
-    // return this.http.get<any>(`${this.baseUrl}/statistics/${companyId}`);
-    return of({
-      totalDepartments: 10,
-      activeDepartments: 8,
-      totalUsers: 50,
-      avgUsersPerDepartment: 5,
-    });
+    let params = new HttpParams();
+    if (input.userIds) {
+      input.userIds.forEach((id) => {
+        params = params.append('UserIds', id.toString());
+      });
+    }
+    if (input.moduleIds) {
+      input.moduleIds.forEach((id) => {
+        params = params.append('moduleIds', id.toString());
+      });
+    }
+    if (input.search) {
+      params = params.set('SearchText', input.search);
+    }
+    if (input.status !== undefined) {
+      params = params.set('Status', input.status.toString());
+    }
+    if (input.page !== undefined) {
+      params = params.set('PageNo', input.page.toString());
+    }
+    if (input.pageSize !== undefined) {
+      params = params.set('ItemsPerPage', input.pageSize.toString());
+    }
+    params = params.set('sortColumn', input.sortColumn?.toString() ?? 'name');
+    params = params.set('sortBy', input.sortBy?.toString() ?? EnumSortBy.ASC);
+
+    return this.http.get<{
+      total: number;
+      active: number;
+      totalUser: number;
+      avgPerDept: number;
+    }>(`${this.baseUrl}/tiles/${companyId}`, { params });
+  }
+
+  getModuleDropdown(): Observable<{ id: number; name: string }[]> {
+    return this.http.get<{ id: number; name: string }[]>(
+      `${environment.apiBaseUrl}/api/ticket-reference/modules`,
+    );
   }
 }
