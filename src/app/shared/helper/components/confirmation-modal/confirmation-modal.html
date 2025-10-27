@@ -1,0 +1,28 @@
+<div class="app-modal">
+  <div class="modal-header">
+    <h5 class="modal-title">{{ title }}</h5>
+    <button class="close" (click)="close()">
+      <svg width="10" viewBox="0 0 10 10">
+        <use href="assets/sprite.svg#svg-close"></use>
+      </svg>
+    </button>
+  </div>
+  <div class="app-modal-body py-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        @if (header) {
+          <h4 class="text-center mb-3">{{ header }}</h4>
+        }
+        <p class="text-center mb-4 text-gray mb-2" [innerHTML]="message"></p>
+        <div class="d-flex justify-content-center">
+          <button type="button" class="ch-btn ch-btn-red-border" (click)="cancel()">
+            {{ cancelButtonText }}
+          </button>
+          <button type="button" class="ch-btn ch-btn-green ms-3" (click)="confirm()">
+            {{ confirmButtonText }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

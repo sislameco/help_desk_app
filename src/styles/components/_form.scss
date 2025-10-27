@@ -221,6 +221,44 @@
       }
     }
 
+    textarea {
+      border: 1px solid #d2d1d4;
+      box-sizing: border-box;
+      border-radius: 3px;
+      outline: none;
+      box-shadow: none;
+      font-weight: normal;
+      font-size: 12px;
+      line-height: 15px;
+      letter-spacing: 0.03em;
+      color: #444;
+      height: 150px;
+      padding: 10px 10px;
+      resize: none;
+      &::placeholder {
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 15px;
+        letter-spacing: 0.03em;
+        color: #989898;
+      }
+      &:focus {
+        border-color: #989898;
+      }
+      &.ng-invalid.ng-touched {
+        border-color: #ff3f41;
+        color: #444;
+      }
+    }
+
+    .select-dropdown {
+      &.ng-invalid.ng-touched {
+        .ng-select-container {
+          border: 1px solid #ff3f41 !important;
+        }
+      }
+    }
+
     &.form-error {
       label {
         color: #ff3f41;
