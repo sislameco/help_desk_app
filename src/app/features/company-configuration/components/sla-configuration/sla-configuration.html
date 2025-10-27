@@ -1,7 +1,6 @@
 <!-- Header Row -->
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h4 class="fw-semibold">SLA Settings</h4>
-  <!-- <button class="btn btn-primary" (click)="openAdd()">Add SLA Rule</button> -->
   <button class="ch-btn ch-btn-green" (click)="openAdd()">Add SLA Rule</button>
 </div>
 
@@ -67,11 +66,11 @@
       <th>Resolution Time</th>
       <th>Escalation Time</th>
       <th>Status</th>
-      <th>Actions</th>
+      <th class="text-center">Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of slas()">
+    <tr *ngFor="let item of slas(); let i = index">
       <td>{{ item.qmsType | enumToString: enumQMSType }}</td>
       <td>{{ item.typeTitle }}</td>
       <td>
@@ -83,31 +82,37 @@
       <td>{{ item.resolutionTime }} {{ item.unit | enumToString: enumUnit }}</td>
       <td>{{ item.escalationTime }} {{ item.unit | enumToString: enumUnit }}</td>
       <td>{{ item.status | enumToString: enumRstatus }}</td>
-      <td>
-        <!-- <button class="btn btn-sm btn-outline-primary me-2" (click)="openEdit(item)">Edit</button>
-        <button class="btn btn-sm btn-outline-danger" (click)="delete(item.id!)">Delete</button> -->
-        <button type="button" type="button" class="ch-icon-btn me-2" (click)="openEdit(item)">
-          <span class="icon">
-            <svg
-              width="11"
-              height="10"
-              viewBox="0 0 11 10"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <use xlink:href="assets/sprite.svg#svg-edit"></use>
+      <td class="text-center">
+        <div
+          class="dropdown-action"
+          dropdown
+          placement="bottom right"
+          container="#dropDownButton_{{ i }}"
+        >
+          <button dropdownToggle type="button" class="active-btn" id="dropDownButton_{{ i }}">
+            <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+              <use href="assets/sprite.svg#svg-cog"></use>
             </svg>
-          </span>
-          Edit
-        </button>
-        <button type="button" type="button" class="ch-icon-btn" (click)="delete(item.id)">
-          <span class="icon">
-            <svg width="12" viewBox="0 0 12 13" fill="currentColor">
-              <use xlink:href="assets/sprite.svg#svg-recycle-bin"></use>
-            </svg>
-          </span>
-          Delete
-        </button>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+            <li>
+              <button class="dropdown-item" (click)="openEdit(item)">
+                <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                  <use href="assets/sprite.svg#edit-s-icon"></use>
+                </svg>
+                Edit
+              </button>
+            </li>
+            <li>
+              <button class="dropdown-item" (click)="delete(item.id)">
+                <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                  <use href="assets/sprite.svg#delete-s-icon"></use>
+                </svg>
+                Delete
+              </button>
+            </li>
+          </ul>
+        </div>
       </td>
     </tr>
   </tbody>

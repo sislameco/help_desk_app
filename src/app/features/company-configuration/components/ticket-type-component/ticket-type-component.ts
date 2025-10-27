@@ -12,11 +12,12 @@ import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { AddEditTicketModal } from './add-edit-ticket-modal/add-edit-ticket-modal';
 import { ConfirmationModal } from '@shared/helper/components/confirmation-modal/confirmation-modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-ticket-type-component',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, EnumToStringPipe],
+  imports: [CommonModule, ReactiveFormsModule, EnumToStringPipe, BsDropdownModule],
   providers: [BsModalService],
   templateUrl: './ticket-type-component.html',
   styleUrls: ['./ticket-type-component.scss'],
