@@ -225,7 +225,6 @@ export class DepartmentSetting {
       }
       params['sortBy'] = params['sortBy'] ? Number(params['sortBy']) : EnumSortBy.ASC;
       this.filters.setMany(params as Partial<DepartmentFilterParams>);
-      console.log('Params updated:', this.filters.value());
     });
   }
 
