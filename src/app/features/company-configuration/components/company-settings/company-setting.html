@@ -1,5 +1,5 @@
 <div class="container-fluid px-4 mt-4">
-  <ul class="nav nav-pills">
+  <ul class="nav nav-pills custom-nav">
     @for (tab of tabs(); track tab.label) {
       <li class="nav-item">
         <a class="nav-link" [routerLink]="[tab.route]" routerLinkActive="active">{{ tab.label }}</a>

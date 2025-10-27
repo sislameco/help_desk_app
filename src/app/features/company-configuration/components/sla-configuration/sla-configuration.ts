@@ -11,6 +11,7 @@ import { derivedAsync } from 'ngxtension/derived-async';
 import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
 import { EnumRStatus } from '../../../user-management/models/user-list-model';
 import { ActivatedRoute } from '@angular/router';
+import { ConfirmationModal } from '@shared/helper/components/confirmation-modal/confirmation-modal';
 
 @Component({
   selector: 'app-sla-configuration',
@@ -43,9 +44,25 @@ export class SlaConfiguration implements OnInit {
   criticalRules = 0;
   avgResponse = 0;
   avgResolution = 0;
-  readonly slas = derivedAsync(() => this.service.getAll(1), {
-    initialValue: [],
-  });
+  private readonly refreshTrigger = signal(0);
+  readonly slas = derivedAsync(
+    () => {
+      this.refreshTrigger();
+      return this.service.getAll(1);
+    },
+    {
+      initialValue: [],
+    },
+  );
+  // readonly slaSummary = derivedAsync(
+  //   () => {
+  //     this.refreshTrigger();
+  //     return this.service.getSummary(1);
+  //   },
+  //   {
+  //     initialValue: [],
+  //   },
+  // );
 
   ngOnInit(): void {
     this.enumPriority = EnumPriority;
@@ -68,7 +85,8 @@ export class SlaConfiguration implements OnInit {
       initialState: { sla: {} as SLAOutputDto, companyId: this.companyId },
     };
     const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
-    this.modalService.show(AddEditModal, modalParams);
+    const modalRef = this.modalService.show(AddEditModal, modalParams);
+    modalRef.content?.saveEmit.subscribe(() => this.refreshTrigger.update((v) => v + 1));
   }
 
   openEdit(sla: SLAOutputDto) {
@@ -78,13 +96,28 @@ export class SlaConfiguration implements OnInit {
       initialState: { sla, mode: 'edit' as const, companyId: this.companyId },
     };
     const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
-    this.modalService.show(AddEditModal, modalParams);
+    const modalRef = this.modalService.show(AddEditModal, modalParams);
+    modalRef.content?.saveEmit.subscribe(() => this.refreshTrigger.update((v) => v + 1));
   }
 
   delete(id: number) {
-    if (confirm('Are you sure you want to delete this SLA Rule?')) {
-      this.service.delete(id).subscribe(() => this.slas());
-    }
+    const modalConfig = {
+      backdrop: true,
+      ignoreBackdropClick: true,
+      class: 'modal-dialog-centered',
+      initialState: {
+        title: 'Warning',
+        message: 'Are you sure you want to delete this SLA Rule?',
+      },
+    };
+    const bsModalRef = this.modalService.show(ConfirmationModal, modalConfig);
+
+    bsModalRef.content?.confirmed.subscribe((result) => {
+      bsModalRef.hide();
+      if (result) {
+        this.service.delete(id).subscribe(() => this.refreshTrigger.update((v) => v + 1));
+      }
+    });
   }
 
   /** ✅ Add this method */

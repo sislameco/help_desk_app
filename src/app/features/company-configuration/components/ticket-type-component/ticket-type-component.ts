@@ -1,37 +1,32 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TicketTypeService } from '../../services/ticket-type-service';
-import { TicketTypeInputDto, TicketTypeOutputDto } from '../../models/ticket-type.model';
+import { TicketTypeOutputDto } from '../../models/ticket-type.model';
 import { EnumPriority, EnumQMSType } from '../../models/sla.model';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { TicketReferenceService } from '../../services/ticket-reference-service';
 import { map, of } from 'rxjs';
-import { NgSelectComponent } from '@ng-select/ng-select';
-import { enumToArray, getPriorityColor } from '@shared/helper/enum-ddl-helpers';
+import { getPriorityColor } from '@shared/helper/enum-ddl-helpers';
 import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
-import { NgxControlError } from 'ngxtension/control-error';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { AddEditTicketModal } from './add-edit-ticket-modal/add-edit-ticket-modal';
+import { ConfirmationModal } from '@shared/helper/components/confirmation-modal/confirmation-modal';
 
 @Component({
   selector: 'app-ticket-type-component',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    NgSelectComponent,
-    EnumToStringPipe,
-    NgxControlError,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, EnumToStringPipe],
+  providers: [BsModalService],
   templateUrl: './ticket-type-component.html',
   styleUrls: ['./ticket-type-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TicketTypeComponent implements OnInit {
   getPriorityColor = getPriorityColor;
+  private readonly modalService = inject(BsModalService);
   private readonly service = inject(TicketTypeService);
   private readonly ticketRef = inject(TicketReferenceService);
-  private readonly fb = inject(FormBuilder);
-  priorities = enumToArray(EnumPriority);
   enumPriority: typeof EnumPriority = EnumPriority;
   qmsType: typeof EnumQMSType = EnumQMSType;
   fkCompanyId = 1;
@@ -40,7 +35,6 @@ export class TicketTypeComponent implements OnInit {
   isEditing = signal<boolean>(false);
   selectedId = signal<number | null>(null);
   loading = signal<boolean>(false);
-  qmsTypes = enumToArray(EnumQMSType);
   users = derivedAsync(
     () =>
       this.fkCompanyId
@@ -60,24 +54,7 @@ export class TicketTypeComponent implements OnInit {
   form!: FormGroup;
 
   ngOnInit(): void {
-    this.initForm();
     this.loadTicketTypes();
-  }
-
-  // ===========================
-  // 🔹 Init Reactive Form
-  // ===========================
-  initForm(): void {
-    this.form = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      fkAssignedUserId: [null],
-      priority: [null, Validators.required],
-      qmsType: [null, Validators.required],
-      isEnabled: [true],
-      fkDepartmentIds: [[]],
-      fkCompanyId: [1], // company fixed for now
-    });
   }
 
   // ===========================
@@ -93,50 +70,43 @@ export class TicketTypeComponent implements OnInit {
       error: () => this.loading.set(false),
     });
   }
-
-  // ===========================
-  // 🔹 Create or Update
-  // ===========================
-  save(): void {
-    if (this.form.invalid) {
-      return;
-    }
-    const dto: TicketTypeInputDto = this.form.value;
-
-    if (this.isEditing()) {
-      this.service.update(this.selectedId()!, dto).subscribe(() => {
-        this.loadTicketTypes();
-        this.cancelEdit();
-      });
-    } else {
-      this.service.create(dto).subscribe(() => {
-        this.loadTicketTypes();
-        this.form.reset();
-      });
-    }
-  }
-
-  // ===========================
-  // 🔹 Edit Mode
-  // ===========================
-  edit(item: TicketTypeOutputDto): void {
-    this.isEditing.set(true);
-    this.selectedId.set(item.id);
-    this.form.patchValue(item);
-  }
-
-  cancelEdit(): void {
-    this.isEditing.set(false);
-    this.selectedId.set(null);
-    this.form.reset({ isEnabled: true });
-  }
-
   // ===========================
   // 🔹 Delete
   // ===========================
   delete(id: number): void {
-    if (confirm('Are you sure you want to delete this ticket type?')) {
-      this.service.delete(id).subscribe(() => this.loadTicketTypes());
-    }
+    const modalConfig = {
+      backdrop: true,
+      ignoreBackdropClick: true,
+      class: 'modal-dialog-centered',
+      initialState: {
+        title: 'Warning',
+        message: 'Are you sure you want to delete?',
+      },
+    };
+    const bsModalRef = this.modalService.show(ConfirmationModal, modalConfig);
+
+    bsModalRef.content?.confirmed.subscribe((result) => {
+      if (result) {
+        this.service.delete(id).subscribe(() => this.loadTicketTypes());
+      } else {
+        bsModalRef.hide();
+      }
+    });
+  }
+
+  openAddEditModal(selectedTicket: TicketTypeOutputDto | null = null) {
+    const initialState = {
+      selectedTicket,
+    };
+    const modalRef = this.modalService.show(AddEditTicketModal, {
+      initialState,
+      ignoreBackdropClick: true,
+      backdrop: true,
+      class: 'modal-lg',
+    });
+
+    modalRef.content?.addOrUpdateEmit.subscribe(() => {
+      this.loadTicketTypes();
+    });
   }
 }

@@ -2,11 +2,14 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h5 class="mb-1">Custom Fields</h5>
-      <small class="text-muted">Add custom fields to QMS modules for additional data collection</small>
+      <small class="text-muted"
+        >Add custom fields to QMS modules for additional data collection</small
+      >
     </div>
-    <button class="btn btn-primary" (click)="addField()">
+    <!-- <button class="btn btn-primary" (click)="addField()">
       <i class="bi bi-plus-lg"></i> Add Custom Field
-    </button>
+    </button> -->
+    <button class="ch-btn ch-btn-green" (click)="addField()">Add Custom Field</button>
   </div>
 
   @if (loading()) {
@@ -15,58 +18,59 @@
     </div>
   }
 
+  <div class="table-responsive">
+    <table class="app-table">
+      <thead class="table-light">
+        <tr>
+          <th>Field Name</th>
+          <th>Ticket Type ID</th>
+          <th>Data Type</th>
+          <th>Value</th>
+          <th>Multi Select</th>
+          <th>Required</th>
+          <th>Description</th>
 
-    <div class="table-responsive">
-      <table class="table table-bordered align-middle">
-        <thead class="table-light">
+          <th style="width: 120px">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (field of fields(); track field.id) {
           <tr>
-            <th>Field Name</th>
-            <th>Ticket Type ID</th>
-            <th>Data Type</th>
-            <th>Value</th>
-            <th>Multi Select</th>
-            <th>Required</th>
-            <th>Description</th>
-
-            <th style="width: 120px;">Actions</th>
+            <td>{{ field.displayName }}</td>
+            <td>
+              <span class="badge bg-secondary">{{ field.fkTicketTypeId }}</span>
+            </td>
+            <td>{{ field.dataType | enumToString: enumDataType }}</td>
+            <td>
+              <span
+                class="badge"
+                [class.bg-danger]="field.isRequired"
+                [class.bg-secondary]="!field.isRequired"
+              >
+                {{ field.isRequired ? 'Required' : 'Optional' }}
+              </span>
+            </td>
+            <td>
+              <span
+                class="badge"
+                [class.bg-danger]="field.isMultiSelect"
+                [class.bg-secondary]="!field.isMultiSelect"
+              >
+                {{ field.isMultiSelect ? 'Multi-Select' : 'Single-Select' }}
+              </span>
+            </td>
+            <td>{{ field.description }}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-secondary me-1" (click)="editField(field)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteField(field.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-                  @for (field of fields(); track field.id) {
-            <tr>
-              <td>{{ field.displayName }}</td>
-              <td><span class="badge bg-secondary">{{ field.fkTicketTypeId }}</span></td>
-              <td>{{ field.dataType | enumToString: enumDataType }}</td>
-              <td>
-                <span
-                  class="badge"
-                  [class.bg-danger]="field.isRequired"
-                  [class.bg-secondary]="!field.isRequired"
-                >
-                  {{ field.isRequired ? 'Required' : 'Optional' }}
-                </span>
-              </td>
-                      <td>
-                <span
-                  class="badge"
-                  [class.bg-danger]="field.isMultiSelect"
-                  [class.bg-secondary]="!field.isMultiSelect"
-                >
-                  {{ field.isMultiSelect ? 'Multi-Select' : 'Single-Select' }}
-                </span>
-              </td>
-              <td>{{ field.description }}</td>
-              <td>
-                <button class="btn btn-sm btn-outline-secondary me-1" (click)="editField(field)">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteField(field.id)">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+        }
+      </tbody>
+    </table>
+  </div>
 </div>

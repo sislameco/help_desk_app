@@ -12,3 +12,32 @@
   padding: 1.5rem;
   border-radius: 8px;
 }
+
+.custom-nav {
+  border-bottom: 1px solid #e6e9ec;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  flex-wrap: wrap;
+}
+
+.custom-nav .nav-link {
+  color: #4a4a4a;
+  font-weight: 500;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+  margin-right: 1.2rem;
+  padding: 0.6rem 0.2rem;
+}
+
+.custom-nav .nav-link:hover {
+  color: #00c17b;
+  border-bottom-color: #b2f0d1;
+}
+
+.custom-nav .nav-link.active {
+  color: #00c17b;
+  border-bottom: 2px solid #00c17b;
+  background: transparent;
+  font-weight: 600;
+}

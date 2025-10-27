@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { EnumPriority, EnumQMSType, EnumUnit, SLAOutputDto } from '../../../models/sla.model';
 import { SLAService } from '../../../services/sla.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -23,6 +31,7 @@ export class AddEditModal implements OnInit {
   mode: 'add' | 'edit' = 'add';
   @Input() sla?: SLAOutputDto;
   @Input() companyId: number | 1 = 1;
+  @Output() saveEmit = new EventEmitter<void>();
   private readonly fb = inject(FormBuilder);
   slaForm: FormGroup;
   private readonly service = inject(SLAService);
@@ -74,11 +83,15 @@ export class AddEditModal implements OnInit {
 
   save() {
     if (this.mode === 'add') {
-      this.service.create(this.slaForm.value).subscribe(() => this.bsModalRef.hide());
+      this.service.create(this.slaForm.value).subscribe(() => {
+        this.saveEmit.emit();
+        this.bsModalRef.hide();
+      });
     } else {
-      this.service
-        .update(this.sla!.id!, this.slaForm.value)
-        .subscribe(() => this.bsModalRef.hide());
+      this.service.update(this.sla!.id!, this.slaForm.value).subscribe(() => {
+        this.saveEmit.emit();
+        this.bsModalRef.hide();
+      });
     }
   }
 
