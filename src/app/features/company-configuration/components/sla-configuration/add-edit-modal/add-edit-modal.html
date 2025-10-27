@@ -1,108 +1,138 @@
-<div class="modal-header">
-  <h5 class="modal-title">{{ mode === 'add' ? 'Add SLA Rule' : 'Edit SLA Rule' }}</h5>
-  <button type="button" class="btn-close" aria-label="Close" (click)="bsModalRef.hide()"></button>
-</div>
+<div class="app-modal">
+  <div class="modal-header">
+    <h5 class="modal-title">{{ mode === 'add' ? 'Add SLA Rule' : 'Edit SLA Rule' }}</h5>
+    <button class="close" (click)="bsModalRef.hide()">
+      <svg width="10" viewBox="0 0 10 10">
+        <use href="assets/sprite.svg#svg-close"></use>
+      </svg>
+    </button>
+  </div>
 
-<div class="modal-body">
-  <p>Configure service level agreement timeframes for QMS items based on type and priority.</p>
+  <div class="modal-body">
+    <!-- <p>Configure service level agreement timeframes for QMS items based on type and priority.</p> -->
 
-  <form [formGroup]="slaForm">
-    <div class="row g-3">
-      <div class="form-group mb-3">
-        <p>Ticket Type</p>
-        <ng-select
-          class="select-dropdown"
-          [items]="ticketTypes()"
-          bindLabel="title"
-          bindValue="id"
-          formControlName="fkTicketTypeId"
-          [searchable]="true"
-          placeholder="Select ticket type"
-          (change)="onTicketTypeSelected($event)"
-        >
-          <ng-template ng-option-tmp let-item="item">
-            <span>{{ item.title }}</span>
-          </ng-template>
-        </ng-select>
-      </div>
+    <form [formGroup]="slaForm" class="app-form">
+      <div class="row">
+        <div class="form-group col-lg-12 mb-3">
+          <div class="position-relative">
+            <label for="fkTicketTypeId" class="input-label"
+              >Ticket Type <span class="text-danger">*</span></label
+            >
+            <ng-select
+              id="fkTicketTypeId"
+              class="select-dropdown"
+              [items]="ticketTypes()"
+              bindLabel="title"
+              bindValue="id"
+              formControlName="fkTicketTypeId"
+              [searchable]="true"
+              placeholder="Select ticket type"
+              (change)="onTicketTypeSelected($event)"
+            >
+            </ng-select>
+          </div>
+        </div>
 
-      <!-- ✅ Show QMS Type & Priority in the same row -->
-      <div class="row g-2 mt-2 align-items-center">
+        <!-- ✅ Show QMS Type & Priority in the same row -->
         <!-- ✅ Display only when ticket type is selected -->
         @if (slaForm.get('fkTicketTypeId')?.value) {
-          <div class="row g-2 mt-2 align-items-center">
-            <div class="col-md-6">
-              <div class="d-flex align-items-center border rounded p-2">
-                <strong class="me-2">QMS Type:</strong>
-                <span class="badge bg-primary">{{
-                  slaForm.get('qmsType')?.value | enumToString: enumQMSType
-                }}</span>
-              </div>
+          <div class="form-group col-lg-6 mb-3">
+            <div class="d-flex align-items-center form-control">
+              <strong class="me-2">QMS Type:</strong>
+              <span class="badge bg-primary">{{
+                slaForm.get('qmsType')?.value | enumToString: enumQMSType
+              }}</span>
             </div>
+          </div>
 
-            <div class="col-md-6">
-              <div class="d-flex align-items-center border rounded p-2">
-                <strong class="me-2">Priority:</strong>
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'bg-danger text-danger':
-                      slaForm.get('priority')?.value === enumPriority.Highest,
-                    'bg-danger': slaForm.get('priority')?.value === enumPriority.High,
-                    'bg-warning text-dark': slaForm.get('priority')?.value === enumPriority.Medium,
-                    'bg-success': slaForm.get('priority')?.value === enumPriority.Low,
-                  }"
-                >
-                  {{ slaForm.get('priority')?.value | enumToString: enumPriority }}
-                </span>
-              </div>
+          <div class="form-group col-lg-6 mb-3">
+            <div class="d-flex align-items-center form-control">
+              <strong class="me-2">Priority:</strong>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-danger text-danger': slaForm.get('priority')?.value === enumPriority.Highest,
+                  'bg-danger': slaForm.get('priority')?.value === enumPriority.High,
+                  'bg-warning text-dark': slaForm.get('priority')?.value === enumPriority.Medium,
+                  'bg-success': slaForm.get('priority')?.value === enumPriority.Low,
+                }"
+              >
+                {{ slaForm.get('priority')?.value | enumToString: enumPriority }}
+              </span>
             </div>
           </div>
         }
-      </div>
-      <div class="col-md-6">
-        <label for="timeUnit">Time Unit</label>
-        <select id="timeUnit" class="form-select" formControlName="unit">
-          <option *ngFor="let unit of units" [value]="unit.value">{{ unit.key }}</option>
-        </select>
-      </div>
+        <!-- </div> -->
+        <div class="form-group col-md-6 mb-3">
+          <div class="position-relative">
+            <label for="timeUnit" class="input-label"
+              >Time Unit <span class="text-danger">*</span></label
+            >
+            <ng-select
+              id="timeUnit"
+              class="select-dropdown"
+              [items]="units"
+              bindLabel="key"
+              bindValue="value"
+              formControlName="unit"
+              [searchable]="false"
+              [clearable]="false"
+              placeholder="Select ticket type"
+            >
+            </ng-select>
+          </div>
+        </div>
 
-      <div class="col-md-4">
-        <label for="responseTime">Response Time</label>
-        <input
-          id="responseTime"
-          type="number"
-          class="form-control"
-          formControlName="responseTime"
-        />
-      </div>
+        <div class="form-group col-md-6 mb-3">
+          <div class="position-relative">
+            <label for="responseTime" class="input-label"
+              >Response Time <span class="text-danger">*</span></label
+            >
+            <input
+              id="responseTime"
+              type="number"
+              class="form-control"
+              formControlName="responseTime"
+            />
+          </div>
+        </div>
 
-      <div class="col-md-4">
-        <label for="resolutionTime">Resolution Time</label>
-        <input
-          id="resolutionTime"
-          type="number"
-          class="form-control"
-          formControlName="resolutionTime"
-        />
-      </div>
+        <div class="form-group col-md-6 mb-3">
+          <div class="position-relative">
+            <label for="resolutionTime" class="input-label"
+              >Resolution Time <span class="text-danger">*</span></label
+            >
+            <input
+              id="resolutionTime"
+              type="number"
+              class="form-control"
+              formControlName="resolutionTime"
+            />
+          </div>
+        </div>
 
-      <div class="col-md-4">
-        <label for="escalationTime">Escalation Time</label>
-        <input
-          id="escalationTime"
-          type="number"
-          class="form-control"
-          formControlName="escalationTime"
-        />
+        <div class="form-group col-md-6 mb-3">
+          <div class="position-relative">
+            <label for="escalationTime" class="input-label"
+              >Escalation Time <span class="text-danger">*</span></label
+            >
+            <input
+              id="escalationTime"
+              type="number"
+              class="form-control"
+              formControlName="escalationTime"
+            />
+          </div>
+        </div>
       </div>
-    </div>
-  </form>
-</div>
-
-<div class="modal-footer">
-  <button class="btn btn-secondary" (click)="bsModalRef.hide()">Cancel</button>
-  <button class="btn btn-primary" (click)="save()">
-    {{ mode === 'add' ? 'Create Rule' : 'Update Rule' }}
-  </button>
+    </form>
+  </div>
+  <div class="form-group text-nowrap text-center mb-5">
+    <button class="ch-btn ch-btn-red-border disabled-hover me-3" (click)="bsModalRef.hide()">
+      Cancel
+    </button>
+    <button class="ch-btn ch-btn-green" (click)="save()">
+      {{ mode === 'add' ? 'Create Rule' : 'Update Rule' }}
+    </button>
+  </div>
 </div>

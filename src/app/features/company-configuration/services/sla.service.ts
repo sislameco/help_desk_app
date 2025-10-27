@@ -14,6 +14,10 @@ export class SLAService {
     return this.http.get<SLAOutputDto[]>(`${this.baseUrl}?fkCompanyId=${fkCompanyId}`);
   }
 
+  getSummary(fkCompanyId: number): Observable<SLAOutputDto[]> {
+    return this.http.get<SLAOutputDto[]>(`${this.baseUrl}?fkCompanyId=${fkCompanyId}&tile=1`);
+  }
+
   getById(id: number): Observable<SLAOutputDto> {
     return this.http.get<SLAOutputDto>(`${this.baseUrl}/${id}`);
   }
