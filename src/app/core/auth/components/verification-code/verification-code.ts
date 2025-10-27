@@ -37,12 +37,13 @@ export class VerificationCode {
     this.auth
       .verifyOtp(this.form.controls.otp.value, this.route.snapshot.queryParams['token'])
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.toastr.success('Email sent successfully!');
           this.router.navigate(['/auth/set-password'], {
             queryParams: {
               token: this.route.snapshot.queryParams['token'],
               userName: this.route.snapshot.queryParams['userName'],
+              userId: res.data,
             },
           });
         },
