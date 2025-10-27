@@ -1,0 +1,166 @@
+.ticket-update {
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  color: #2b2b2b;
+  background-color: #f8f9fb;
+  min-height: 100vh;
+
+  h4 {
+    color: #1f4e79;
+  }
+
+  // ---------- Header ----------
+  .border-bottom {
+    border-color: #dee2e6 !important;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    vertical-align: middle;
+  }
+
+  .btn-outline-secondary {
+    color: #555;
+    border-color: #bbb;
+    &:hover {
+      background-color: #f1f1f1;
+    }
+  }
+
+  // ---------- Layout ----------
+  .row {
+    --bs-gutter-x: 1.75rem;
+  }
+
+  .col-lg-8 {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .col-lg-4 {
+    padding-right: 1rem;
+  }
+
+  // ---------- Left Panel ----------
+  .form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  input.form-control,
+  textarea.form-control,
+  .ng-select .ng-select-container {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+    transition: all 0.2s ease-in-out;
+    &:focus {
+      border-color: #1f4e79;
+      box-shadow: 0 0 0 0.15rem rgba(31, 78, 121, 0.15);
+    }
+  }
+
+  ngx-editor {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    min-height: 180px;
+    background: #fff;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  // ---------- Comments ----------
+  .border.rounded {
+    background: #fff;
+    border-color: #e3e6eb !important;
+    font-size: 0.9rem;
+
+    strong {
+      color: #1f4e79;
+    }
+
+    small {
+      font-size: 0.75rem;
+      color: #666;
+    }
+  }
+
+  textarea.form-control {
+    resize: vertical;
+  }
+
+  // ---------- Right Panel ----------
+  .card {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+    background: #fff;
+  }
+
+  .card .form-label {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .btn-success {
+    background-color: #007b5a;
+    border-color: #007b5a;
+    font-weight: 600;
+    &:hover {
+      background-color: #009e6f;
+    }
+  }
+
+  // ---------- Attachments ----------
+  .list-group-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    font-size: 0.88rem;
+    padding: 0.65rem 0.75rem;
+
+    i {
+      color: #1f4e79;
+      margin-right: 6px;
+    }
+
+    &:hover {
+      background: #f8f9fc;
+    }
+  }
+
+  // ---------- Section Titles ----------
+  h6.text-primary {
+    font-size: 0.9rem;
+    color: #1f4e79 !important;
+    border-left: 3px solid #1f4e79;
+    padding-left: 8px;
+  }
+
+  // ---------- Responsive ----------
+  @media (max-width: 992px) {
+    .col-lg-8,
+    .col-lg-4 {
+      padding: 1rem !important;
+    }
+
+    .col-lg-4 {
+      margin-top: 1rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ticket-update {
+      padding: 0.5rem;
+    }
+
+    .col-lg-8 {
+      padding: 1rem;
+    }
+  }
+}
