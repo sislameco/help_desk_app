@@ -90,12 +90,18 @@ export class SetPassword {
       return;
     }
 
-    this.authService.setNewPassword('', this.form.controls.newPassword.value as string).subscribe({
-      next: () => {
-        this.router
-          .navigate(['/auth', 'login'])
-          .then(() => this.toastr.success('Password set successfully'));
-      },
-    });
+    this.authService
+      .setNewPassword(
+        '',
+        this.form.controls.newPassword.value as string,
+        this.route.snapshot.queryParams['userId'],
+      )
+      .subscribe({
+        next: () => {
+          this.router
+            .navigate(['/auth', 'login'])
+            .then(() => this.toastr.success('Password set successfully'));
+        },
+      });
   }
 }

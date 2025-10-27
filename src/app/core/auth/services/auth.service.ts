@@ -35,9 +35,9 @@ export class AuthService {
       },
     );
   }
-  setNewPassword(userToken: string, newPassword: string) {
+  setNewPassword(userToken: string, newPassword: string, userId: number) {
     return this.http.post<{ data: string }>(
-      `${environment.apiBaseUrl}/api/helpdesk/reset-password`,
+      `${environment.apiBaseUrl}/api/helpdesk/change-password/${userId}`,
       {
         userToken,
         newPassword,
