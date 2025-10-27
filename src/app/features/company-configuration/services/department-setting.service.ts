@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PaginationResponse } from '@shared/models/api-response.model';
 import {
   DepartmentSettingInputDto,
@@ -48,5 +48,20 @@ export class DepartmentSettingService {
   }
   getDepById(id: number): Observable<DepartmentSetupOutputDto> {
     return this.http.get<DepartmentSetupOutputDto>(`${this.baseUrl}/${id}`);
+  }
+
+  getDepartmentStatistics(): Observable<{
+    totalDepartments: number;
+    activeDepartments: number;
+    totalUsers: number;
+    avgUsersPerDepartment: number;
+  }> {
+    // return this.http.get<any>(`${this.baseUrl}/statistics/${companyId}`);
+    return of({
+      totalDepartments: 10,
+      activeDepartments: 8,
+      totalUsers: 50,
+      avgUsersPerDepartment: 5,
+    });
   }
 }

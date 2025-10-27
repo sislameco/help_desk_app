@@ -3,48 +3,130 @@
   <p class="text-muted">Manage departments, access permissions, and organizational structure</p>
 
   <!-- Summary Cards -->
-  <div class="row g-3 mb-4">
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Total Departments</h5>
-        <p class="fs-4 fw-bold">{{ 10 }}</p>
+  <div class="text-end w-100 mb-3">
+    @if (!isShowStatusBar()) {
+      <button class="ch-icon-btn" type="button" (click)="isShowStatusBar.set(true)">
+        <span class="icon">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="14">
+            <use href="assets/sprite.svg#svg-eye-outline"></use>
+          </svg>
+        </span>
+        Show Status Bar
+      </button>
+    } @else {
+      <button class="ch-icon-btn" type="button" (click)="isShowStatusBar.set(false)">
+        <span class="icon">
+          <svg fill="currentColor" viewBox="0 0 640 512" width="14">
+            <use href="assets/sprite.svg#svg-eye-close"></use>
+          </svg>
+        </span>
+        Hide Status Bar
+      </button>
+    }
+  </div>
+  <div class="app-new-form" [hidden]="!isShowStatusBar()">
+    @if (departmentStatistics()) {
+      <div class="row mb-3">
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-warning d-flex align-items-center">
+            <div class="cursor-pointer card-callout-inner">
+              <h5>Total Departments</h5>
+              <h3>{{ departmentStatistics()?.totalDepartments }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-secondary d-flex align-items-center">
+            <div class="card-callout-inner">
+              <h5>
+                Active Departments
+                <!-- <span class="badge ml-1">{{ tiles.reviewCount }}</span> -->
+              </h5>
+              <h3>{{ departmentStatistics()?.activeDepartments }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-danger d-flex align-items-center">
+            <div class="card-callout-inner">
+              <h5>
+                Total Users
+                <!-- <span class="badge ml-1">{{ tiles.rejectedCount }}</span> -->
+              </h5>
+              <h3>{{ departmentStatistics()?.totalUsers }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-success d-flex align-items-center">
+            <div class="card-callout-inner">
+              <h5>
+                Avg Users/Dept
+                <!-- <span class="badge ml-1">{{ tiles.approvedCount }}</span> -->
+              </h5>
+              <h3>{{ departmentStatistics()?.avgUsersPerDepartment }}</h3>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-lg-2">
+        <div class="card-callout card-callout-dark d-flex align-items-center">
+          <div class="card-callout-inner">
+            <h5>
+              Paid
+              <span class="badge ml-1">{{ tiles.paidCount }}</span>
+            </h5>
+            <h3>{{ tiles.totalPaidAmount | currency : "EUR" }}</h3>
+          </div>
+        </div>
+      </div> -->
       </div>
+    }
+  </div>
+
+  <div class="table-filter">
+    <div class="form-group min-width-150">
+      <label for="roles">Users</label>
+      <!-- <ng-select
+          placeholder="All"
+          id="roles"
+          clearable="false"
+          searchable="false"
+          [multiple]="true"
+          class="multi-form-select md-multi-select rounded"
+        >
+        @for (role of roleDropdown(); track role.roleId) {
+          <ng-option [value]="role.roleId">{{ role.roleName }}</ng-option>
+        }
+        </ng-select> -->
+      <!-- <ng-select [items]="userDropdown() ?? []" [(ngModel)]="filters.value()['roleIds']" bindLabel="roleName"
+        (ngModelChange)="onMultiChange('roleIds', $event)" (clear)="onMultiChange('roleIds', [])" bindValue="roleId"
+        [multiple]="true" class="select-dropdown select-dropdown-circle mr-2 w-100" placeholder="Select user...">
+      </ng-select> -->
     </div>
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Active Departments</h5>
-        <p class="fs-4 fw-bold text-success">{{ 10 }}</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Total Users</h5>
-        <p class="fs-4 fw-bold">{{ 10 }}</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Avg Users/Dept</h5>
-        <p class="fs-4 fw-bold">{{ 10 }}</p>
-      </div>
+    <div class="form-group min-width-150 ng-select-md">
+      <label for="warehouse">Status</label>
+      <!-- <ng-select class="select-dropdown select-dropdown-circle mr-2 w-100" placeholder="All" id="status"
+        [searchable]="false" [items]="statusOptions" bindLabel="label" bindValue="value" [clearable]="true"
+        [ngModel]="filters.value()['status']" (ngModelChange)="onStatusChange($event)">
+      </ng-select> -->
     </div>
   </div>
 
   <!-- Departments Table -->
-  <div class="card">
-    <div class="card-header">
+  <div>
+    <!-- <div class="card-header">
       <h5 class="mb-0">Departments</h5>
-    </div>
-    <div class="card-body p-0">
-      <table class="table table-striped table-bordered mb-0">
+    </div> -->
+    <div>
+      <table class="app-table">
         <thead class="table-light">
           <tr>
             <th>Department</th>
             <th>Manager</th>
             <th>Users</th>
-            <th>Permissions</th>
-            <th>Status</th>
-            <th class="text-center">Actions</th>
+            <th>Module</th>
+            <!-- <th>Status</th> -->
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -56,30 +138,71 @@
               </td>
               <td>{{ dep.managerName }}</td>
               <td>{{ dep.totalUsers }} users</td>
-              <td>-</td>
+              <td>
+                @for (modul of dep.moduls.slice(0, 2); track modul) {
+                  <span class="badge badge-success ng-star-inserted me-1"> {{ modul }}</span>
+                }
+                @if (dep.moduls.length > 2) {
+                  <span class="badge badge-success ng-star-inserted"
+                    >+{{ dep.moduls.length - 2 }}</span
+                  >
+                }
+              </td>
               <!-- <td>
                 @for (p of dep.permissions ?? []; track p) {
                   <span class="badge bg-dark me-1">{{ p }}</span>
                 }
               </td> -->
-              <td>
+              <!-- <td>
                 {{ dep.status || enumRStatus }}
-              </td>
-              <td class="text-center">
-                <button
-                  class="btn btn-sm btn-outline-primary me-1"
-                  (click)="openDepSetupModal(dep)"
-                >
-                  ✏️
-                </button>
-                <button class="btn btn-sm btn-outline-danger" (click)="deleteDepartment(dep.id)">
-                  🗑️
-                </button>
+              </td> -->
+              <td>
+                <div class="dropdown-action" dropdown placement="bottom right">
+                  <button dropdownToggle type="button" class="active-btn">
+                    <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                      <use href="assets/sprite.svg#svg-cog"></use>
+                    </svg>
+                  </button>
+                  <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                    <!-- <li>
+                    <button class="dropdown-item" (click)="openDepSetupModal(dep)">
+                      <svg width="14" viewBox="0 0 16 16" fill="currentColor">
+                        <use href="assets/sprite.svg#svg-eye-outline"></use>
+                      </svg>
+                      View
+                    </button>
+                  </li> -->
+                    <li>
+                      <button class="dropdown-item" (click)="openDepSetupModal(dep)">
+                        <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                          <use href="assets/sprite.svg#edit-s-icon"></use>
+                        </svg>
+                        Edit
+                      </button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" (click)="deleteDepartment(dep.id)">
+                        <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                          <use href="assets/sprite.svg#delete-s-icon"></use>
+                        </svg>
+                        Delete
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+                <!-- <button class="btn btn-sm btn-outline-primary me-1" (click)="openDepSetupModal(dep)">
+                ✏️
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteDepartment(dep.id)">
+                🗑️
+              </button> -->
               </td>
             </tr>
           }
         </tbody>
       </table>
+      <!-- <app-pagination [total]="totalItems()" [page]="currentPage()" [pageSize]="pageSize()" (pageChange)="setPage($event)"
+        (pageSizeChange)="setPageSize($event)"></app-pagination> -->
     </div>
   </div>
 </div>

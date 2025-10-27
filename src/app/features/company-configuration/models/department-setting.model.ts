@@ -18,6 +18,7 @@ export interface DepartmentSettingOutputDto {
   managerEmail: string;
   status: number;
   totalUsers: number;
+  moduls: string[];
 }
 
 export interface DepartmentUpdateDto {

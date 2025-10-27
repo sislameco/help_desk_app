@@ -23,4 +23,11 @@ export class UserService {
       environment.apiBaseUrl + '/api/role/dropdown',
     );
   }
+
+  getUserDropdown(companyId: number): Observable<{ id: number; fullName: string }[]> {
+    return this.http.get<{ id: number; fullName: string }[]>(
+      environment.apiBaseUrl + '/api/user/dropdown',
+      { params: { companyId } },
+    );
+  }
 }
