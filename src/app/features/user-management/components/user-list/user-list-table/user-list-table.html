@@ -77,12 +77,12 @@
 <table class="table app-table mt-3">
   <thead>
     <tr>
-      <th>
+      <!-- <th>
         <label class="custom-checkbox">
           <input type="checkbox" [checked]="allSelected()" (change)="onSelectAll($event)" />
           <span></span>
         </label>
-      </th>
+      </th> -->
       <th>Name</th>
       <th>Email</th>
       <th>Phone</th>
@@ -95,7 +95,7 @@
   <tbody>
     @for (user of filterData().items; track $index) {
       <tr>
-        <td>
+        <!-- <td>
           <label class="custom-checkbox">
             <input
               type="checkbox"
@@ -104,7 +104,7 @@
             />
             <span></span>
           </label>
-        </td>
+        </td> -->
         <td class="text-nowrap">{{ user.fullName }}</td>
         <td class="text-nowrap">{{ user.email }}</td>
         <td class="text-nowrap">{{ user.phone }}</td>
@@ -176,14 +176,14 @@
   (pageSizeChange)="setPageSize($event)"
 ></app-pagination>
 <!-- </div> -->
-@if (selectedRows().length > 0) {
+<!-- @if (selectedRows().length > 0) {
   <div class="d-flex justify-content-end gap-3 mt-3">
     <a href="javascript:void(0);" class="btn btn-outline-danger">Cancel</a>
     <a href="javascript:void(0);" class="btn btn-danger" (click)="removeAlert()">Delete</a>
     <a href="javascript:void(0);" class="btn btn-outline-blue">Deactivate</a>
     <a href="javascript:void(0);" class="btn btn-theme">Activate</a>
   </div>
-}
+} -->
 
 <!-- Angular modal (popup) -->
 @if (isViewOpen) {

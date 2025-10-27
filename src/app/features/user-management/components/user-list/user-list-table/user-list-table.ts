@@ -123,8 +123,8 @@ export class UserListTable {
   //userList = signal<UserModel[]>(userList);
 
   protected readonly refresh = signal(0);
-  allSelected = signal(false);
-  selectedRows = signal<number[]>([]);
+  // allSelected = signal(false);
+  // selectedRows = signal<number[]>([]);
 
   // 👉 Constructor
   constructor() {
@@ -208,33 +208,33 @@ export class UserListTable {
       .then();
   }
 
-  onSelectRow(event: Event, index: number) {
-    const checkbox = event.target as HTMLInputElement;
-    if (checkbox.checked) {
-      this.selectedRows.update((rows) => [...rows, index]);
-    } else {
-      this.selectedRows.update((rows) => rows.filter((i) => i !== index));
-      this.allSelected.set(false);
-    }
-  }
+  // onSelectRow(event: Event, index: number) {
+  //   const checkbox = event.target as HTMLInputElement;
+  //   if (checkbox.checked) {
+  //     this.selectedRows.update((rows) => [...rows, index]);
+  //   } else {
+  //     this.selectedRows.update((rows) => rows.filter((i) => i !== index));
+  //     this.allSelected.set(false);
+  //   }
+  // }
 
-  onSelectAll(event: Event) {
-    const checkbox = event.target as HTMLInputElement;
-    this.allSelected.set(checkbox.checked);
-    if (this.allSelected()) {
-      this.selectedRows.set((this.usersResult() ?? []).map((_, i) => i));
-    } else {
-      this.selectedRows.set([]);
-    }
-  }
-  removeAlert() {
-    const modalConfig = {
-      backdrop: true,
-      ignoreBackdropClick: true,
-    };
-    const modalParams = Object.assign({}, modalConfig, { class: 'modal-md' });
-    this.modalService.show(AlertModal, modalParams);
-  }
+  // onSelectAll(event: Event) {
+  //   const checkbox = event.target as HTMLInputElement;
+  //   this.allSelected.set(checkbox.checked);
+  //   if (this.allSelected()) {
+  //     this.selectedRows.set((this.usersResult() ?? []).map((_, i) => i));
+  //   } else {
+  //     this.selectedRows.set([]);
+  //   }
+  // }
+  // removeAlert() {
+  //   const modalConfig = {
+  //     backdrop: true,
+  //     ignoreBackdropClick: true,
+  //   };
+  //   const modalParams = Object.assign({}, modalConfig, { class: 'modal-md' });
+  //   this.modalService.show(AlertModal, modalParams);
+  // }
   reload() {
     this.refresh.update((v: number) => v + 1);
   }
