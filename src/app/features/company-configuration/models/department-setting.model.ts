@@ -4,10 +4,13 @@ import { EnumRStatus } from '../../user-management/models/user-list-model';
 
 export interface DepartmentSettingInputDto {
   userIds?: number[];
-  searchText?: string;
+  moduleIds?: number[];
+  search?: string;
   status?: number;
-  pageNo?: number;
-  itemsPerPage?: number;
+  page?: number;
+  pageSize?: number;
+  sortColumn?: string;
+  sortBy?: number;
 }
 
 export interface DepartmentSettingOutputDto {
@@ -39,4 +42,16 @@ export interface DepartmentSetupOutputDto {
 export interface DepartmentMenu extends RoleMenuAction {
   isAllowed: boolean;
   fkMenuActionMapId: number;
+}
+
+export interface DepartmentFilterParams
+  extends Record<string, string | number | number[] | boolean | undefined> {
+  page: number;
+  pageSize: number;
+  userIds?: number[];
+  moduleIds?: number[];
+  status?: number;
+  searchText?: string;
+  sortColumn?: string;
+  sortBy?: number;
 }

@@ -14,6 +14,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { TicketReferenceService } from '../../../services/ticket-reference-service';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-department-setup',
@@ -21,12 +22,15 @@ import { NgSelectComponent } from '@ng-select/ng-select';
   templateUrl: './update-department-setup.html',
   styleUrl: './update-department-setup.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DepartmentSettingService],
 })
 export class UpdateDepartmentSetup {
   bsModalRef = inject(BsModalRef);
-  fkCompanyId = 1;
   private readonly departmentService = inject(DepartmentSettingService);
   private readonly ticketReferenceService = inject(TicketReferenceService);
+  private readonly tostrar = inject(ToastrService);
+
+  fkCompanyId = 1;
   departmentId = 0;
   department = signal<DepartmentSetupOutputDto | null>(null);
   roleMenuActions: DepartmentMenu[] = [];
@@ -89,6 +93,8 @@ export class UpdateDepartmentSetup {
     }
     this.isSubmitting.set(true);
 
+    this.roleMenuActions = [];
+    this.getActionPermission(this.loadDepartment().menus);
     const payload: DepartmentUpdateDto = {
       id: this.form.value.id ?? 0,
       //name: this.form.value.name ?? '',
@@ -100,12 +106,32 @@ export class UpdateDepartmentSetup {
 
     this.departmentService.updateDepartment(payload).subscribe({
       next: () => {
+        this.tostrar.success('Department updated successfully');
+        this.bsModalRef.hide();
         this.isSubmitting.set(false);
         this.form.reset();
       },
       error: () => {
+        this.tostrar.error('Failed to update department');
         this.isSubmitting.set(false);
       },
+    });
+  }
+
+  getActionPermission(menus: MenuAccess[]) {
+    menus.forEach((menu) => {
+      menu.actions.forEach((action) => {
+        if (!action.isPermitted) {
+          return;
+        }
+        this.roleMenuActions.push({
+          isAllowed: action.isPermitted,
+          fkMenuActionMapId: action.fkMenuActionMapId,
+        });
+      });
+      if (menu.childs && menu.childs.length > 0) {
+        this.getActionPermission(menu.childs);
+      }
     });
   }
 
