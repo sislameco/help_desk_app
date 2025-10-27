@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AlertModal } from '@shared/helper/components/alert-modal/alert-modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { UserStatusEnum } from '../../../enums/user-list-enum';
 import { BsModalService } from 'ngx-bootstrap/modal';
