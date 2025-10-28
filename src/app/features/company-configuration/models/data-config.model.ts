@@ -43,5 +43,12 @@ export interface CustomFieldOutputDto {
   dDLValue: string[];
   isRequired: boolean;
   description: string;
+  displayOrder: number;
   isMultiSelect?: boolean;
+}
+
+export interface TicketTypeDropdownDto {
+  id: number;
+  name: string;
+  fields: CustomFieldOutputDto[];
 }

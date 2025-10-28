@@ -6,7 +6,7 @@
         >Add custom fields to QMS modules for additional data collection</small
       >
     </div>
-    <button class="ch-btn ch-btn-green" (click)="addField()">Add Custom Field</button>
+    <!-- <button class="ch-btn ch-btn-green" (click)="addField()">Add Custom Field</button> -->
   </div>
 
   @if (loading()) {
@@ -15,7 +15,150 @@
     </div>
   }
 
-  <table class="app-table">
+  <div class="ticket-types-group row ps-2">
+    <div class="quotation-tree--container col-lg-4">
+      <!-- Search bar with add option -->
+      <div class="wTree-search-box app-search-plus mb-0">
+        <div class="input-group">
+          <app-search
+            placeholder="Search here..."
+            class="w-100"
+            (searchString)="searchField($event)"
+          ></app-search>
+          <div class="input-group-append d-flex">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              (click)="addField()"
+              [disabled]="isAddEditMode()"
+            >
+              <svg width="11" viewBox="0 0 11 10">
+                <use href="assets/sprite.svg#plus-icon"></use>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ticket tpyes with draggable childs -->
+      <div class="wTree wTree-tiny wTree-draggable">
+        <div
+          class="scroll-box"
+          style="overflow-y: scroll; padding-right: 10px"
+          [ngStyle]="
+            isReorder() ? { height: 'calc(100vh - 320px)' } : { height: 'calc(100vh - 275px)' }
+          "
+          cdkScrollable
+        >
+          <ul class="sortable-data-wrapper_test">
+            @for (
+              ticketType of ticketTypesWithFields() | search: searchText();
+              track ticketType.id;
+              let i = $index
+            ) {
+              <li
+                [ngClass]="{ active: selectedTicketTypeId() === ticketType.id }"
+                class="wTree-parent"
+              >
+                <a href="javascript:void(0)" (click)="toggleTicketTypeSelection(ticketType.id)">{{
+                  ticketType.name
+                }}</a>
+                @if (selectedTicketTypeId() === ticketType.id) {
+                  <ul
+                    class="sortable-data-wrapper_test"
+                    cdkDropList
+                    (cdkDropListDropped)="dropField($event, ticketType.fields)"
+                  >
+                    @for (
+                      field of ticketType.fields | search: searchText();
+                      track field.id;
+                      let j = $index
+                    ) {
+                      <li
+                        [ngClass]="{ active: selectedFieldId() === field.id }"
+                        cdkDrag
+                        class="wTree-parent"
+                        [cdkDragDisabled]="isAddEditMode()"
+                      >
+                        <div
+                          class="dropdown-action app-table-dropdown"
+                          dropdown
+                          placement="bottom right"
+                          container="body"
+                          (onShown)="onShowDropdown()"
+                        >
+                          <div class="app-table--action">
+                            <button
+                              dropdownToggle
+                              type="button"
+                              class="active-btn"
+                              id="dropDownButton_{{ j }}"
+                              [disabled]="isAddEditMode()"
+                            >
+                              <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                                <use href="assets/sprite.svg#svg-cog"></use>
+                              </svg>
+                            </button>
+                            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                              <li>
+                                <button class="dropdown-item" (click)="editField(field)">
+                                  <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                                    <use href="assets/sprite.svg#edit-s-icon"></use>
+                                  </svg>
+                                  Edit
+                                </button>
+                              </li>
+                              <li>
+                                <button class="dropdown-item" (click)="deleteField(field.id)">
+                                  <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                                    <use href="assets/sprite.svg#delete-s-icon"></use>
+                                  </svg>
+                                  Delete
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <a href="javascript:void(0)">{{ field.displayName }}</a>
+                      </li>
+                    }
+                  </ul>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+      @if (isReorder()) {
+        <div class="d-flex mt-2 justify-content-end pe-2">
+          <button class="ch-btn ch-btn-red-border" type="button" (click)="clearAddEditMode()">
+            Cancel
+          </button>
+          <button class="ch-btn ch-btn-green ms-2" type="button">Save</button>
+        </div>
+      }
+      <!-- Ticket tpyes with draggable childs ends -->
+    </div>
+
+    <div class="col-lg-6">
+      @if (isAddEditMode()) {
+        <app-add-edit-custom-field
+          [field]="selectedField()"
+          (saved)="clearAddEditMode()"
+        ></app-add-edit-custom-field>
+      } @else {
+        <div class="app-no-data">
+          <div class="no-data-text text-center">
+            <h2>Custom Fields</h2>
+            <h6>Select an item from the menu on the left to display content</h6>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Will be deleted -->
+  <table class="app-table" *ngIf="false">
     <thead class="table-light">
       <tr>
         <th>Field Name</th>

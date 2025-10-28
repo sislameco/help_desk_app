@@ -1,3 +1,5 @@
+@use '../base/variable' as *;
+
 .dropdown-action {
   position: relative;
   .active-btn {
@@ -38,5 +40,13 @@
         flex-shrink: 0;
       }
     }
+  }
+}
+
+.dropdown-menu {
+  .dropdown-item:hover,
+  .dropdown-item:focus {
+    background: unset;
+    color: $themeColor;
   }
 }
