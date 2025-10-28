@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { SLAInputDto, SLAOutputDto } from '../models/sla.model';
+import { SLAInputDto, SLAOutputDto, SlASummary } from '../models/sla.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,8 +14,8 @@ export class SLAService {
     return this.http.get<SLAOutputDto[]>(`${this.baseUrl}?fkCompanyId=${fkCompanyId}`);
   }
 
-  getSummary(fkCompanyId: number): Observable<SLAOutputDto[]> {
-    return this.http.get<SLAOutputDto[]>(`${this.baseUrl}?fkCompanyId=${fkCompanyId}&tile=1`);
+  getSummary(fkCompanyId: number): Observable<SlASummary> {
+    return this.http.get<SlASummary>(`${this.baseUrl}/tiles?fkCompanyId=${fkCompanyId}`);
   }
 
   getById(id: number): Observable<SLAOutputDto> {
