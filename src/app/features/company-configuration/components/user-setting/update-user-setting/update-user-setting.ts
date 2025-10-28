@@ -11,14 +11,14 @@ import { ToastrService } from 'ngx-toastr';
 import { UserSettingService } from '../../../services/user-setting.service';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { NgxControlError } from 'ngxtension/control-error';
-import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { UserRoleService } from '../../../../user-management/services/user-role.service';
 import { UserSetupOutputDto } from '../../../models/user-setting.model';
 
 @Component({
   selector: 'app-update-user-setting',
-  imports: [NgxControlError, ReactiveFormsModule, NgSelectComponent, NgOptionComponent],
+  imports: [NgxControlError, ReactiveFormsModule, NgSelectModule],
   templateUrl: './update-user-setting.html',
   styleUrl: './update-user-setting.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,15 +39,13 @@ export class UpdateUserSetting {
 
   @Output() formSubmit = new EventEmitter<boolean>();
 
-  protected readonly roleDropdown = derivedAsync(() => this.userRoleService.getRoleDropdown());
+  readonly roleDropdown = derivedAsync(() => this.userRoleService.getRoleDropdown(), {
+    initialValue: [] as { roleId: number; roleName: string }[],
+  });
 
   constructor() {
     this.form = this.fb.record({
       id: this.fb.nonNullable.control<number>(0),
-      firstName: this.fb.nonNullable.control<string>(''),
-      lastName: this.fb.nonNullable.control<string>(''),
-      email: this.fb.nonNullable.control<string>(''),
-      phone: this.fb.nonNullable.control<string>(''),
       roleId: this.fb.nonNullable.control<number | null>(null, {
         validators: [Validators.required],
       }),
@@ -59,18 +57,9 @@ export class UpdateUserSetting {
     afterNextRender(() => {
       if (this.user) {
         this.form.patchValue(this.user);
-        this.form.updateValueAndValidity();
       } else {
-        this.form.updateValueAndValidity();
       }
     });
-  }
-
-  passwordsMatchValidator(control: import('@angular/forms').AbstractControl) {
-    const form = control as FormGroup;
-    const password = form.get('passwordHash')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
   submit() {
