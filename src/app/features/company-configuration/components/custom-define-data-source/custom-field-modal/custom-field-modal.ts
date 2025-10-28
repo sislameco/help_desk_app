@@ -15,11 +15,11 @@ import { CustomDefineDataSourceService } from '../../../services/custom-define-d
 import { TicketReferenceService } from '../../../services/ticket-reference-service';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map } from 'rxjs';
-import { NgSelectComponent } from '@ng-select/ng-select';
+import { NgOptionComponent, NgSelectComponent } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-custom-field-modal',
-  imports: [ReactiveFormsModule, CommonModule, NgSelectComponent],
+  imports: [ReactiveFormsModule, CommonModule, NgSelectComponent, NgOptionComponent],
   templateUrl: './custom-field-modal.html',
   styleUrl: './custom-field-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
