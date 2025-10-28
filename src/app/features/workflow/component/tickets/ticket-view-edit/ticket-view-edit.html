@@ -1,187 +1,188 @@
-<div class="ticket-update container-fluid py-3" *ngIf="ticket">
-  <!-- 🔹 Header -->
-  <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-    <div>
-      <h4 class="fw-bold mb-1">
-        {{ ticket.ticketNumber }}
-        <span class="badge bg-secondary ms-2">{{ ticket.status }}</span>
-      </h4>
-      <small class="text-muted">
-        Created {{ ticket.createdDate }} by
-        <strong>{{ ticket.createdByUser?.fullName }}</strong>
-      </small>
+@if (ticket) {
+  <div class="ticket-update container-fluid py-3">
+    <!-- 🔹 Header -->
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+      <div>
+        <h4 class="fw-bold mb-1">
+          {{ ticket.ticketNumber }}
+          <span class="badge bg-secondary ms-2">{{ ticket.status }}</span>
+        </h4>
+        <small class="text-muted">
+          Created {{ ticket.createdDate }} by
+          <strong>{{ ticket.createdByUser?.fullName }}</strong>
+        </small>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary" (click)="closeModal()">
+        <i class="bi bi-x-lg"></i> Close
+      </button>
     </div>
-    <button class="btn btn-sm btn-outline-secondary" (click)="closeModal()">
-      <i class="bi bi-x-lg"></i> Close
-    </button>
-  </div>
 
-  <!-- 🔸 Two-Column Layout -->
-  <div class="row g-4">
-    <!-- 🧩 Left Panel -->
-    <div class="col-lg-8 col-md-7">
-      <!-- Summary -->
-      <div class="mb-3">
-        <p class="form-label fw-semibold">Summary</p>
-        <!-- <input type="text" class="form-control" [(ngModel)]="ticket.subject" /> -->
-      </div>
-
-      <!-- Description -->
-      <div class="mb-4">
-        <p class="form-label fw-semibold">Description</p>
-        <ngx-editor
-          [(ngModel)]="ticket.description"
-          [editor]="editor"
-          [disabled]="false"
-          [placeholder]="'Describe the issue in detail...'"
-        ></ngx-editor>
-      </div>
-
-      <!-- Attachments -->
-      <div class="mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h6 class="fw-bold text-primary mb-0">Attachments</h6>
-          <button class="btn btn-sm btn-outline-primary" (click)="uploadAttachment()">
-            <i class="bi bi-upload"></i> Upload
-          </button>
+    <!-- 🔸 Two-Column Layout -->
+    <div class="row g-4">
+      <!-- 🧩 Left Panel -->
+      <div class="col-lg-8 col-md-7">
+        <!-- Summary -->
+        <div class="mb-3">
+          <p class="form-label fw-semibold">Summary</p>
+          <!-- <input type="text" class="form-control" [(ngModel)]="ticket.subject" /> -->
         </div>
-        <ul class="list-group small">
-          <li
-            *ngFor="let f of ticket.attachments"
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <span><i class="bi bi-file-earmark-text"></i> {{ f.fileName }}</span>
-            <span class="text-muted"
-              >{{ f.uploadedBy?.fullName }} • {{ f.createdDate | date: 'short' }}</span
+
+        <!-- Description -->
+        <div class="mb-4">
+          <p class="form-label fw-semibold">Description</p>
+          <ngx-editor
+            [(ngModel)]="ticket.description"
+            [editor]="editor"
+            [disabled]="false"
+            [placeholder]="'Describe the issue in detail...'"
+          ></ngx-editor>
+        </div>
+
+        <!-- Attachments -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="fw-bold text-primary mb-0">Attachments</h6>
+            <button class="btn btn-sm btn-outline-primary" (click)="uploadAttachment()">
+              <i class="bi bi-upload"></i> Upload
+            </button>
+          </div>
+          <ul class="list-group small">
+            <li
+              *ngFor="let f of ticket.attachments"
+              class="list-group-item d-flex justify-content-between align-items-center"
             >
-          </li>
-        </ul>
-      </div>
-
-      <!-- Comments -->
-      <div class="mb-4">
-        <h6 class="fw-bold text-primary mb-2">Comments</h6>
-        <div *ngFor="let c of ticket.comments" class="border rounded p-2 mb-2">
-          <strong>{{ c.user?.fullName }}</strong>
-          <small class="text-muted float-end">{{ c.createdDate }}</small>
-          <div class="mt-1">{{ c.text }}</div>
+              <span><i class="bi bi-file-earmark-text"></i> {{ f.fileName }}</span>
+              <span class="text-muted"
+                >{{ f.uploadedBy?.fullName }} • {{ f.createdDate | date: 'short' }}</span
+              >
+            </li>
+          </ul>
         </div>
 
-        <div class="mt-3">
-          <textarea rows="3" class="form-control mb-2" placeholder="Add a comment..."></textarea>
-          <button class="btn btn-sm btn-primary" (click)="addComment()">
-            <i class="bi bi-send"></i> Post Comment
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 🧱 Right Panel -->
-    <div class="col-lg-4 col-md-5">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <!-- Status -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Status</p>
-            <select class="form-select" [(ngModel)]="ticket.status">
-              <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
-            </select>
+        <!-- Comments -->
+        <div class="mb-4">
+          <h6 class="fw-bold text-primary mb-2">Comments</h6>
+          <div *ngFor="let c of ticket.comments" class="border rounded p-2 mb-2">
+            <strong>{{ c.user?.fullName }}</strong>
+            <small class="text-muted float-end">{{ c.createdDate }}</small>
+            <div class="mt-1">{{ c.text }}</div>
           </div>
 
-          <!-- Priority -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Priority</p>
-            <select class="form-select" [(ngModel)]="ticket.priority">
-              <option *ngFor="let p of priorities" [value]="p.value">{{ p.label }}</option>
-            </select>
-          </div>
-
-          <!-- Assignee -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Assignee</p>
-            <ng-select
-              [items]="users"
-              bindLabel="fullName"
-              bindValue="id"
-              [(ngModel)]="ticket.assignedToUserId"
-              placeholder="Select user"
-            ></ng-select>
-          </div>
-
-          <!-- Departments -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Department(s)</p>
-            <ng-select
-              [items]="departments"
-              bindLabel="name"
-              bindValue="id"
-              [multiple]="true"
-              [(ngModel)]="ticket.departmentIds"
-            ></ng-select>
-          </div>
-
-          <!-- Root Cause -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Root Cause</p>
-            <ng-select
-              [items]="rootCauses"
-              bindLabel="name"
-              bindValue="id"
-              [(ngModel)]="ticket.rootCauseId"
-              placeholder="Select root cause"
-            ></ng-select>
-          </div>
-
-          <!-- Resolution -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Resolution</p>
-            <ng-select
-              [items]="resolutions"
-              bindLabel="name"
-              bindValue="id"
-              [(ngModel)]="ticket.resolutionId"
-              placeholder="Select resolution"
-            ></ng-select>
-          </div>
-
-          <!-- Project -->
-          <div class="mb-3">
-            <label class="form-label fw-semibold" for="linkedProject">Linked Project</label>
-            <input
-              id="linkedProject"
-              class="form-control"
-              [value]="ticket.project?.referenceNumber + ' - ' + ticket.project?.address"
-              readonly
-            />
-          </div>
-
-          <!-- SLA -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Due Date (SLA)</p>
-            <input type="datetime-local" class="form-control" [(ngModel)]="ticket.dueDate" />
-            <small class="text-muted" *ngIf="ticket.slaStatus">SLA: {{ ticket.slaStatus }}</small>
-          </div>
-
-          <!-- Watchers -->
-          <div class="mb-3">
-            <p class="form-label fw-semibold">Watchers</p>
-            <ng-select
-              [items]="users"
-              bindLabel="fullName"
-              bindValue="id"
-              [multiple]="true"
-              [(ngModel)]="ticket.watchers"
-            ></ng-select>
-          </div>
-
-          <!-- Save Button -->
-          <div class="text-end">
-            <button class="btn btn-success w-100" (click)="updateTicket()">
-              <i class="bi bi-save"></i> Update Ticket
+          <div class="mt-3">
+            <textarea rows="3" class="form-control mb-2" placeholder="Add a comment..."></textarea>
+            <button class="btn btn-sm btn-primary" (click)="addComment()">
+              <i class="bi bi-send"></i> Post Comment
             </button>
           </div>
         </div>
       </div>
+
+      <!-- 🧱 Right Panel -->
+      <div class="col-lg-4 col-md-5">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <!-- Status -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Status</p>
+              <select class="form-select" [(ngModel)]="ticket.status">
+                <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+
+            <!-- Priority -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Priority</p>
+              <select class="form-select" [(ngModel)]="ticket.priority">
+                <option *ngFor="let p of priorities" [value]="p.value">{{ p.label }}</option>
+              </select>
+            </div>
+
+            <!-- Assignee -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Assignee</p>
+              <ng-select
+                [items]="users"
+                bindLabel="fullName"
+                bindValue="id"
+                [(ngModel)]="ticket.assignedToUserId"
+                placeholder="Select user"
+              ></ng-select>
+            </div>
+
+            <!-- Departments -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Department(s)</p>
+              <ng-select
+                [items]="departments"
+                bindLabel="name"
+                bindValue="id"
+                [multiple]="true"
+                [(ngModel)]="ticket.departmentIds"
+              ></ng-select>
+            </div>
+
+            <!-- Root Cause -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Root Cause</p>
+              <ng-select
+                [items]="rootCauses"
+                bindLabel="name"
+                bindValue="id"
+                [(ngModel)]="ticket.rootCauseId"
+                placeholder="Select root cause"
+              ></ng-select>
+            </div>
+
+            <!-- Resolution -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Resolution</p>
+              <ng-select
+                [items]="resolutions"
+                bindLabel="name"
+                bindValue="id"
+                [(ngModel)]="ticket.resolutionId"
+                placeholder="Select resolution"
+              ></ng-select>
+            </div>
+
+            <!-- Project -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Linked Project</p>
+              <input
+                class="form-control"
+                [value]="ticket.project?.referenceNumber + ' - ' + ticket.project?.address"
+                readonly
+              />
+            </div>
+
+            <!-- SLA -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Due Date (SLA)</p>
+              <input type="datetime-local" class="form-control" [(ngModel)]="ticket.dueDate" />
+              <small class="text-muted" *ngIf="ticket.slaStatus">SLA: {{ ticket.slaStatus }}</small>
+            </div>
+
+            <!-- Watchers -->
+            <div class="mb-3">
+              <p class="form-label fw-semibold">Watchers</p>
+              <ng-select
+                [items]="users"
+                bindLabel="fullName"
+                bindValue="id"
+                [multiple]="true"
+                [(ngModel)]="ticket.watchers"
+              ></ng-select>
+            </div>
+
+            <!-- Save Button -->
+            <div class="text-end">
+              <button class="btn btn-success w-100" (click)="updateTicket()">
+                <i class="bi bi-save"></i> Update Ticket
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+}

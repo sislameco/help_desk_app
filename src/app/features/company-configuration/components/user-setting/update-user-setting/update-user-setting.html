@@ -1,1 +1,62 @@
-<p>update-user-setting works!</p>
+<div class="modal-header">
+  <h2>{{ user ? 'Edit' : 'Create' }} User</h2>
+  <button type="button" (click)="bsModalRef.hide()">&times;</button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form" class="app-form" (ngSubmit)="submit()">
+    <div class="form-group mb-3">
+      <label for="roleId" class="input-label">Role <span class="text-danger">*</span></label>
+      <ng-select
+        class="select-dropdown"
+        placeholder="All"
+        clearable="true"
+        searchable="false"
+        id="roleId"
+        [multiple]="false"
+        formControlName="roleId"
+        [items]="roleDropdown()"
+        bindLabel="roleName"
+        bindValue="roleId"
+      >
+        <!-- @for (role of roleDropdown(); track role.roleId) {
+          <ng-option [value]="role.roleId">{{ role.roleName }}</ng-option>
+        } -->
+      </ng-select>
+      <strong class="text-danger" *ngxControlError="form.controls['roleId']; track: 'required'"
+        >Role is required.</strong
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="departmentId" class="input-label"
+        >Department <span class="text-danger">*</span></label
+      >
+      <ng-select
+        class="select-dropdown"
+        placeholder="All"
+        clearable="true"
+        searchable="false"
+        [items]="departments"
+        bindLabel="fullName"
+        bindValue="id"
+        id="departmentId"
+        [multiple]="false"
+        formControlName="departmentId"
+      >
+      </ng-select>
+      <strong
+        class="text-danger"
+        *ngxControlError="form.controls['departmentId']; track: 'required'"
+        >Department is required.</strong
+      >
+    </div>
+    <div class="form-group mb-3">
+      <label for="departmentId" class="input-label">Is Admin</label>
+      <input type="checkbox" id="isAdmin" formControlName="isAdmin" />
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 mt-4">
+      <button class="btn btn-outline-danger" type="button" (click)="back()">Cancel</button>
+      <button class="btn btn-theme" type="submit">Save</button>
+    </div>
+  </form>
+</div>
