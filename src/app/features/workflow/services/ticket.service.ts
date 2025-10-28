@@ -12,9 +12,9 @@ import { Observable } from 'rxjs';
 export class TicketService {
   private readonly http = inject(HttpClient);
 
-  getTickets(data: Params) {
+  getTickets(companyId: number, data: Params) {
     return this.http.get<PaginationResponse<TicketListViewDto>>(
-      `${environment.apiBaseUrl}/api/ticket/list`,
+      `${environment.apiBaseUrl}/api/ticket/list?companyId=${companyId}`,
       {
         params: data,
       },

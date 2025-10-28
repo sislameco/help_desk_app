@@ -28,7 +28,7 @@ export class TicketCentre {
 
   readonly params = signal<Params>({});
 
-  readonly ticketsResponse = derivedAsync(() => this.ticketService.getTickets(this.params()), {
+  readonly ticketsResponse = derivedAsync(() => this.ticketService.getTickets(1, this.params()), {
     initialValue: { items: [], total: 0, page: 1, pageSize: 0 },
   });
 
