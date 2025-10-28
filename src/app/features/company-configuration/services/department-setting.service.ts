@@ -105,4 +105,10 @@ export class DepartmentSettingService {
       `${environment.apiBaseUrl}/api/ticket-reference/modules`,
     );
   }
+
+  getDepartmentDropdown(companyId: number): Observable<{ id: number; fullName: string }[]> {
+    return this.http.get<{ id: number; fullName: string }[]>(
+      `${environment.apiBaseUrl}/api/department-setting/dropdown?companyId=${companyId}`,
+    );
+  }
 }

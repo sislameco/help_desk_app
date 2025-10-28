@@ -3,46 +3,115 @@
   <p class="text-muted">Manage users, access permissions, and organizational structure</p>
 
   <!-- Summary Cards -->
-  <div class="row g-3 mb-4">
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Total Users</h5>
-        <p class="fs-4 fw-bold">{{ users().total }}</p>
+  <div class="text-end w-100 mb-3">
+    @if (!isShowStatusBar()) {
+      <button class="ch-icon-btn" type="button" (click)="isShowStatusBar.set(true)">
+        <span class="icon">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="14">
+            <use href="assets/sprite.svg#svg-eye-outline"></use>
+          </svg>
+        </span>
+        Show Status Bar
+      </button>
+    } @else {
+      <button class="ch-icon-btn" type="button" (click)="isShowStatusBar.set(false)">
+        <span class="icon">
+          <svg fill="currentColor" viewBox="0 0 640 512" width="14">
+            <use href="assets/sprite.svg#svg-eye-close"></use>
+          </svg>
+        </span>
+        Hide Status Bar
+      </button>
+    }
+  </div>
+  <div class="app-new-form" [hidden]="!isShowStatusBar()">
+    @if (userStatistics()) {
+      <div class="row mb-3">
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-warning d-flex align-items-center">
+            <div class="cursor-pointer card-callout-inner">
+              <h5>Total Users</h5>
+              <h3>{{ userStatistics()?.totalUsers }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-secondary d-flex align-items-center">
+            <div class="card-callout-inner">
+              <h5>Active Users</h5>
+              <h3>{{ userStatistics()?.activeUsers }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-danger d-flex align-items-center">
+            <div class="card-callout-inner">
+              <h5>Total Admins</h5>
+              <h3>{{ userStatistics()?.admins }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card-callout card-callout-success d-flex align-items-center">
+            <div class="card-callout-inner">
+              <h5>Avg Department</h5>
+              <h3>{{ userStatistics()?.departments }}</h3>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Active Users</h5>
-        <p class="fs-4 fw-bold text-success">{{ users().items.length }}</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Roles</h5>
-        <p class="fs-4 fw-bold">-</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h5>Avg Roles/User</h5>
-        <p class="fs-4 fw-bold">-</p>
-      </div>
-    </div>
+    }
   </div>
 
-  <!-- Users Table -->
-  <div class="card">
-    <div class="card-header">
-      <h5 class="mb-0">Users</h5>
+  <div class="table-filter mb-3">
+    <div class="form-group min-width-150">
+      <label for="roles">Search</label>
+      <app-search (searchString)="searchAction($event)"></app-search>
     </div>
-    <div class="card-body p-0">
-      <table class="table table-striped table-bordered mb-0">
+    <div class="form-group min-width-150">
+      <label for="roles">Department</label>
+      <ng-select
+        [items]="departmentDropdown()"
+        [(ngModel)]="filters.value()['departmentIds']"
+        bindLabel="fullName"
+        (ngModelChange)="onMultiChange('departmentIds', $event)"
+        (clear)="onMultiChange('departmentIds', [])"
+        bindValue="id"
+        [multiple]="true"
+        class="select-dropdown select-dropdown-circle mr-2 w-100"
+        placeholder="Select user..."
+      >
+      </ng-select>
+    </div>
+  </div>
+  <!-- Users Table -->
+  <div>
+    <!-- <div class="card-header">
+      <h5 class="mb-0">Users</h5>
+    </div> -->
+    <div>
+      <table class="app-table">
         <thead class="table-light">
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
+          <tr appSortTableDirective (appSortChange)="sortData($event)">
+            <th
+              appSortInputDirective
+              [sortInput]="'name'"
+              [sortColumn]="filters.value()['sortColumn']"
+              [sortBy]="filters.value()['sortBy']"
+            >
+              Name
+            </th>
+            <th
+              appSortInputDirective
+              [sortInput]="'managerName'"
+              [sortColumn]="filters.value()['sortColumn']"
+              [sortBy]="filters.value()['sortBy']"
+            >
+              Email
+            </th>
             <th>Roles</th>
-            <th>Status</th>
+            <th>Department</th>
+            <th>Is Admin</th>
             <th class="text-center">Actions</th>
           </tr>
         </thead>
@@ -51,31 +120,58 @@
             <tr>
               <td>
                 <div class="fw-bold">{{ user.fullName }}</div>
-                <div class="text-muted small">{{ user.emailAddress }}</div>
+                <div class="text-muted small">{{ user.userName }}</div>
               </td>
               <td>{{ user.email }}</td>
               <td>
-                @for (role of user.roleName; track role) {
-                  <span class="badge bg-dark me-1">{{ role }}</span>
-                }
+                <!-- @for (role of user.roleName; track role) { -->
+                <span class="badge bg-dark me-1">{{ user.roleName }}</span>
+                <!-- } -->
+              </td>
+              <td>
+                {{ user.departmentName }}
               </td>
               <td>
                 {{ user.status }}
               </td>
-              <td class="text-center">
-                <button
-                  class="btn btn-sm btn-outline-primary me-1"
-                  (click)="openUserSetupModal(user)"
-                >
-                  ✏️
-                </button>
-                <button class="btn btn-sm btn-outline-danger">🗑️</button>
+              <td>
+                <div class="dropdown-action" dropdown placement="bottom right">
+                  <button dropdownToggle type="button" class="active-btn">
+                    <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                      <use href="assets/sprite.svg#svg-cog"></use>
+                    </svg>
+                  </button>
+                  <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                    <li>
+                      <button class="dropdown-item" (click)="openUserSetupModal(user)">
+                        <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                          <use href="assets/sprite.svg#edit-s-icon"></use>
+                        </svg>
+                        Edit
+                      </button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item">
+                        <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                          <use href="assets/sprite.svg#delete-s-icon"></use>
+                        </svg>
+                        Delete
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </td>
             </tr>
           }
         </tbody>
       </table>
+      <app-pagination
+        [total]="totalItems()"
+        [page]="currentPage()"
+        [pageSize]="pageSize()"
+        (pageChange)="setPage($event)"
+        (pageSizeChange)="setPageSize($event)"
+      ></app-pagination>
     </div>
   </div>
 </div>
-<p>user-setting works!</p>
