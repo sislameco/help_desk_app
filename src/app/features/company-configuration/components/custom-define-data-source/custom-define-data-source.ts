@@ -6,13 +6,14 @@ import { EnumDataType } from '../../models/company.model';
 import { CustomFieldModalComponent } from './custom-field-modal/custom-field-modal';
 import { CommonModule } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-custom-define-data-source',
   templateUrl: './custom-define-data-source.html',
   styleUrl: './custom-define-data-source.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [EnumToStringPipe, CommonModule],
+  imports: [EnumToStringPipe, CommonModule, BsDropdownModule],
   providers: [BsModalService],
   standalone: true,
 })
