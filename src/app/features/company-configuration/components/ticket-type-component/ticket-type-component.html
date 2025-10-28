@@ -19,12 +19,12 @@
         <th>Priority</th>
         <th>Default Assign User</th>
         <th>Default Assign Departments</th>
-        <th>Enabled</th>
-        <th>Action</th>
+        <th class="text-center">Enabled</th>
+        <th class="text-center">Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let t of ticketTypes()">
+      <tr *ngFor="let t of ticketTypes(); let i = index">
         <td>{{ t.title }}</td>
         <td>{{ t.description }}</td>
         <td>{{ t.qmsType | enumToString: qmsType }}</td>
@@ -39,39 +39,45 @@
             {{ d }}
           </span>
         </td>
-        <td>
-          <span [class.text-success]="t.isEnabled" [class.text-danger]="!t.isEnabled">
-            {{ t.isEnabled ? 'Active' : 'Disabled' }}
-          </span>
+        <td class="text-center pe-none">
+          <label class="app-form--checkbox" [for]="i" style="padding: 0px !important"
+            ><input type="checkbox" [id]="i" [checked]="t.isEnabled" disabled /><span
+              class="d-flex align-items-center justify-content-center"
+              ><svg viewBox="0 0 10 8" fill="none" width="10">
+                <use xlink:href="assets/sprite.svg#svg-check"></use></svg></span
+          ></label>
         </td>
-        <td>
-          <button
-            type="button"
-            type="button"
-            class="ch-icon-btn me-2"
-            (click)="openAddEditModal(t)"
+        <td class="text-center">
+          <div
+            class="dropdown-action"
+            dropdown
+            placement="bottom right"
+            container="#dropDownButton_{{ i }}"
           >
-            <span class="icon">
-              <svg
-                width="11"
-                height="10"
-                viewBox="0 0 11 10"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <use xlink:href="assets/sprite.svg#svg-edit"></use>
+            <button dropdownToggle type="button" class="active-btn" id="dropDownButton_{{ i }}">
+              <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                <use href="assets/sprite.svg#svg-cog"></use>
               </svg>
-            </span>
-            Edit
-          </button>
-          <button type="button" type="button" class="ch-icon-btn" (click)="delete(t.id)">
-            <span class="icon">
-              <svg width="12" viewBox="0 0 12 13" fill="currentColor">
-                <use xlink:href="assets/sprite.svg#svg-recycle-bin"></use>
-              </svg>
-            </span>
-            Delete
-          </button>
+            </button>
+            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+              <li>
+                <button class="dropdown-item" (click)="openAddEditModal(t)">
+                  <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                    <use href="assets/sprite.svg#edit-s-icon"></use>
+                  </svg>
+                  Edit
+                </button>
+              </li>
+              <li>
+                <button class="dropdown-item" (click)="delete(t.id)">
+                  <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                    <use href="assets/sprite.svg#delete-s-icon"></use>
+                  </svg>
+                  Delete
+                </button>
+              </li>
+            </ul>
+          </div>
         </td>
       </tr>
     </tbody>
