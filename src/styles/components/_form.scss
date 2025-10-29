@@ -347,7 +347,7 @@
     min-height: 16px;
     span {
       background: #fafafa;
-      border: 1px solid #204971;
+      border: 1px solid variable.$green-dark;
       border-radius: 2px;
       height: 16px;
       left: 0;
@@ -386,8 +386,8 @@
 
       &:checked {
         ~ span {
-          border-color: variable.$blue-dark;
-          background: variable.$blue-dark;
+          border-color: variable.$green-dark;
+          background: variable.$green-dark;
           svg {
             stroke: #fff;
             fill: none !important;
@@ -395,7 +395,7 @@
         }
 
         ~ p {
-          color: variable.$blue-dark;
+          color: variable.$green-dark;
           font-weight: 600;
         }
       }

@@ -1,0 +1,23 @@
+.app-no-data {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  .no-data-text {
+    h2 {
+      font-weight: 800;
+      font-size: 40px;
+      line-height: 70px;
+      text-transform: uppercase;
+      // color: rgb(32, 73, 113);
+      color: #59b96b;
+    }
+
+    h6 {
+      font-weight: normal;
+      font-size: 21px;
+      line-height: 26px;
+      color: rgb(68, 68, 68);
+    }
+  }
+}

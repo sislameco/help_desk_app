@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomFieldModal } from './custom-field-modal';
+import { AddEditCustomField } from './add-edit-custom-field';
 
-describe('CustomFieldModal', () => {
-  let component: CustomFieldModal;
-  let fixture: ComponentFixture<CustomFieldModal>;
+describe('AddEditCustomField', () => {
+  let component: AddEditCustomField;
+  let fixture: ComponentFixture<AddEditCustomField>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomFieldModal],
+      imports: [AddEditCustomField],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CustomFieldModal);
+    fixture = TestBed.createComponent(AddEditCustomField);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

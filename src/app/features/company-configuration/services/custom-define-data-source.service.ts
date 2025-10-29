@@ -1,7 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CustomFieldDto, CustomFieldOutputDto } from '../models/data-config.model';
+import {
+  CustomFieldDto,
+  CustomFieldOutputDto,
+  FieldDisplayOrderInputDto,
+  TicketTypeDropdownDto,
+} from '../models/data-config.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -12,6 +17,12 @@ export class CustomDefineDataSourceService {
 
   // Base API endpoint (adjust if needed, e.g., '/api/field')
   private readonly baseUrl = `${environment.apiBaseUrl}/api/field`;
+
+  getTicketTypes(companyId: number): Observable<TicketTypeDropdownDto[]> {
+    return this.http.get<TicketTypeDropdownDto[]>(
+      `${this.baseUrl}/ticket-type?companyId=${companyId}`,
+    );
+  }
 
   /** 🔹 Get all fields */
   getAll(): Observable<CustomFieldOutputDto[]> {
@@ -36,5 +47,9 @@ export class CustomDefineDataSourceService {
   /** 🔹 Delete field by ID */
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  reorderFields(ticketTypes: FieldDisplayOrderInputDto[]) {
+    return this.http.patch<void>(`${this.baseUrl}/display-order`, ticketTypes);
   }
 }

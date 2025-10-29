@@ -1,11 +1,11 @@
-<div class="search-box">
+<div class="app-search-box">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="m-0">
     <use href="assets/sprite.svg#svg-search"></use>
   </svg>
   <input
     type="text"
     class="form-control form-control-lg"
-    placeholder="Search by keyword"
+    [placeholder]="placeholder"
     [formControl]="searchControl"
   />
   @if (searchText()) {

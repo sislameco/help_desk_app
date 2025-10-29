@@ -1,0 +1,142 @@
+<form [formGroup]="form" class="app-form">
+  <!-- Field Name + QMS Type -->
+  <div class="row">
+    <div class="form-group col-lg-12">
+      <div class="position-relative">
+        <label for="displayName" class="input-label fw-medium"
+          >Display Name <span class="text-danger">*</span></label
+        >
+        <input
+          id="displayName"
+          formControlName="displayName"
+          placeholder="Enter field name..."
+          class="form-control form-control-sm rounded-2"
+        />
+      </div>
+    </div>
+
+    <div class="form-group col-lg-12">
+      <!-- <p>Ticket Type</p> -->
+      <div class="position-relative">
+        <label for="displayName" class="input-label fw-medium"
+          >Ticket Type <span class="text-danger">*</span></label
+        >
+        <ng-select
+          class="select-dropdown"
+          [items]="ticketTypes()"
+          bindLabel="title"
+          bindValue="id"
+          formControlName="fkTicketTypeId"
+          [searchable]="true"
+          placeholder="Select ticket type"
+        >
+        </ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Field Type + Required -->
+  <div class="d-flex align-items-center mb-4">
+    <div class="form-group col-md-6 me-3 mb-0 px-0">
+      <div class="position-relative">
+        <label for="displayName" class="input-label fw-medium">Field Type</label>
+        <ng-select
+          class="select-dropdown"
+          formControlName="dataType"
+          [searchable]="false"
+          [clearable]="false"
+          placeholder="Select Field type"
+        >
+          <ng-option [value]="EnumDataType.textInput">Text</ng-option>
+          <ng-option [value]="EnumDataType.number">Number</ng-option>
+          <ng-option [value]="EnumDataType.date">Date</ng-option>
+          <ng-option [value]="EnumDataType.dropdownList">Dropdown List</ng-option>
+        </ng-select>
+      </div>
+    </div>
+
+    <div class="form-group mb-0">
+      <label for="isRequired" class="app-form--checkbox">
+        <input type="checkbox" id="isRequired" formControlName="isRequired" />
+        <span class="d-flex align-items-center justify-content-center">
+          <svg viewBox="0 0 10 8" fill="none" width="10">
+            <use xlink:href="assets/sprite.svg#svg-check"></use>
+          </svg>
+        </span>
+        <p class="mb-0">Required Field</p>
+      </label>
+    </div>
+
+    @if (+form.value.dataType === EnumDataType.dropdownList) {
+      <div class="form-group mb-0">
+        <label for="isMultiSelect" class="app-form--checkbox">
+          <input type="checkbox" id="isMultiSelect" formControlName="isMultiSelect" />
+          <span class="d-flex align-items-center justify-content-center">
+            <svg viewBox="0 0 10 8" fill="none" width="10">
+              <use xlink:href="assets/sprite.svg#svg-check"></use>
+            </svg>
+          </span>
+          <p class="mb-0">Multi Select</p>
+        </label>
+      </div>
+    }
+  </div>
+
+  <!-- Description -->
+  <div class="form-group mb-3">
+    <div class="position-relative">
+      <label for="description" class="input-label"
+        >Description <span class="text-danger">*</span></label
+      >
+      <textarea
+        type="text"
+        id="description"
+        class="form-control"
+        formControlName="description"
+        placeholder="Purpose of the field"
+      ></textarea>
+    </div>
+  </div>
+  @if (+form.value.dataType === EnumDataType.dropdownList) {
+    <!-- Dropdown Values -->
+    <div class="mb-3">
+      <p class="form-label fw-medium mb-2">List Options</p>
+      <div formArrayName="dDLValue" class="d-flex flex-column mb-2 ps-0">
+        @for (ctrl of ddlValues.controls; track $index; let i = $index) {
+          <div class="form-group d-flex align-items-center mb-3">
+            <input
+              [formControlName]="i"
+              placeholder="Option {{ i + 1 }}"
+              class="form-control form-control-sm rounded-2"
+            />
+            <button
+              type="button"
+              class="ch-icon-btn ch-icon-single disabled-hover"
+              (click)="removeDDLValue(i)"
+            >
+              <span class="icon">
+                <svg width="13" viewBox="0 0 13 13" fill="currentColor">
+                  <use xlink:href="assets/sprite.svg#red-close-icon"></use>
+                </svg>
+              </span>
+            </button>
+          </div>
+        }
+      </div>
+      <button type="button" class="ch-icon-btn" (click)="addDDLValue()">
+        <span class="icon">
+          <svg width="11" viewBox="0 0 11 11" fill="currentColor">
+            <use xlink:href="assets/sprite.svg#plus-icon"></use>
+          </svg>
+        </span>
+        Add Option
+      </button>
+    </div>
+  }
+  <div class="form-group text-nowrap text-end mt-3">
+    <button class="ch-btn ch-btn-red-border disabled-hover me-3" (click)="cancel()">Cancel</button>
+    <button class="ch-btn ch-btn-green" (click)="submit()" [disabled]="form.invalid">
+      {{ field() ? 'Update' : 'Create Field' }}
+    </button>
+  </div>
+</form>

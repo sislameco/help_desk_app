@@ -40,8 +40,21 @@ export interface CustomFieldOutputDto {
   fkTicketTypeId: number;
   displayName: string;
   dataType: EnumDataType;
-  dDLValue: string[];
+  ddlValue: string[];
   isRequired: boolean;
   description: string;
+  displayOrder: number;
   isMultiSelect?: boolean;
+}
+
+export interface TicketTypeDropdownDto {
+  id: number;
+  name: string;
+  shouldReorder: boolean;
+  fields: CustomFieldOutputDto[];
+}
+
+export interface FieldDisplayOrderInputDto {
+  fkTicketTypeId: number;
+  fieldIds: number[];
 }

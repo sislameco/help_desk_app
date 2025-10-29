@@ -38,4 +38,11 @@ export interface SLAOutputDto extends SLAInputDto {
   typeTitle: string;
 }
 
+export interface SlASummary {
+  totalRules: number;
+  activeRules: number;
+  criticalRules: number;
+  avgResponse: number;
+}
+
 // You may need to define QMSType, TicketPriority, EnumUnit elsewhere or import them.
