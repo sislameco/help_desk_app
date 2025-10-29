@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of } from 'rxjs';
@@ -14,16 +14,17 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { EnumDataType } from '../../../../../company-configuration/models/company.model';
 import { NgxControlError } from 'ngxtension/control-error';
 import { FileManagementService } from '../../../../services/file-manager-service';
+import { Editor, NgxEditorModule } from 'ngx-editor';
 
 @Component({
   selector: 'app-add-ticket-modal',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectComponent, NgxControlError],
+  imports: [ReactiveFormsModule, NgSelectComponent, NgxControlError, NgxEditorModule],
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddTicketModal {
+export class AddTicketModal implements OnDestroy {
   // 🔹 Inject services
   private readonly fb = inject(FormBuilder);
   private readonly ticketRef = inject(TicketReferenceService);
@@ -33,6 +34,7 @@ export class AddTicketModal {
   // 🟦 New signal to toggle minimize state
   isMinimized = signal(false);
   // 🔹 Base signals (unchanged)
+  editorRef!: Editor;
   fkCompanyId = 1;
   ticketTypeId = signal<number | null>(null);
   showCustomer = false;
@@ -124,6 +126,10 @@ export class AddTicketModal {
         : of([]),
     { initialValue: [] },
   );
+
+  constructor() {
+    this.editorRef = new Editor();
+  }
 
   get subFormArray(): FormArray {
     return this.form.get('subForm') as FormArray;
@@ -234,5 +240,9 @@ export class AddTicketModal {
   }
   toggleMinimize() {
     this.isMinimized.update((v) => !v);
+  }
+
+  ngOnDestroy(): void {
+    this.editorRef.destroy();
   }
 }

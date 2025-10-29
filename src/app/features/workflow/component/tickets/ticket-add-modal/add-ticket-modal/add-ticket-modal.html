@@ -21,7 +21,7 @@
       <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form"> -->
       <!-- 🧾 Basic Information -->
       <section class="ticket-section card p-3">
-        <h5 class="section-title">Basic Information</h5>
+        <h6 class="text-muted">Basic Information</h6>
 
         <div class="form-grid">
           <div class="form-group my-3">
@@ -61,14 +61,20 @@
 
           <div class="form-group mb-0">
             <!-- <p>Summary Note</p> -->
-            <label for="summaryNote" class="input-label">Summary Note</label>
-            <textarea
+            <label for="summaryNote" class="input-label">Description</label>
+            <ngx-editor-menu [editor]="editorRef"></ngx-editor-menu>
+            <ngx-editor
+              formControlName="description"
+              [editor]="editorRef"
+              placeholder="Describe the issue in detail"
+            ></ngx-editor>
+            <!-- <textarea
               id="summaryNote"
               formControlName="description"
               rows="3"
               class="form-control"
               placeholder="Describe the issue in detail..."
-            ></textarea>
+            ></textarea> -->
           </div>
         </div>
       </section>
@@ -77,8 +83,8 @@
 
       <!-- 👤 Customer & Project -->
       <section class="ticket-section mt-3 card p-3">
-        <h5 class="section-title">Customer & Project</h5>
-        <div class="form-grid mt-3">
+        <h6 class="text-muted">Customer & Project</h6>
+        <div class="form-grid mt-2">
           <div class="form-group">
             <label class="app-form--checkbox" for="isCustomer"
               ><input
@@ -131,7 +137,7 @@
 
       <!-- 📂 Ticket Type & Details -->
       <section class="ticket-section card p-3 mt-3">
-        <h5 class="section-title">Ticket Type</h5>
+        <h6 class="text-muted">Ticket Type</h6>
 
         <div class="form-grid mt-3">
           <div class="form-group">
@@ -187,8 +193,8 @@
       <!-- 🧩 Dynamic Subform -->
       @if (subforms() && subforms().length > 0) {
         <section class="subform card mt-3 p-3">
-          <h6 class="text-muted mb-3">Additional Info</h6>
-          <div formArrayName="subForm" class="form-grid">
+          <h6 class="text-muted">Additional Info</h6>
+          <div formArrayName="subForm" class="form-grid mt-3">
             <!-- @for (field of subforms; track field.id; let i = $index) { -->
             @for (field of subFormArray.controls; track $index; let i = $index) {
               <div class="form-group" [formGroupName]="i">
@@ -255,7 +261,7 @@
 
       <!-- 👥 Assignment & Attachments -->
       <section class="ticket-section card mt-3 p-3">
-        <h5 class="section-title">Assignment & Attachments</h5>
+        <h6 class="text-muted">Assignment</h6>
 
         <div class="form-grid mt-3">
           <div class="form-group">
@@ -293,8 +299,8 @@
         </div>
       </section>
 
-      <div class="form-group card mt-3 p-3">
-        <h5 class="upload-title-tag mb-2">Attachments</h5>
+      <div class="form-group card mt-3 p-3 pt-4">
+        <h6 class="text-muted">Attachments</h6>
         <label for="upload" class="ch-btn ch-btn-blue cursor-pointer mb-0"
           ><span>Upload File</span></label
         >
