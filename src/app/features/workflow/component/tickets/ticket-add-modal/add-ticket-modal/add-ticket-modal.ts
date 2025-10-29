@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  output,
+  signal,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of } from 'rxjs';
@@ -25,6 +32,7 @@ import { Editor, NgxEditorModule } from 'ngx-editor';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddTicketModal implements OnDestroy {
+  saved = output<void>();
   // 🔹 Inject services
   private readonly fb = inject(FormBuilder);
   private readonly ticketRef = inject(TicketReferenceService);
@@ -35,7 +43,7 @@ export class AddTicketModal implements OnDestroy {
   isMinimized = signal(false);
   // 🔹 Base signals (unchanged)
   editorRef!: Editor;
-  fkCompanyId = 1;
+  fkCompanyId = signal<number | null>(1);
   ticketTypeId = signal<number | null>(null);
   showCustomer = false;
   showProject = false;
@@ -70,65 +78,83 @@ export class AddTicketModal implements OnDestroy {
   // 🔹 derivedAsync dropdowns (unchanged)
   // =======================================
   departments = derivedAsync(
-    () =>
-      this.fkCompanyId
+    () => {
+      this.fkCompanyId();
+      return this.fkCompanyId()
         ? this.ticketRef
-            .getDepartments(this.fkCompanyId)
+            .getDepartments(this.fkCompanyId()!)
             .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
+        : of([]);
+    },
     { initialValue: [] },
   );
 
   ticketTypes = derivedAsync(
-    () =>
-      this.fkCompanyId
+    () => {
+      this.fkCompanyId();
+      return this.fkCompanyId()
         ? this.ticketRef
-            .getTicketTypes(this.fkCompanyId)
+            .getTicketTypes(this.fkCompanyId()!)
             .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
+        : of([]);
+    },
     { initialValue: [] },
   );
 
   rootCauses = derivedAsync(
-    () =>
-      this.fkCompanyId
+    () => {
+      this.fkCompanyId();
+      return this.fkCompanyId()
         ? this.ticketRef
-            .getRootCauses(this.fkCompanyId)
+            .getRootCauses(this.fkCompanyId()!)
             .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
+        : of([]);
+    },
     { initialValue: [] },
   );
 
   customers = derivedAsync(
-    () =>
-      this.fkCompanyId
+    () => {
+      this.fkCompanyId();
+      return this.fkCompanyId()
         ? this.ticketRef
-            .getCustomers(this.fkCompanyId)
+            .getCustomers(this.fkCompanyId()!)
             .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
+        : of([]);
+    },
     { initialValue: [] },
   );
 
   projects = derivedAsync(
-    () =>
-      this.fkCompanyId
+    () => {
+      this.fkCompanyId();
+      return this.fkCompanyId()
         ? this.ticketRef
-            .getProjects(this.fkCompanyId)
+            .getProjects(this.fkCompanyId()!)
             .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
+        : of([]);
+    },
     { initialValue: [] },
   );
 
   users = derivedAsync(
-    () =>
-      this.fkCompanyId
-        ? this.ticketRef.getUsers(this.fkCompanyId).pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
+    () => {
+      this.fkCompanyId();
+      return this.fkCompanyId()
+        ? this.ticketRef
+            .getUsers(this.fkCompanyId()!)
+            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
+        : of([]);
+    },
     { initialValue: [] },
   );
 
   constructor() {
     this.editorRef = new Editor();
+  }
+
+  reloadSetupData(fkCompanyId: number) {
+    this.fkCompanyId.set(fkCompanyId);
   }
 
   get subFormArray(): FormArray {
@@ -166,7 +192,7 @@ export class AddTicketModal implements OnDestroy {
     this.isSubmitting.set(true);
 
     const input: AddTicketInputDto = {
-      fkCompanyId: this.fkCompanyId,
+      fkCompanyId: this.fkCompanyId()!,
       subject: this.form.value.subject,
       description: this.form.value.description,
       isCustomer: this.form.value.isCustomer,
@@ -184,6 +210,8 @@ export class AddTicketModal implements OnDestroy {
     this.ticketService.createTicket(input).subscribe({
       next: () => {
         this.isSubmitting.set(true);
+        this.bsModalRef.hide();
+        this.saved.emit();
       },
       error: () => {
         this.isSubmitting.set(false);

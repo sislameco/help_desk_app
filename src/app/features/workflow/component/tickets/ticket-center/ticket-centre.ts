@@ -20,6 +20,7 @@ import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 export class TicketCentre {
   private readonly ticketService = inject(TicketService);
   private readonly modalService = inject(BsModalService);
+  private readonly refreshTrigger = signal(0);
 
   readonly viewMode = signal<'list' | 'kanban'>('list');
 
@@ -29,15 +30,26 @@ export class TicketCentre {
 
   readonly params = signal<Params>({});
 
-  readonly ticketsResponse = derivedAsync(() => this.ticketService.getTickets(1, this.params()), {
-    initialValue: { items: [], total: 0, page: 1, pageSize: 0 },
-  });
+  readonly ticketsResponse = derivedAsync(
+    () => {
+      this.refreshTrigger();
+      return this.ticketService.getTickets(1, this.params());
+    },
+    {
+      initialValue: { items: [], total: 0, page: 1, pageSize: 0 },
+    },
+  );
 
   openAddTicket() {
-    this.modalService.show(AddTicketModal, {
+    const modalRef = this.modalService.show(AddTicketModal, {
       backdrop: true,
       ignoreBackdropClick: true,
       class: 'modal-xl',
+    });
+
+    modalRef.content?.saved.subscribe(() => {
+      // Refresh ticket list after adding a new ticket
+      this.refreshTrigger.update((n) => n + 1);
     });
   }
 }

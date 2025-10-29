@@ -34,6 +34,7 @@
               bindLabel="value"
               bindValue="id"
               formControlName="fkCompanyId"
+              (change)="reloadSetupData(form.value.fkCompanyId)"
               [searchable]="true"
               placeholder="Select company"
             >
@@ -312,6 +313,23 @@
           (change)="onFileSelected($event)"
           hidden=""
         />
+
+        <!-- <div class="d-flex justify-content-center">
+          <div class="imagew">asdsa</div>
+          <div class="file-input">
+            <label for="upload" class="ch-btn ch-btn-blue cursor-pointer mb-0"
+              ><span>Upload File</span></label
+            >
+            <input
+              type="file"
+              name="upload"
+              id="upload"
+              multiple
+              (change)="onFileSelected($event)"
+              hidden=""
+            />
+          </div>
+        </div> -->
         <!-- <p>Attachments</p>
         <div class="upload-box">
           <input type="file" multiple (change)="onFileSelected($event)" />
