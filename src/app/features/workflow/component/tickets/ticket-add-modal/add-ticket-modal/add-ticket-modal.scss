@@ -78,3 +78,13 @@
     }
   }
 }
+
+.card {
+  h6 {
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    z-index: 10;
+    background: #fff;
+  }
+}

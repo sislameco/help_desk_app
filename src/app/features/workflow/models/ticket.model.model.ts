@@ -25,7 +25,7 @@ export interface AddTicketInputDto {
 
   // Screen 3
   fkTicketTypeId: number; // dropdown
-  subFrom: SubFromInputDto[]; // from API
+  subForm: SubFromInputDto[]; // from API
   fkRelocationId: number; // dropdown
   fkRootCauseId: number; // dropdown
 

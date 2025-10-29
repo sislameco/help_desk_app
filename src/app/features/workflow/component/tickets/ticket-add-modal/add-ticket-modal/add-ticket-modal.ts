@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of } from 'rxjs';
 import { TicketReferenceService } from '../../../../../company-configuration/services/ticket-reference-service';
@@ -40,7 +40,7 @@ export class AddTicketModal {
   EnumDataType = EnumDataType;
   companyValues = [{ id: 1, value: 'Churchfield Home Services' }];
 
-  subforms: FieldOutputDto[] = [];
+  subforms = signal<FieldOutputDto[]>([]);
   // =======================================
   // 🔹 Reactive form
   // =======================================
@@ -56,6 +56,7 @@ export class AddTicketModal {
     files: [[]],
     fkRootCauseId: [null],
     fkTicketTypeId: [null],
+    subForm: this.fb.array([]),
     fkRelocationId: [null],
   });
 
@@ -124,6 +125,10 @@ export class AddTicketModal {
     { initialValue: [] },
   );
 
+  get subFormArray(): FormArray {
+    return this.form.get('subForm') as FormArray;
+  }
+
   // =======================================
   // 🔹 File upload handling
   // =======================================
@@ -165,7 +170,7 @@ export class AddTicketModal {
       fkDepartmentId: this.form.value.fkDepartmentId,
       files: this.form.value.files,
       fkTicketTypeId: this.form.value.fkTicketTypeId,
-      subFrom: [],
+      subForm: this.getSubFormData(this.form.value.subForm),
       fkRelocationId: this.form.value.fkRelocationId,
       fkRootCauseId: this.form.value.fkRootCauseId,
     };
@@ -179,6 +184,15 @@ export class AddTicketModal {
       },
     });
   }
+
+  getSubFormData(subForm: FieldOutputDto[]) {
+    return subForm.flatMap(({ id, value }) =>
+      Array.isArray(value)
+        ? value.map((v) => ({ id, value: String(v) }))
+        : [{ id, value: String(value) }],
+    );
+  }
+
   onTicketTypeChange(selected: TicketTypeDDL) {
     const value = Number(selected.id);
     if (isNaN(value)) {
@@ -191,7 +205,22 @@ export class AddTicketModal {
     if (ticketTypeIdValue !== null) {
       this.ticketRef.getSubforms(ticketTypeIdValue).subscribe({
         next: (subforms) => {
-          this.subforms = Array.isArray(subforms) ? subforms : [subforms];
+          this.subforms.set(Array.isArray(subforms) ? subforms : [subforms]);
+
+          const subFormArray = this.subFormArray;
+          subFormArray.clear();
+          this.subforms().forEach((v) => {
+            subFormArray.push(
+              this.fb.group({
+                id: [v.id],
+                dataType: [v.dataType],
+                isMultiSelect: [v.isMultiSelect],
+                displayName: [v.displayName],
+                value: [v.value],
+                ddlValues: [v.ddlValue],
+              }),
+            );
+          });
         },
       });
     }

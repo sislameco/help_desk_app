@@ -25,6 +25,7 @@ export interface FieldOutputDto {
   displayName: string;
   dataType: EnumDataType;
   ddlValue: string[];
+  value: string;
   isRequired: boolean;
   description: string;
   isMultiSelect: boolean;
