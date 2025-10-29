@@ -1,4 +1,4 @@
-@use '../base/variable';
+@use '../base/variable' as *;
 .modal-content {
   // border-radius: 4px;
   border: none;
@@ -6,7 +6,7 @@
 .modal-header {
   padding: 10px 16px;
   border-radius: 4px 4px 0 0;
-  background: variable.$blue-dark;
+  background: $green-dark;
   h2 {
     color: var(--PF-White100, #fff);
     font-family: Mulish;
@@ -38,7 +38,7 @@
 .app-modal {
   &--content-box {
     background-color: #f0f7f9;
-    border: 1px solid variable.$blue-light;
+    border: 1px solid $blue-light;
     border-radius: 3px;
     padding: 14px;
 
@@ -56,13 +56,13 @@
   }
 
   .modal-header {
-    padding: 14px 30px 14px 20px;
+    padding: 16px 30px 16px 20px;
     position: relative;
-    background: variable.$blue-dark;
+    background: $green-dark;
     color: #fff;
 
     .modal-title {
-      font-size: 12px;
+      font-size: 16px;
       font-weight: 700;
       line-height: 15px;
     }
@@ -89,7 +89,7 @@
       &:hover {
         background-color: rgb(255 255 255);
         > svg {
-          fill: rgba(32, 73, 113, 0.88);
+          fill: $green-dark;
         }
       }
     }
@@ -129,7 +129,7 @@
       padding-top: 36px;
 
       > p {
-        color: variable.$blue-dark;
+        color: $green-dark;
         font-size: 16px;
         font-weight: 600;
         letter-spacing: 0.025em;
@@ -138,7 +138,7 @@
         padding: 0 30px;
 
         span {
-          color: variable.$blue-light;
+          color: $blue-light;
         }
       }
     }

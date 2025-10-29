@@ -33,6 +33,10 @@ export class TicketCentre {
   });
 
   openAddTicket() {
-    this.modalService.show(AddTicketModal, { class: 'modal-lg' });
+    this.modalService.show(AddTicketModal, {
+      backdrop: true,
+      ignoreBackdropClick: true,
+      class: 'modal-xl',
+    });
   }
 }

@@ -1,7 +1,8 @@
-<div class="ticket-create-modal">
-  <div class="modal-header d-flex align-items-center justify-content-between mb-3">
-    <h3 class="fw-bold mb-0">Create New Ticket</h3>
-    <button type="button" class="btn-minimize" (click)="toggleMinimize()">
+<div class="app-modal">
+  <!-- <div class="app-modal ticket-create-modal"> -->
+  <div class="modal-header">
+    <h5 class="modal-title">Create New Ticket</h5>
+    <button type="button" class="btn-minimize d-none" (click)="toggleMinimize()">
       @if (isMinimized()) {
         <i class="bi bi-arrows-fullscreen"></i>
         <!-- maximize -->
@@ -10,302 +11,334 @@
         <!-- minimize -->
       }
     </button>
-    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+    <!-- <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button> -->
+    <button class="close" (click)="closeModal()">
+      <svg width="10" viewBox="0 0 10 10"><use href="assets/sprite.svg#svg-close"></use></svg>
+    </button>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form">
-    <!-- 🧾 Basic Information -->
-    <section class="ticket-section">
-      <h5 class="section-title">🧾 Basic Information</h5>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="app-form">
+      <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form"> -->
+      <!-- 🧾 Basic Information -->
+      <section class="ticket-section card p-3">
+        <h5 class="section-title">Basic Information</h5>
 
-      <div class="form-grid">
-        <div class="form-group">
-          <p>Company</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="companyValues"
-            bindLabel="value"
-            bindValue="id"
-            formControlName="fkCompanyId"
-            [searchable]="true"
-            placeholder="Select company"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.value }}</span>
-            </ng-template>
-          </ng-select>
-
-          <strong
-            class="text-danger"
-            *ngxControlError="form.controls['fkCompanyId']; track: 'required'"
-          >
-            Company is required.
-          </strong>
-        </div>
-
-        <div class="form-group">
-          <p>Subject</p>
-          <input
-            type="text"
-            formControlName="subject"
-            class="form-control"
-            placeholder="Enter ticket subject..."
-          />
-        </div>
-
-        <div class="form-group full">
-          <p>Description</p>
-          <textarea
-            formControlName="description"
-            rows="3"
-            class="form-control"
-            placeholder="Describe the issue in detail..."
-          ></textarea>
-        </div>
-      </div>
-    </section>
-
-    <hr />
-
-    <!-- 👤 Customer & Project -->
-    <section class="ticket-section">
-      <h5 class="section-title">👤 Customer & Project</h5>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <p>Is Related to a Customer?</p>
-          <input
-            type="checkbox"
-            formControlName="isCustomer"
-            (change)="onIsCustomerChanged($event)"
-          />
-        </div>
-        @if (showCustomer) {
-          <div class="form-group">
-            <p>Customer</p>
+        <div class="form-grid">
+          <div class="form-group my-3">
+            <!-- <p>Company</p> -->
+            <label for="fkCompanyId" class="input-label">Company</label>
             <ng-select
+              id="fkCompanyId"
               class="select-dropdown"
-              [items]="customers()"
-              bindLabel="fullName"
+              [items]="companyValues"
+              bindLabel="value"
               bindValue="id"
-              [formControlName]="'fkCustomerId'"
+              formControlName="fkCompanyId"
               [searchable]="true"
-              placeholder="Select customer"
+              placeholder="Select company"
             >
-              <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.fullName }}</span>
-              </ng-template>
+            </ng-select>
+
+            <small
+              class="text-danger fw-bold"
+              *ngxControlError="form.controls['fkCompanyId']; track: 'required'"
+            >
+              Company is required.
+            </small>
+          </div>
+
+          <div class="form-group mb-3">
+            <!-- <p>Subject</p> -->
+            <label for="subject" class="input-label">Subject</label>
+            <input
+              id="subject"
+              type="text"
+              formControlName="subject"
+              class="form-control"
+              placeholder="Enter ticket subject..."
+            />
+          </div>
+
+          <div class="form-group mb-0">
+            <!-- <p>Summary Note</p> -->
+            <label for="summaryNote" class="input-label">Summary Note</label>
+            <textarea
+              id="summaryNote"
+              formControlName="description"
+              rows="3"
+              class="form-control"
+              placeholder="Describe the issue in detail..."
+            ></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- <hr /> -->
+
+      <!-- 👤 Customer & Project -->
+      <section class="ticket-section mt-3 card p-3">
+        <h5 class="section-title">Customer & Project</h5>
+        <div class="form-grid mt-3">
+          <div class="form-group">
+            <!-- <p>Is Related to a Customer?</p>
+            <input
+              type="checkbox"
+              formControlName="isCustomer"
+              (change)="onIsCustomerChanged($event)"
+            /> -->
+            <label class="app-form--checkbox" for="isCustomer"
+              ><input
+                type="checkbox"
+                id="isCustomer"
+                formControlName="isCustomer"
+                (change)="onIsCustomerChanged($event)"
+              /><span class="d-flex align-items-center justify-content-center"
+                ><svg viewBox="0 0 10 8" fill="none" width="10">
+                  <use xlink:href="assets/sprite.svg#svg-check"></use></svg
+              ></span>
+              <p class="mb-0">Is Related to a Customer?</p>
+            </label>
+          </div>
+          @if (showCustomer) {
+            <div class="form-group mb-0">
+              <!-- <p>Customer</p> -->
+              <label for="customer" class="input-label">Customer</label>
+              <ng-select
+                id="customer"
+                class="select-dropdown"
+                [items]="customers()"
+                bindLabel="fullName"
+                bindValue="id"
+                [formControlName]="'fkCustomerId'"
+                [searchable]="true"
+                placeholder="Select customer"
+              >
+                <!-- <ng-template ng-option-tmp let-item="item">
+                  <span>{{ item.fullName }}</span>
+                </ng-template> -->
+              </ng-select>
+            </div>
+          } @else {
+            <div class="form-group mb-0">
+              <!-- <p>Project</p> -->
+              <label for="project" class="input-label">Project</label>
+              <ng-select
+                id="project"
+                class="select-dropdown"
+                [items]="projects()"
+                bindLabel="referenceNumber"
+                bindValue="id"
+                [formControlName]="'fkProjectId'"
+                [searchable]="true"
+                placeholder="Select project"
+              >
+                <ng-template ng-option-tmp let-item="item">
+                  <span>{{ item.referenceNumber }}</span>
+                </ng-template>
+              </ng-select>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- <hr /> -->
+
+      <!-- 📂 Ticket Type & Details -->
+      <section class="ticket-section card p-3 mt-3">
+        <h5 class="section-title">Ticket Type & Details</h5>
+
+        <div class="form-grid mt-3">
+          <div class="form-group">
+            <!-- <p>Ticket Type</p> -->
+            <label for="ticketType" class="input-label">Ticket Type</label>
+            <ng-select
+              id="ticketType"
+              class="select-dropdown"
+              [items]="ticketTypes()"
+              bindLabel="title"
+              bindValue="id"
+              [formControlName]="'fkTicketTypeId'"
+              [searchable]="true"
+              placeholder="Select ticket type"
+              (change)="onTicketTypeChange($event)"
+            >
+              <!-- <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.title }}</span>
+              </ng-template> -->
             </ng-select>
           </div>
-        } @else {
-          <div class="form-group">
-            <p>Project</p>
+
+          <!-- <div class="form-group">
+            <p>Relocation</p>
             <ng-select
               class="select-dropdown"
-              [items]="projects()"
-              bindLabel="referenceNumber"
+              [items]="rootCauses()"
+              bindLabel="name"
               bindValue="id"
-              [formControlName]="'fkProjectId'"
+              [formControlName]="'fkRelocationId'"
               [searchable]="true"
-              placeholder="Select project"
+              placeholder="Select relocation"
             >
               <ng-template ng-option-tmp let-item="item">
-                <span>{{ item.referenceNumber }}</span>
+                <span>{{ item.name }}</span>
               </ng-template>
             </ng-select>
+          </div> -->
+
+          <div class="form-group mb-0">
+            <!-- <p>Root Cause</p> -->
+            <label for="rootCause" class="input-label">Root Cause</label>
+            <ng-select
+              id="rootCause"
+              class="select-dropdown"
+              [items]="rootCauses()"
+              bindLabel="name"
+              bindValue="id"
+              [formControlName]="'fkRootCauseId'"
+              [searchable]="true"
+              placeholder="Select root cause"
+            >
+              <!-- <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.name }}</span>
+              </ng-template> -->
+            </ng-select>
+          </div>
+        </div>
+
+        <!-- 🧩 Dynamic Subform -->
+        @if (subforms && subforms.length > 0) {
+          <div class="subform mt-3">
+            <h6 class="text-muted mb-2">Additional Fields</h6>
+            <div formArrayName="subForm" class="form-grid">
+              @for (field of subforms; track field.id; let i = $index) {
+                <div class="form-group">
+                  <p>{{ field.displayName }}</p>
+
+                  @switch (field.dataType) {
+                    @case (EnumDataType.textInput) {
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Enter {{ field.displayName }}"
+                        [formControlName]="i"
+                      />
+                    }
+                    @case (EnumDataType.number) {
+                      <input
+                        type="number"
+                        class="form-control"
+                        placeholder="Enter {{ field.displayName }}"
+                        [formControlName]="i"
+                      />
+                    }
+
+                    @case (EnumDataType.textArea) {
+                      <textarea
+                        rows="3"
+                        class="form-control"
+                        placeholder="Enter {{ field.displayName }}"
+                        [formControlName]="i"
+                      ></textarea>
+                    }
+
+                    @case (EnumDataType.dropdownList) {
+                      <ng-select
+                        class="select-dropdown"
+                        [items]="field.ddlValue"
+                        [formControlName]="i"
+                        bindLabel="label"
+                        bindValue="value"
+                        placeholder="Select {{ field.displayName }}"
+                      ></ng-select>
+                    }
+
+                    @default {
+                      <input type="text" class="form-control" [formControlName]="i" />
+                    }
+                  }
+                </div>
+              }
+            </div>
           </div>
         }
-      </div>
-    </section>
+      </section>
 
-    <hr />
+      <!-- <hr /> -->
 
-    <!-- 📂 Ticket Type & Details -->
-    <section class="ticket-section">
-      <h5 class="section-title">📂 Ticket Type & Details</h5>
+      <!-- 👥 Assignment & Attachments -->
+      <section class="ticket-section card mt-3 p-3">
+        <h5 class="section-title">Assignment & Attachments</h5>
 
-      <div class="form-grid">
-        <div class="form-group">
-          <p>Ticket Type</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="ticketTypes()"
-            bindLabel="title"
-            bindValue="id"
-            [formControlName]="'fkTicketTypeId'"
-            [searchable]="true"
-            placeholder="Select ticket type"
-            (change)="onTicketTypeChange($event)"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.title }}</span>
-            </ng-template>
-          </ng-select>
-        </div>
+        <div class="form-grid mt-3">
+          <div class="form-group">
+            <!-- <p>Assign User</p> -->
+            <label for="user" class="input-label">Assign User</label>
+            <ng-select
+              id="user"
+              class="select-dropdown"
+              [items]="users()"
+              bindLabel="name"
+              bindValue="id"
+              [formControlName]="'fkAssignUser'"
+              [searchable]="true"
+              placeholder="Select user"
+            >
+              <!-- <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.name }}</span>
+              </ng-template> -->
+            </ng-select>
+          </div>
 
-        <!-- <div class="form-group">
-          <p>Relocation</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="rootCauses()"
-            bindLabel="name"
-            bindValue="id"
-            [formControlName]="'fkRelocationId'"
-            [searchable]="true"
-            placeholder="Select relocation"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.name }}</span>
-            </ng-template>
-          </ng-select>
-        </div> -->
+          <!-- Departments (multi-select) -->
+          <div class="form-group full">
+            <!-- <p>Departments</p> -->
+            <label for="departments" class="input-label">Departments</label>
+            <ng-select
+              id="departments"
+              class="select-dropdown"
+              [items]="departments()"
+              [multiple]="true"
+              bindLabel="name"
+              bindValue="id"
+              [formControlName]="'fkDepartmentId'"
+              [searchable]="true"
+              placeholder="Select departments"
+            >
+              <!-- <ng-template ng-option-tmp let-item="item">
+                <span>{{ item.name }}</span>
+              </ng-template> -->
+            </ng-select>
+          </div>
 
-        <div class="form-group">
-          <p>Root Cause</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="rootCauses()"
-            bindLabel="name"
-            bindValue="id"
-            [formControlName]="'fkRootCauseId'"
-            [searchable]="true"
-            placeholder="Select root cause"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.name }}</span>
-            </ng-template>
-          </ng-select>
-        </div>
-      </div>
+          <div class="form-group full">
+            <p>Attachments</p>
+            <div class="upload-box">
+              <input type="file" multiple (change)="onFileSelected($event)" />
+              <!-- <button type="button" class="btn btn-outline-primary mt-2" (click)="uploadFiles()">
+                Upload Files
+              </button> -->
+            </div>
 
-      <!-- 🧩 Dynamic Subform -->
-      @if (subforms && subforms.length > 0) {
-        <div class="subform mt-3">
-          <h6 class="text-muted mb-2">Additional Fields</h6>
-          <div formArrayName="subForm" class="form-grid">
-            @for (field of subforms; track field.id; let i = $index) {
-              <div class="form-group">
-                <p>{{ field.displayName }}</p>
-
-                @switch (field.dataType) {
-                  @case (EnumDataType.textInput) {
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Enter {{ field.displayName }}"
-                      [formControlName]="i"
-                    />
-                  }
-                  @case (EnumDataType.number) {
-                    <input
-                      type="number"
-                      class="form-control"
-                      placeholder="Enter {{ field.displayName }}"
-                      [formControlName]="i"
-                    />
-                  }
-
-                  @case (EnumDataType.textArea) {
-                    <textarea
-                      rows="3"
-                      class="form-control"
-                      placeholder="Enter {{ field.displayName }}"
-                      [formControlName]="i"
-                    ></textarea>
-                  }
-
-                  @case (EnumDataType.dropdownList) {
-                    <ng-select
-                      class="select-dropdown"
-                      [items]="field.ddlValue"
-                      [formControlName]="i"
-                      bindLabel="label"
-                      bindValue="value"
-                      placeholder="Select {{ field.displayName }}"
-                    ></ng-select>
-                  }
-
-                  @default {
-                    <input type="text" class="form-control" [formControlName]="i" />
-                  }
+            @if (uploadedFileIds.length > 0) {
+              <ul class="uploaded-list mt-2">
+                @for (id of uploadedFileIds; track id) {
+                  <li>File ID: {{ id }}</li>
                 }
-              </div>
+              </ul>
             }
           </div>
         </div>
-      }
-    </section>
+      </section>
 
-    <hr />
+      <!-- <hr /> -->
 
-    <!-- 👥 Assignment & Attachments -->
-    <section class="ticket-section">
-      <h5 class="section-title">👥 Assignment & Attachments</h5>
-
-      <div class="form-grid">
-        <div class="form-group">
-          <p>Assign User</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="users()"
-            bindLabel="name"
-            bindValue="id"
-            [formControlName]="'fkAssignUser'"
-            [searchable]="true"
-            placeholder="Select user"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.name }}</span>
-            </ng-template>
-          </ng-select>
-        </div>
-
-        <!-- Departments (multi-select) -->
-        <div class="form-group full">
-          <p>Departments</p>
-          <ng-select
-            class="select-dropdown"
-            [items]="departments()"
-            [multiple]="true"
-            bindLabel="name"
-            bindValue="id"
-            [formControlName]="'fkDepartmentId'"
-            [searchable]="true"
-            placeholder="Select departments"
-          >
-            <ng-template ng-option-tmp let-item="item">
-              <span>{{ item.name }}</span>
-            </ng-template>
-          </ng-select>
-        </div>
-
-        <div class="form-group full">
-          <p>Attachments</p>
-          <div class="upload-box">
-            <input type="file" multiple (change)="onFileSelected($event)" />
-            <button type="button" class="btn btn-outline-primary mt-2" (click)="uploadFiles()">
-              Upload Files
-            </button>
-          </div>
-
-          @if (uploadedFileIds.length > 0) {
-            <ul class="uploaded-list mt-2">
-              @for (id of uploadedFileIds; track id) {
-                <li>File ID: {{ id }}</li>
-              }
-            </ul>
-          }
-        </div>
+      <!-- Submit -->
+      <div class="d-flex justify-content-end mt-3">
+        <button type="submit" class="ch-btn ch-btn-green" [disabled]="isSubmitting()">
+          Create Ticket
+        </button>
       </div>
-    </section>
-
-    <hr />
-
-    <!-- Submit -->
-    <div class="modal-footer d-flex justify-content-end">
-      <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
-        Create Ticket
-      </button>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
