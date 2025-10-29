@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  Output,
+  signal,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -15,6 +23,7 @@ import { MenuService } from '../../../services/menu.service';
 import { UserRoleService } from '../../../services/user-role.service';
 import { NgxControlError } from 'ngxtension/control-error';
 import { MenuAccess, MenuItem, MenuResource } from '../../../models/menu.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-user-role-modal',
@@ -24,17 +33,12 @@ import { MenuAccess, MenuItem, MenuResource } from '../../../models/menu.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateUserRoleModal {
-  constructor() {
-    effect(() => {
-      if (this.roleId > 0) {
-        this.syncFormWithMenuResource();
-      }
-    });
-  }
-  roleId: number | 0 = 0;
   bsModalRef = inject(BsModalRef);
   private menuService = inject(MenuService);
   private userRoleService = inject(UserRoleService);
+  private toster = inject(ToastrService);
+
+  roleId: number | 0 = 0;
   private fb = new FormBuilder();
   roleMenuActions: RoleMenuAction[] = [];
   // Reactive form
@@ -58,6 +62,16 @@ export class CreateUserRoleModal {
 
   // Loading state
   readonly isSubmitting = signal(false);
+
+  @Output() formSubmit = new EventEmitter<boolean>();
+
+  constructor() {
+    effect(() => {
+      if (this.roleId > 0) {
+        this.syncFormWithMenuResource();
+      }
+    });
+  }
 
   // Toggle collapse for menu tree nodes
   toggle(menuId: number) {
@@ -134,6 +148,9 @@ export class CreateUserRoleModal {
     if (this.roleId && this.roleId > 0) {
       this.userRoleService.updateRole(this.roleId, payload).subscribe({
         next: () => {
+          this.toster.success('Role updated successfully');
+          this.formSubmit.emit(true);
+          this.bsModalRef.hide();
           this.isSubmitting.set(false);
           this.form.reset();
         },
@@ -146,6 +163,9 @@ export class CreateUserRoleModal {
         next: () => {
           // console.log('✅ Role created successfully');
           this.isSubmitting.set(false);
+          this.toster.success('Role created successfully');
+          this.formSubmit.emit(true);
+          this.bsModalRef.hide();
           this.form.reset();
           this.roleMenuActions = [];
         },

@@ -15,6 +15,13 @@ export const UserManagementRoute: Routes = [
       {
         path: 'roles',
         component: UserRole,
+        data: {
+          showBackButton: true,
+          // title: 'Product Categories',
+          // breadcrumb: ['Procurement ', 'Product Details', 'Product Categories'],
+          // backTo: '/pages/procurement/product-details/products',
+          // actions: { search: false, viewArchive: true, export: false, more: false },
+        },
       },
       {
         path: 'users',

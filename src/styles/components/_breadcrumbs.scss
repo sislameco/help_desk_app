@@ -38,24 +38,19 @@
           left: 0;
           width: 0;
           height: 1px;
-          background: variable.$blue-light;
+          background: variable.$themeColor;
         }
 
         &:hover,
         &:focus,
         &.active {
-          color: variable.$blue-dark;
+          color: variable.$themeColor;
           svg {
-            color: variable.$blue-dark;
+            color: variable.$themeColor;
           }
           &::before {
             width: 100%;
           }
-        }
-      }
-      &:first-child {
-        a {
-          padding-left: 0;
         }
       }
       ul {
@@ -105,7 +100,7 @@
   background: #fafafa;
   .page-title {
     h3 {
-      color: #00688f;
+      color: variable.$themeColor;
       font-family: Mulish;
       font-size: 21px;
       font-style: normal;

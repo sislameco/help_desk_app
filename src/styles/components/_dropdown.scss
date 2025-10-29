@@ -6,7 +6,10 @@
     background: transparent;
     border: none;
     outline: none;
-    color: #00688f;
+    color: $dark;
+    :hover {
+      color: $themeColor;
+    }
   }
   .dropdown-menu {
     min-width: 150px;

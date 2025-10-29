@@ -6,11 +6,12 @@ import { TicketService } from '../../../services/ticket.service';
 import { Params } from '@angular/router';
 import { TicketListView } from './ticket-list-view/ticket-list-view';
 import { TicketKanbanView } from './ticket-kanban-view/ticket-kanban-view';
+import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 
 @Component({
   selector: 'app-ticket-centre',
   standalone: true,
-  imports: [TicketListView, TicketKanbanView],
+  imports: [TicketListView, TicketKanbanView, Breadcrumbs],
   templateUrl: './ticket-centre.html',
   styleUrl: './ticket-centre.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

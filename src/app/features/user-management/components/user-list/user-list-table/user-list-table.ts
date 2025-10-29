@@ -29,10 +29,11 @@ import { EnumSortBy } from '@shared/enums/sort-by.enum';
 import { toNums } from '@shared/helper/functions/common.function';
 import { CommonSelectBox } from '@shared/models/common.model';
 import { Pagination } from '@shared/helper/components/pagination/pagination';
+import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 
 @Component({
   selector: 'app-user-list-table',
-  imports: [NgSelectModule, BsDropdownModule, CommonModule, FormsModule, Pagination],
+  imports: [NgSelectModule, BsDropdownModule, CommonModule, FormsModule, Pagination, Breadcrumbs],
   templateUrl: './user-list-table.html',
   styleUrl: './user-list-table.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

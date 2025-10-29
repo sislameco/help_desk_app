@@ -1,165 +1,182 @@
-<!-- Wrap with async signal state -->
-<div *ngIf="ticketSummary() as data">
-  <!-- DASHBOARD HEADER -->
-  <div class="d-flex align-items-center justify-content-between mb-3">
-    <h4 class="mb-0">Dashboard</h4>
+<app-breadcrumbs></app-breadcrumbs>
+<div class="p-3">
+  <!-- Wrap with async signal state -->
+  <div *ngIf="ticketSummary() as data">
+    <!-- DASHBOARD HEADER -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <h4 class="mb-0">Dashboard</h4>
 
-    <!-- Filters -->
-    <div class="d-flex gap-2 flex-wrap">
-      <span class="badge text-bg-light border">
-  Role: <strong class="ms-1">{{ data?.filters?.role }}</strong>
-      </span>
-      <span class="badge text-bg-light border">
-  Company: <strong class="ms-1">{{ data?.filters?.company }}</strong>
-      </span>
-      <span class="badge text-bg-light border">
-  Dept: <strong class="ms-1">{{ data?.filters?.department }}</strong>
-      </span>
-    </div>
-  </div>
-
-  <h2 class="fw-semibold mb-1">QMS Dashboard</h2>
-  <p class="text-secondary mb-4">Overview of your quality management system</p>
-
-  <!-- TOP METRICS -->
-  <div class="row g-3 mb-3">
-    <div class="col-12 col-md-6 col-xl-3">
-      <div class="card h-100">
-        <div class="card-body">
-          <h6 class="text-secondary mb-0">Open Tickets</h6>
-          <div class="display-6 fw-semibold my-2">{{ data?.stats?.openTickets }}</div>
-          <div class="small text-secondary">{{ data?.stats?.ticketsOverdue }} overdue</div>
-          <div class="small text-success">+{{ data?.stats?.ticketsDelta }} from yesterday</div>
-        </div>
+      <!-- Filters -->
+      <div class="d-flex gap-2 flex-wrap">
+        <span class="badge text-bg-light border">
+          Role: <strong class="ms-1">{{ data?.filters?.role }}</strong>
+        </span>
+        <span class="badge text-bg-light border">
+          Company: <strong class="ms-1">{{ data?.filters?.company }}</strong>
+        </span>
+        <span class="badge text-bg-light border">
+          Dept: <strong class="ms-1">{{ data?.filters?.department }}</strong>
+        </span>
       </div>
     </div>
 
-    <div class="col-12 col-md-6 col-xl-3">
-      <div class="card h-100">
-        <div class="card-body">
-          <h6 class="text-secondary mb-0">Active Complaints</h6>
-          <div class="display-6 fw-semibold my-2">{{ data?.stats?.activeComplaints }}</div>
-          <div class="small text-secondary">{{ data?.stats?.complaintsEscalated }} escalated</div>
+    <h2 class="fw-semibold mb-1">QMS Dashboard</h2>
+    <p class="text-secondary mb-4">Overview of your quality management system</p>
+
+    <!-- TOP METRICS -->
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="text-secondary mb-0">Open Tickets</h6>
+            <div class="display-6 fw-semibold my-2">{{ data?.stats?.openTickets }}</div>
+            <div class="small text-secondary">{{ data?.stats?.ticketsOverdue }} overdue</div>
+            <div class="small text-success">+{{ data?.stats?.ticketsDelta }} from yesterday</div>
+          </div>
         </div>
       </div>
+
+      <div class="col-12 col-md-6 col-xl-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="text-secondary mb-0">Active Complaints</h6>
+            <div class="display-6 fw-semibold my-2">{{ data?.stats?.activeComplaints }}</div>
+            <div class="small text-secondary">{{ data?.stats?.complaintsEscalated }} escalated</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ... other stat cards same way ... -->
     </div>
 
-    <!-- ... other stat cards same way ... -->
-  </div>
+    <!-- Recent Activity -->
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-lg-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="mb-1">Recent Activity</h6>
+            <div class="list-group list-group-flush">
+              <a
+                *ngFor="let a of data?.recentActivities"
+                class="list-group-item list-group-item-action py-3"
+              >
+                <div class="d-flex gap-2 align-items-center mb-1">
+                  <span class="badge text-bg-light border">{{ a?.code }}</span>
+                  <span
+                    class="badge rounded-pill"
+                    [ngClass]="{
+                      'text-bg-primary': a?.tagColor === 'primary',
+                      'text-bg-warning': a?.tagColor === 'warning',
+                      'text-bg-info': a?.tagColor === 'info',
+                      'text-bg-secondary': a?.tagColor === 'secondary',
+                    }"
+                  >
+                    {{ a?.tag }}
+                  </span>
+                  <span class="ms-auto small text-secondary">
+                    Due: {{ a?.due | date: 'yyyy-MM-dd' }}
+                  </span>
+                </div>
+                <div class="small text-body">{{ a?.title }}</div>
+                <div class="small text-secondary">Assigned to: {{ a?.assignee }}</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <!-- Recent Activity -->
-  <div class="row g-3 mb-3">
-    <div class="col-12 col-lg-6">
-      <div class="card h-100">
-        <div class="card-body">
-          <h6 class="mb-1">Recent Activity</h6>
-          <div class="list-group list-group-flush">
-            <a *ngFor="let a of data?.recentActivities"
-               class="list-group-item list-group-item-action py-3">
-              <div class="d-flex gap-2 align-items-center mb-1">
-                <span class="badge text-bg-light border">{{ a?.code }}</span>
-                <span class="badge rounded-pill"
-                      [ngClass]="{
-                        'text-bg-primary': a?.tagColor === 'primary',
-                        'text-bg-warning': a?.tagColor === 'warning',
-                        'text-bg-info': a?.tagColor === 'info',
-                        'text-bg-secondary': a?.tagColor === 'secondary'
-                      }">
-                  {{ a?.tag }}
-                </span>
-                <span class="ms-auto small text-secondary">
-                  Due: {{ a?.due | date:'yyyy-MM-dd' }}
-                </span>
+      <!-- SLA Performance -->
+      <div class="col-12 col-lg-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h6 class="mb-1">SLA Performance</h6>
+            <div class="mb-3" *ngFor="let m of data?.slaMetrics">
+              <div class="d-flex justify-content-between small mb-1">
+                <span>{{ m?.label }}</span>
+                <span>{{ m?.value }}%</span>
               </div>
-              <div class="small text-body">{{ a?.title }}</div>
-              <div class="small text-secondary">
-                Assigned to: {{ a?.assignee }}
+              <div class="progress">
+                <div class="progress-bar" [style.width.%]="m?.value"></div>
               </div>
-            </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SLA Performance -->
-    <div class="col-12 col-lg-6">
-      <div class="card h-100">
-        <div class="card-body">
-          <h6 class="mb-1">SLA Performance</h6>
-          <div class="mb-3" *ngFor="let m of data?.slaMetrics">
-            <div class="d-flex justify-content-between small mb-1">
-              <span>{{ m?.label }}</span>
-              <span>{{ m?.value }}%</span>
-            </div>
-            <div class="progress">
-              <div class="progress-bar" [style.width.%]="m?.value"></div>
-            </div>
-          </div>
+    <!-- Department Overview -->
+    <div class="card">
+      <div class="card-body">
+        <h6 class="mb-1">Department Overview</h6>
+
+        <!-- Tabs -->
+        <ul class="nav nav-pills gap-2 mb-3">
+          <li class="nav-item">
+            <button
+              class="btn"
+              [ngClass]="activeTab === 'workload' ? 'btn-primary' : 'btn-outline-primary'"
+              (click)="activeTab = 'workload'"
+            >
+              Workload
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn"
+              [ngClass]="activeTab === 'performance' ? 'btn-primary' : 'btn-outline-primary'"
+              (click)="activeTab = 'performance'"
+            >
+              Performance
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn"
+              [ngClass]="activeTab === 'trends' ? 'btn-primary' : 'btn-outline-primary'"
+              (click)="activeTab = 'trends'"
+            >
+              Trends
+            </button>
+          </li>
+        </ul>
+
+        <!-- Workload -->
+        <div *ngIf="activeTab === 'workload'">
+          <table class="table">
+            <tr *ngFor="let d of data?.deptWorkload">
+              <td>{{ d?.name }}</td>
+              <td>{{ d?.openTickets }}</td>
+              <td>{{ d?.activeCapas }}</td>
+              <td>{{ d?.highRisks }}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Performance -->
+        <div *ngIf="activeTab === 'performance'">
+          <table class="table">
+            <tr *ngFor="let p of data?.deptPerformance">
+              <td>{{ p?.name }}</td>
+              <td>{{ p?.ticketResolution }}%</td>
+              <td>{{ p?.complaintResponse }}%</td>
+              <td>{{ p?.capaCompletion }}%</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Trends -->
+        <div *ngIf="activeTab === 'trends'">
+          <pre>{{ data?.deptTrends | json }}</pre>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Department Overview -->
-  <div class="card">
-    <div class="card-body">
-      <h6 class="mb-1">Department Overview</h6>
-
-      <!-- Tabs -->
-      <ul class="nav nav-pills gap-2 mb-3">
-        <li class="nav-item">
-          <button class="btn"
-                  [ngClass]="activeTab === 'workload' ? 'btn-primary' : 'btn-outline-primary'"
-                  (click)="activeTab='workload'">Workload</button>
-        </li>
-        <li class="nav-item">
-          <button class="btn"
-                  [ngClass]="activeTab === 'performance' ? 'btn-primary' : 'btn-outline-primary'"
-                  (click)="activeTab='performance'">Performance</button>
-        </li>
-        <li class="nav-item">
-          <button class="btn"
-                  [ngClass]="activeTab === 'trends' ? 'btn-primary' : 'btn-outline-primary'"
-                  (click)="activeTab='trends'">Trends</button>
-        </li>
-      </ul>
-
-      <!-- Workload -->
-      <div *ngIf="activeTab === 'workload'">
-        <table class="table">
-          <tr *ngFor="let d of data?.deptWorkload">
-            <td>{{ d?.name }}</td>
-            <td>{{ d?.openTickets }}</td>
-            <td>{{ d?.activeCapas }}</td>
-            <td>{{ d?.highRisks }}</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- Performance -->
-      <div *ngIf="activeTab === 'performance'">
-        <table class="table">
-          <tr *ngFor="let p of data?.deptPerformance">
-            <td>{{ p?.name }}</td>
-            <td>{{ p?.ticketResolution }}%</td>
-            <td>{{ p?.complaintResponse }}%</td>
-            <td>{{ p?.capaCompletion }}%</td>
-          </tr>
-        </table>
-      </div>
-
-      <!-- Trends -->
-      <div *ngIf="activeTab === 'trends'">
-  <pre>{{ data?.deptTrends | json }}</pre>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Loading & error states -->
-<!-- <div *ngIf="ticketSummary()?.loading" class="text-center p-3">
+  <!-- Loading & error states -->
+  <!-- <div *ngIf="ticketSummary()?.loading" class="text-center p-3">
   Loading dashboard...
 </div>
 <div *ngIf="ticketSummary()?.error as err" class="alert alert-danger">
   Failed to load: {{ err }}
 </div> -->
+</div>

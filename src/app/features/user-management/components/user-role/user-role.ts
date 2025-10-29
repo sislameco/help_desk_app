@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -13,10 +13,18 @@ import { SortInputDirective } from '@shared/helper/directives/sort-table/sort-in
 import { EnumSortBy } from '@shared/enums/sort-by.enum';
 import { SortAction } from '@shared/helper/directives/sort-table/sort-table.model';
 import { CreateUserRoleModal } from './create-user-role-modal/create-user-role-modal';
+import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 
 @Component({
   selector: 'app-user-role-management',
-  imports: [NgSelectModule, BsDropdownModule, FormsModule, SortTableDirective, SortInputDirective],
+  imports: [
+    NgSelectModule,
+    BsDropdownModule,
+    FormsModule,
+    SortTableDirective,
+    SortInputDirective,
+    Breadcrumbs,
+  ],
   templateUrl: './user-role.html',
   styleUrl: './user-role.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +35,8 @@ export class UserRole {
   readonly modalService = inject(BsModalService);
   protected readonly EnumSortBy = EnumSortBy;
   route = inject(ActivatedRoute);
+
+  showBackButton = input<boolean>();
   readonly filters = new FilterParams<RoleFilterParams>({
     page: 1,
     pageSize: 20,
@@ -37,8 +47,11 @@ export class UserRole {
     isCommissionRole: undefined,
   });
 
+  private readonly refresh = signal(0);
+
   readonly rolesResult = derivedAsync(
     () => {
+      this.refresh();
       const params = this.filters.toQueryParams();
       return this.userRoleService.getRolesWithUsers(params);
     },
@@ -118,7 +131,16 @@ export class UserRole {
       initialState: { roleId },
     };
     const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
-    this.modalService.show(CreateUserRoleModal, modalParams);
+    const modalRef = this.modalService.show(CreateUserRoleModal, modalParams);
+    modalRef.content?.formSubmit.subscribe((res) => {
+      if (res) {
+        this.reload();
+      }
+    });
+  }
+
+  reload() {
+    this.refresh.update((v: number) => v + 1);
   }
 
   sortData(action: SortAction) {

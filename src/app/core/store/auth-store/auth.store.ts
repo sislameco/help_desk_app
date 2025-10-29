@@ -9,11 +9,13 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, tap } from 'rxjs';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { ToastrService } from 'ngx-toastr';
+import { UserMenuItem } from '@core/layout/pages/authorized-layout/authorized-sidebar/sidebar-data-type';
 
 export interface AuthState {
   isLogin: boolean;
   userInfo: LoginResponse['user'] | null;
   token: string;
+  menus: UserMenuItem[];
 }
 
 export const AuthStore = signalStore(
@@ -23,6 +25,7 @@ export const AuthStore = signalStore(
     isLogin: false,
     userInfo: null,
     token: '',
+    menus: [],
   }),
   withMethods((store) => {
     const cookieService = inject(CookieService);
@@ -47,6 +50,7 @@ export const AuthStore = signalStore(
                   isLogin: true,
                   userInfo: response.user,
                   token: response.token,
+                  menus: [],
                 });
                 toastr.success('Login successful');
                 router.navigateByUrl('/');
@@ -79,6 +83,11 @@ export const AuthStore = signalStore(
         localStorage.clear();
         patchState(store, { isLogin: false, userInfo: null, token: '' });
         router.navigateByUrl('/auth/login');
+      },
+      updateMenus(menus: UserMenuItem[]) {
+        patchState(store, {
+          menus,
+        });
       },
     };
   }),

@@ -1,12 +1,14 @@
-<div class="table-header">
-  <p>
-    Showing {{ (currentPage() - 1) * pageSize() + 1 }}-{{ lastItemIndex() }} of
-    {{ totalItems() }} results
-  </p>
-  <div class="table-filter">
-    <div class="form-group min-width-150">
-      <label for="roles">Roles</label>
-      <!-- <ng-select
+<app-breadcrumbs [showBackButton]="true" [showSearch]="true"></app-breadcrumbs>
+<div class="p-3">
+  <div class="table-header">
+    <p>
+      Showing {{ (currentPage() - 1) * pageSize() + 1 }}-{{ lastItemIndex() }} of
+      {{ totalItems() }} results
+    </p>
+    <div class="table-filter">
+      <div class="form-group min-width-150">
+        <label for="roles">Roles</label>
+        <!-- <ng-select
         placeholder="All"
         id="roles"
         clearable="false"
@@ -18,20 +20,20 @@
         <ng-option [value]="role.roleId">{{ role.roleName }}</ng-option>
       }
       </ng-select> -->
-      <ng-select
-        [items]="roleDropdown() ?? []"
-        [(ngModel)]="filters.value()['roleIds']"
-        bindLabel="roleName"
-        (ngModelChange)="onMultiChange('roleIds', $event)"
-        (clear)="onMultiChange('roleIds', [])"
-        bindValue="roleId"
-        [multiple]="true"
-        class="select-dropdown select-dropdown-circle mr-2 w-100"
-        placeholder="Select user..."
-      >
-      </ng-select>
-    </div>
-    <!-- <div class="form-group min-width-150">
+        <ng-select
+          [items]="roleDropdown() ?? []"
+          [(ngModel)]="filters.value()['roleIds']"
+          bindLabel="roleName"
+          (ngModelChange)="onMultiChange('roleIds', $event)"
+          (clear)="onMultiChange('roleIds', [])"
+          bindValue="roleId"
+          [multiple]="true"
+          class="select-dropdown select-dropdown-circle mr-2 w-100"
+          placeholder="Select user..."
+        >
+        </ng-select>
+      </div>
+      <!-- <div class="form-group min-width-150">
       <label for="department">Department</label>
       <ng-select placeholder="All" id="Department" clearable="false" searchable="false" [multiple]="true"
         class="select-dropdown select-dropdown-circle mr-2 w-100">
@@ -39,23 +41,23 @@
         <ng-option value="Cherry Orchard">Cherry Orchard</ng-option>
       </ng-select>
     </div> -->
-    <div class="form-group min-width-150 ng-select-md">
-      <label for="warehouse">Status</label>
-      <ng-select
-        class="select-dropdown select-dropdown-circle mr-2 w-100"
-        placeholder="All"
-        id="status"
-        [searchable]="false"
-        [items]="statusOptions"
-        bindLabel="label"
-        bindValue="value"
-        [clearable]="true"
-        [ngModel]="filters.value()['status']"
-        (ngModelChange)="onStatusChange($event)"
-      >
-      </ng-select>
-    </div>
-    <!-- <a [routerLink]="'/pages/user-management/users/invite-user'" class="icon-sm-btn bg-primary">
+      <div class="form-group min-width-150 ng-select-md">
+        <label for="warehouse">Status</label>
+        <ng-select
+          class="select-dropdown select-dropdown-circle mr-2 w-100"
+          placeholder="All"
+          id="status"
+          [searchable]="false"
+          [items]="statusOptions"
+          bindLabel="label"
+          bindValue="value"
+          [clearable]="true"
+          [ngModel]="filters.value()['status']"
+          (ngModelChange)="onStatusChange($event)"
+        >
+        </ng-select>
+      </div>
+      <!-- <a [routerLink]="'/pages/user-management/users/invite-user'" class="icon-sm-btn bg-primary">
       <span class="icon">
         <svg width="12" viewBox="0 0 18 18" fill="currentColor">
           <use href="assets/sprite.svg#svg-plus"></use>
@@ -63,39 +65,39 @@
       </span>
       Invite User
     </a> -->
-    <a href="javascript:void(0);" (click)="createUpdateRoleModal()" class="icon-sm-btn bg-primary">
-      <span class="icon">
-        <svg width="12" viewBox="0 0 18 18" fill="currentColor">
-          <use href="assets/sprite.svg#svg-plus"></use>
-        </svg>
-      </span>
-      Create User
-    </a>
+      <a href="javascript:void(0);" (click)="createUpdateRoleModal()" class="ch-icon-btn">
+        <span class="icon">
+          <svg width="12" viewBox="0 0 18 18" fill="currentColor">
+            <use href="assets/sprite.svg#svg-plus"></use>
+          </svg>
+        </span>
+        Create User
+      </a>
+    </div>
   </div>
-</div>
-<!-- <div class="table-responsive"> -->
-<table class="table app-table mt-3">
-  <thead>
-    <tr>
-      <!-- <th>
+  <!-- <div class="table-responsive"> -->
+  <table class="table app-table mt-3">
+    <thead>
+      <tr>
+        <!-- <th>
         <label class="custom-checkbox">
           <input type="checkbox" [checked]="allSelected()" (change)="onSelectAll($event)" />
           <span></span>
         </label>
       </th> -->
-      <th>Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Status</th>
-      <th>Roles</th>
-      <!-- <th>Department</th> -->
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (user of filterData().items; track $index) {
-      <tr>
-        <!-- <td>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th>Roles</th>
+        <!-- <th>Department</th> -->
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of filterData().items; track $index) {
+        <tr>
+          <!-- <td>
           <label class="custom-checkbox">
             <input
               type="checkbox"
@@ -105,76 +107,77 @@
             <span></span>
           </label>
         </td> -->
-        <td class="text-nowrap">{{ user.fullName }}</td>
-        <td class="text-nowrap">{{ user.email }}</td>
-        <td class="text-nowrap">{{ user.phone }}</td>
-        <td>
-          @if (user.status === enumRStatus.Inactive) {
-            <span class="badge badge-secondary">Inactive</span>
-          } @else if (user.status === enumRStatus.Pending) {
-            <span class="badge badge-warning">Pending</span>
-          } @else if (user.status === enumRStatus.Active) {
-            <span class="badge badge-success">Active</span>
-          }
-        </td>
-        <td>{{ user.roles }}</td>
-        <!-- <td>{{ user.departments }}</td> -->
-        <td>
-          <div class="dropdown-action" dropdown placement="bottom right">
-            <button dropdownToggle type="button" class="active-btn">
-              <svg fill="currentColor" width="16" viewBox="0 0 18 18">
-                <use href="assets/sprite.svg#svg-cog"></use>
-              </svg>
-            </button>
-            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
-              <li>
-                <button class="dropdown-item" (click)="viewUser(user)">
-                  <svg width="14" viewBox="0 0 16 16" fill="currentColor">
-                    <use href="assets/sprite.svg#svg-eye-outline"></use>
-                  </svg>
-                  View
-                </button>
-              </li>
-              <li>
-                <button class="dropdown-item" (click)="updateRoleModal(user)">
-                  <svg width="11" viewBox="0 0 11 10" fill="currentColor">
-                    <use href="assets/sprite.svg#edit-s-icon"></use>
-                  </svg>
-                  Edit
-                </button>
-              </li>
-              @if (user.status === enumRStatus.Pending) {
+          <td class="text-nowrap">{{ user.fullName }}</td>
+          <td class="text-nowrap">{{ user.email }}</td>
+          <td class="text-nowrap">{{ user.phone }}</td>
+          <td>
+            @if (user.status === enumRStatus.Inactive) {
+              <span class="badge badge-secondary">Inactive</span>
+            } @else if (user.status === enumRStatus.Pending) {
+              <span class="badge badge-warning">Pending</span>
+            } @else if (user.status === enumRStatus.Active) {
+              <span class="badge badge-success">Active</span>
+            }
+          </td>
+          <td>{{ user.roles }}</td>
+          <!-- <td>{{ user.departments }}</td> -->
+          <td>
+            <div class="dropdown-action" dropdown placement="bottom right">
+              <button dropdownToggle type="button" class="active-btn">
+                <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                  <use href="assets/sprite.svg#svg-cog"></use>
+                </svg>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
                 <li>
-                  <button class="dropdown-item">
-                    <svg width="11" viewBox="0 0 11 11" fill="currentColor">
-                      <use href="assets/sprite.svg#svg-re-active"></use>
+                  <button class="dropdown-item" (click)="viewUser(user)">
+                    <svg width="14" viewBox="0 0 16 16" fill="currentColor">
+                      <use href="assets/sprite.svg#svg-eye-outline"></use>
                     </svg>
-                    Resend Invite
+                    View
                   </button>
                 </li>
-              }
-              <li>
-                <button class="dropdown-item">
-                  <svg width="12" viewBox="0 0 12 12" fill="currentColor">
-                    <use href="assets/sprite.svg#delete-s-icon"></use>
-                  </svg>
-                  Delete
-                </button>
-              </li>
-            </ul>
-          </div>
-        </td>
-      </tr>
-    }
-  </tbody>
-</table>
-<app-pagination
-  [total]="totalItems()"
-  [page]="currentPage()"
-  [pageSize]="pageSize()"
-  (pageChange)="setPage($event)"
-  (pageSizeChange)="setPageSize($event)"
-></app-pagination>
+                <li>
+                  <button class="dropdown-item" (click)="updateRoleModal(user)">
+                    <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                      <use href="assets/sprite.svg#edit-s-icon"></use>
+                    </svg>
+                    Edit
+                  </button>
+                </li>
+                @if (user.status === enumRStatus.Pending) {
+                  <li>
+                    <button class="dropdown-item">
+                      <svg width="11" viewBox="0 0 11 11" fill="currentColor">
+                        <use href="assets/sprite.svg#svg-re-active"></use>
+                      </svg>
+                      Resend Invite
+                    </button>
+                  </li>
+                }
+                <li>
+                  <button class="dropdown-item">
+                    <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                      <use href="assets/sprite.svg#delete-s-icon"></use>
+                    </svg>
+                    Delete
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <app-pagination
+    [total]="totalItems()"
+    [page]="currentPage()"
+    [pageSize]="pageSize()"
+    (pageChange)="setPage($event)"
+    (pageSizeChange)="setPageSize($event)"
+  ></app-pagination>
+</div>
 <!-- </div> -->
 <!-- @if (selectedRows().length > 0) {
   <div class="d-flex justify-content-end gap-3 mt-3">
