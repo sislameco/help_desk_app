@@ -67,7 +67,7 @@
                   <ul
                     class="sortable-data-wrapper_test"
                     cdkDropList
-                    (cdkDropListDropped)="dropField($event, ticketType.fields)"
+                    (cdkDropListDropped)="dropField($event, ticketType, ticketType.fields)"
                   >
                     @for (
                       field of ticketType.fields | search: searchText();
@@ -93,7 +93,7 @@
                               type="button"
                               class="active-btn"
                               id="dropDownButton_{{ j }}"
-                              [disabled]="isAddEditMode()"
+                              [disabled]="isAddEditMode() || isReorder()"
                             >
                               <svg fill="currentColor" width="16" viewBox="0 0 18 18">
                                 <use href="assets/sprite.svg#svg-cog"></use>
@@ -134,7 +134,9 @@
           <button class="ch-btn ch-btn-red-border" type="button" (click)="clearAddEditMode()">
             Cancel
           </button>
-          <button class="ch-btn ch-btn-green ms-2" type="button">Save</button>
+          <button class="ch-btn ch-btn-green ms-2" type="button" (click)="reorderFields()">
+            Save
+          </button>
         </div>
       }
       <!-- Ticket tpyes with draggable childs ends -->
@@ -156,82 +158,4 @@
       }
     </div>
   </div>
-
-  <!-- Will be deleted -->
-  <table class="app-table" *ngIf="false">
-    <thead class="table-light">
-      <tr>
-        <th>Field Name</th>
-        <th>Ticket Name</th>
-        <th>Description</th>
-        <th>Data Type</th>
-        <!-- <th>Value</th> -->
-        <th>Multi Select</th>
-        <th>Required</th>
-        <th style="width: 120px" class="text-center">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (field of fields(); track field.id; let i = $index) {
-        <tr>
-          <td>{{ field.displayName }}</td>
-          <td>
-            <span class="badge bg-secondary">{{ field.fkTicketTypeId }}</span>
-          </td>
-          <td>{{ field.description }}</td>
-          <td>{{ field.dataType | enumToString: enumDataType }}</td>
-          <td>
-            <span
-              class="badge"
-              [class.bg-danger]="field.isMultiSelect"
-              [class.bg-secondary]="!field.isMultiSelect"
-            >
-              {{ field.isMultiSelect ? 'Multi-Select' : 'Single-Select' }}
-            </span>
-          </td>
-          <td>
-            <span
-              class="badge"
-              [class.bg-danger]="field.isRequired"
-              [class.bg-secondary]="!field.isRequired"
-            >
-              {{ field.isRequired ? 'Required' : 'Optional' }}
-            </span>
-          </td>
-          <td class="text-center">
-            <div
-              class="dropdown-action"
-              dropdown
-              placement="bottom right"
-              container="#dropDownButton_{{ i }}"
-            >
-              <button dropdownToggle type="button" class="active-btn" id="dropDownButton_{{ i }}">
-                <svg fill="currentColor" width="16" viewBox="0 0 18 18">
-                  <use href="assets/sprite.svg#svg-cog"></use>
-                </svg>
-              </button>
-              <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
-                <li>
-                  <button class="dropdown-item" (click)="editField(field)">
-                    <svg width="11" viewBox="0 0 11 10" fill="currentColor">
-                      <use href="assets/sprite.svg#edit-s-icon"></use>
-                    </svg>
-                    Edit
-                  </button>
-                </li>
-                <li>
-                  <button class="dropdown-item" (click)="deleteField(field.id)">
-                    <svg width="12" viewBox="0 0 12 12" fill="currentColor">
-                      <use href="assets/sprite.svg#delete-s-icon"></use>
-                    </svg>
-                    Delete
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
 </div>

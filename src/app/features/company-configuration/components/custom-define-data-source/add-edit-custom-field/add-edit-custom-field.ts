@@ -4,7 +4,7 @@ import {
   effect,
   EventEmitter,
   inject,
-  Input,
+  input,
   Output,
 } from '@angular/core';
 import { CustomFieldDto, CustomFieldOutputDto } from '../../../models/data-config.model';
@@ -25,7 +25,7 @@ import { map } from 'rxjs';
   standalone: true,
 })
 export class AddEditCustomField {
-  @Input() field: CustomFieldOutputDto | null = null;
+  field = input<CustomFieldOutputDto | null>();
   @Output() saved = new EventEmitter<void>();
   fb = inject(FormBuilder);
   service = inject(CustomDefineDataSourceService);
@@ -51,26 +51,25 @@ export class AddEditCustomField {
       dataType: [EnumDataType.textInput, Validators.required],
       dDLValue: this.fb.array([]),
       isRequired: [false],
-      description: [''],
+      description: ['', Validators.required],
       isMultiSelect: [false],
     });
   }
 
   patchForm() {
-    if (this.field) {
-      // console.log(this.field);
+    const field = this.field();
+    if (field) {
       this.form.patchValue({
-        fkTicketTypeId: this.field.fkTicketTypeId,
-        displayName: this.field.displayName,
-        dataType: this.field.dataType,
-        // ddLValue: this.field.dDLValue,
-        isRequired: this.field.isRequired,
-        description: this.field.description,
-        isMultiSelect: this.field.isMultiSelect,
+        fkTicketTypeId: field.fkTicketTypeId,
+        displayName: field.displayName,
+        dataType: field.dataType,
+        isRequired: field.isRequired,
+        description: field.description,
+        isMultiSelect: field.isMultiSelect,
       });
-      // const ddlValuesArray = this.form.get('dDLValue') as FormArray;
-      // ddlValuesArray.clear();
-      // this.field.ddlValue.forEach(() => ddlValuesArray.push(this.fb.control('')));
+      const ddlValuesArray = this.form.get('dDLValue') as FormArray;
+      ddlValuesArray.clear();
+      field.ddlValue.forEach((v) => ddlValuesArray.push(this.fb.control(v)));
     }
   }
 
@@ -87,16 +86,24 @@ export class AddEditCustomField {
   }
 
   submit() {
-    const input: CustomFieldDto = {
-      fkTicketTypeId: this.field?.fkTicketTypeId,
+    const fieldData: CustomFieldDto = {
+      fkTicketTypeId: this.field()?.fkTicketTypeId,
       ...this.form.value,
     };
 
-    this.service.createMany(input).subscribe({
-      next: () => {
-        this.saved.emit();
-      },
-    });
+    if (!this.field()) {
+      this.service.createMany(fieldData).subscribe({
+        next: () => {
+          this.saved.emit();
+        },
+      });
+    } else {
+      this.service.update(this.field()!.id!, fieldData).subscribe({
+        next: () => {
+          this.saved.emit();
+        },
+      });
+    }
   }
 
   cancel() {

@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
-import { CustomFieldOutputDto } from '../../models/data-config.model';
+import {
+  CustomFieldOutputDto,
+  FieldDisplayOrderInputDto,
+  TicketTypeDropdownDto,
+} from '../../models/data-config.model';
 import { CustomDefineDataSourceService } from '../../services/custom-define-data-source.service';
-import { EnumToStringPipe } from '@shared/helper/pipes/pipes/enum-to-string-pipe';
 import { EnumDataType } from '../../models/company.model';
 import { CommonModule } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -12,6 +15,7 @@ import { CdkDragDrop, moveItemInArray, CdkDropList, DragDropModule } from '@angu
 import { NavigationExtras, Router } from '@angular/router';
 import { SearchPipe } from '@shared/pipes/search-pipe';
 import { AddEditCustomField } from './add-edit-custom-field/add-edit-custom-field';
+import { ConfirmationModal } from '@shared/helper/components/confirmation-modal/confirmation-modal';
 
 @Component({
   selector: 'app-custom-define-data-source',
@@ -19,7 +23,6 @@ import { AddEditCustomField } from './add-edit-custom-field/add-edit-custom-fiel
   styleUrl: './custom-define-data-source.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    EnumToStringPipe,
     CommonModule,
     BsDropdownModule,
     Search,
@@ -42,7 +45,6 @@ export class CustomDefineDataSourceComponent {
   selectedTicketTypeId = signal(0);
   selectedFieldId = signal(0);
   isAddEditMode = signal(false);
-  // selectedField: CustomFieldOutputDto | null = null;
   selectedField = signal<CustomFieldOutputDto | null>(null);
   readonly loading = signal(false);
   private readonly refreshTrigger = signal(0);
@@ -71,51 +73,39 @@ export class CustomDefineDataSourceComponent {
   ticketTypesWithFields = computed(() => {
     return this.ticketTypes().map((type) => ({
       ...type,
+      shouldReorder: false,
       fields: this.fields()
         .filter((field) => field.fkTicketTypeId === type.id)
         .sort((a, b) => a.displayOrder - b.displayOrder),
     }));
   });
-  constructor() {
-    // this.loadFields();
-  }
-
-  // loadFields() {
-  //   this.loading.set(true);
-  //   this.service.getAll().subscribe({
-  //     next: (res) => {
-  //       this.fields.set(res);
-  //       this.loading.set(false);
-  //     },
-  //     error: () => {
-  //       this.loading.set(false);
-  //     },
-  //   });
-  // }
+  constructor() {}
 
   deleteField(id: number | undefined) {
     if (!id) {
       return;
     }
-    // if (confirm('Are you sure you want to delete this field?')) {
-    //   this.service.delete(id).subscribe(() => {
-    //     this.fields.update((fields) => fields.filter((f) => f.id !== id));
-    //   });
-    // }
+    const modalConfig = {
+      backdrop: true,
+      ignoreBackdropClick: true,
+      class: 'modal-dialog-centered',
+      initialState: {
+        title: 'Warning',
+        message: 'Are you sure you want to delete this field?',
+      },
+    };
+    const bsModalRef = this.modalService.show(ConfirmationModal, modalConfig);
+
+    bsModalRef.content?.confirmed.subscribe((result) => {
+      bsModalRef.hide();
+      if (result) {
+        this.service.delete(id).subscribe(() => this.triggerRefresh());
+      }
+    });
   }
 
   addField() {
     this.isAddEditMode.set(true);
-    // const modalConfig = {
-    //   backdrop: true,
-    //   ignoreBackdropClick: true,
-    //   initialState: { mode: 'edit' as const, fkTicketTypeId: 0 },
-    // };
-    // const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
-    // const modalRef = this.modalService.show(CustomFieldModalComponent, modalParams);
-    // modalRef.content?.saved.subscribe(() => {
-    //   this.triggerRefresh();
-    // });
   }
 
   triggerRefresh() {
@@ -125,21 +115,12 @@ export class CustomDefineDataSourceComponent {
   clearAddEditMode() {
     this.isReorder.set(false);
     this.isAddEditMode.set(false);
-    // this.selectedField = null;
     this.selectedField.set(null);
     this.triggerRefresh();
   }
 
   editField(field: CustomFieldOutputDto) {
-    // const modalConfig = {
-    //   backdrop: true,
-    //   ignoreBackdropClick: true,
-    //   initialState: { mode: 'edit' as const, fkTicketTypeId: field.id },
-    // };
-    // const modalParams = Object.assign({}, modalConfig, { class: 'modal-lg' });
-    // this.modalService.show(CustomFieldModalComponent, modalParams);
     this.isAddEditMode.set(true);
-    // this.selectedField = field;
     this.selectedField.set(field);
   }
 
@@ -161,8 +142,13 @@ export class CustomDefineDataSourceComponent {
     this.selectedFieldId.update((current) => (current === fieldId ? 0 : fieldId));
   }
 
-  dropField(event: CdkDragDrop<CustomFieldOutputDto[]>, list: CustomFieldOutputDto[]) {
+  dropField(
+    event: CdkDragDrop<CustomFieldOutputDto[]>,
+    ticketType: TicketTypeDropdownDto,
+    list: CustomFieldOutputDto[],
+  ) {
     this.isReorder.set(true);
+    ticketType.shouldReorder = true;
     moveItemInArray(list, event.previousIndex, event.currentIndex);
   }
 
@@ -171,5 +157,19 @@ export class CustomDefineDataSourceComponent {
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
     }, 0);
+  }
+
+  reorderFields() {
+    const ticketTypesToReorder: FieldDisplayOrderInputDto[] = this.ticketTypesWithFields()
+      .filter((tt) => tt.shouldReorder)
+      .map((tt) => ({
+        fkTicketTypeId: tt.id,
+        fieldIds: tt.fields.map((f) => f.id!),
+      }));
+
+    this.service.reorderFields(ticketTypesToReorder).subscribe(() => {
+      this.clearAddEditMode();
+      this.triggerRefresh();
+    });
   }
 }

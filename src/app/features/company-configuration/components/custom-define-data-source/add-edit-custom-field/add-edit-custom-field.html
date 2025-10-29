@@ -3,7 +3,9 @@
   <div class="row">
     <div class="form-group col-lg-12">
       <div class="position-relative">
-        <label for="displayName" class="input-label fw-medium">Display Name</label>
+        <label for="displayName" class="input-label fw-medium"
+          >Display Name <span class="text-danger">*</span></label
+        >
         <input
           id="displayName"
           formControlName="displayName"
@@ -16,7 +18,9 @@
     <div class="form-group col-lg-12">
       <!-- <p>Ticket Type</p> -->
       <div class="position-relative">
-        <label for="displayName" class="input-label fw-medium">Ticket Type</label>
+        <label for="displayName" class="input-label fw-medium"
+          >Ticket Type <span class="text-danger">*</span></label
+        >
         <ng-select
           class="select-dropdown"
           [items]="ticketTypes()"
@@ -81,24 +85,17 @@
   <!-- Description -->
   <div class="form-group mb-3">
     <div class="position-relative">
-      <label for="description" class="input-label">Description</label>
+      <label for="description" class="input-label"
+        >Description <span class="text-danger">*</span></label
+      >
       <textarea
         type="text"
         id="description"
         class="form-control"
         formControlName="description"
-        placeholder="Optional description for the field..."
+        placeholder="Purpose of the field"
       ></textarea>
     </div>
-    <!-- <label class="form-label fw-medium"
-          >Description
-          <textarea
-            formControlName="description"
-            rows="2"
-            placeholder="Optional description for the field..."
-            class="form-control form-control-sm rounded-2"
-          ></textarea>
-        </label> -->
   </div>
   @if (+form.value.dataType === EnumDataType.dropdownList) {
     <!-- Dropdown Values -->
@@ -139,7 +136,7 @@
   <div class="form-group text-nowrap text-end mt-3">
     <button class="ch-btn ch-btn-red-border disabled-hover me-3" (click)="cancel()">Cancel</button>
     <button class="ch-btn ch-btn-green" (click)="submit()" [disabled]="form.invalid">
-      Create Field
+      {{ field() ? 'Update' : 'Create Field' }}
     </button>
   </div>
 </form>

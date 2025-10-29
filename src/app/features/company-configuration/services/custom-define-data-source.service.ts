@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   CustomFieldDto,
   CustomFieldOutputDto,
+  FieldDisplayOrderInputDto,
   TicketTypeDropdownDto,
 } from '../models/data-config.model';
 import { environment } from '../../../../environments/environment';
@@ -46,5 +47,9 @@ export class CustomDefineDataSourceService {
   /** 🔹 Delete field by ID */
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  reorderFields(ticketTypes: FieldDisplayOrderInputDto[]) {
+    return this.http.patch<void>(`${this.baseUrl}/display-order`, ticketTypes);
   }
 }
