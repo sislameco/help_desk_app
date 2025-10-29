@@ -18,8 +18,8 @@
     line-height: 12px;
   }
   &.bg-primary {
-    background-color: variable.$blue-light !important;
-    border-color: variable.$blue-light;
+    background-color: variable.$themeColor !important;
+    border-color: variable.$themeColor;
     color: #fff;
   }
 }

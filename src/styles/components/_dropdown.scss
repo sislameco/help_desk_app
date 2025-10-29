@@ -1,10 +1,14 @@
+@use '../base/variable';
 .dropdown-action {
   position: relative;
   .active-btn {
     background: transparent;
     border: none;
     outline: none;
-    color: #00688f;
+    color: variable.$dark;
+    :hover {
+      color: variable.$themeColor;
+    }
   }
   .dropdown-menu {
     min-width: 150px;

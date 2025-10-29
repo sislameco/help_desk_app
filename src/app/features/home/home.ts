@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { DashboardService } from './dashboard.service';
 import { derivedAsync } from 'ngxtension/derived-async';
+import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Breadcrumbs],
   templateUrl: './home.html',
   styleUrls: ['./home.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

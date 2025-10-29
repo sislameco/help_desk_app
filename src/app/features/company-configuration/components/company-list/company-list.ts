@@ -4,11 +4,12 @@ import { RouterModule, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CompanyService } from '../../services/company.service';
 import { CompanyDto } from '../../models/company.model';
+import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 
 @Component({
   selector: 'app-company-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Breadcrumbs],
   templateUrl: './company-list.html',
   styleUrls: ['./company-list.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

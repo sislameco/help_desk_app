@@ -10,4 +10,19 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class AlertModal {
   bsModalRef = inject(BsModalRef);
+
+  title = 'Alert';
+  message = 'Are you sure?';
+  buttonText = 'Yes';
+
+  // callback from service
+  onClose: (confirmed: boolean) => void = () => {};
+
+  confirm() {
+    this.onClose(true);
+  }
+
+  cancel() {
+    this.onClose(false);
+  }
 }

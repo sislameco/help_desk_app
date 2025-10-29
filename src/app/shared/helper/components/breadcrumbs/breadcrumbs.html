@@ -1,56 +1,178 @@
-<nav class="breadcrumb-menu">
-  <ul>
-    <li>
-      <a href="javascript:void(0);" class="active">
-        <svg width="15" viewBox="0 0 15 16" fill="currentColor">
-          <use href="assets/sprite.svg#svg-menu-account"></use>
-        </svg>
-        Home
-      </a>
-      <ul>
-        <li><a href="javascript:void(0);">Submenu Item 1</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 2</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 3</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 4</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 5</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="javascript:void(0);">User Management</a>
+<div class="d-flex align-items-center">
+  @if (showBackButton()) {
+    <div>
+      <button (click)="goBack()" class="ch-icon-btn ms-2">
+        <span class="icon">
+          <svg width="12" viewBox="0 0 12 8" fill="currentColor">
+            <use href="assets/sprite.svg#svg-arrow-left"></use>
+          </svg>
+        </span>
+        Back
+      </button>
+    </div>
+  }
+  <nav class="breadcrumb-menu">
+    <ul>
+      @for (item of this.authStore.menus(); track $index) {
+        <li>
+          @if (item.route) {
+            <a
+              href="javascript:void(0);"
+              routerLink="/{{ item.route }}"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <svg width="15" viewBox="0 0 15 16" fill="currentColor">
+                <use [attr.href]="'assets/sprite.svg#' + item.icon"></use>
+              </svg>
+              {{ item.menuName }}
+            </a>
+          } @else {
+            <a href="javascript:void(0);" [class.active]="isSubMenuActiveSignal(item.subMenus)()">
+              <svg width="15" viewBox="0 0 15 16" fill="currentColor">
+                <use [attr.href]="'assets/sprite.svg#' + item.icon"></use>
+              </svg>
+              {{ item.menuName }}
+            </a>
+          }
 
-      <ul>
-        <li><a href="javascript:void(0);">Submenu Item 1</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 2</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 3</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 4</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 5</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="javascript:void(0);">Role</a>
+          <ul>
+            @for (sub of item.subMenus; track $index) {
+              <li>
+                <a
+                  routerLink="/{{ sub.route }}"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: false }"
+                  >{{ sub.menuName }}</a
+                >
+              </li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+  </nav>
+</div>
 
-      <ul>
-        <li><a href="javascript:void(0);">Submenu Item 1</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 2</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 3</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 4</a></li>
-        <li><a href="javascript:void(0);">Submenu Item 5</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
 <div class="breadcrumb-page-header">
-  <a href="javascript:void(0);" (click)="back()" class="btn icon-sm-btn">
+  <!-- <a href="javascript:void(0);" (click)="back()" class="btn icon-sm-btn">
     <span class="icon">
       <svg width="12" viewBox="0 0 12 8" fill="currentColor">
         <use href="assets/sprite.svg#svg-arrow-left"></use>
       </svg>
     </span>
     Back
-  </a>
+  </a> -->
   <div class="page-title me-auto">
-    <h3>User Management</h3>
-    <span> User / </span>
+    <h3>{{ activeMenuName() }}</h3>
+    @if (crumbs()) {
+      @for (c of crumbs() ?? []; track $index) {
+        <span>{{ c }}</span>
+        @if ($index < (crumbs() ?? []).length - 1) {
+          <span class="mx-2">/</span>
+        }
+      }
+    } @else {
+      <span> {{ activeMenuAndSubMenu() }} </span>
+    }
   </div>
-  <app-search (searchString)="searchAction($event)"></app-search>
+  @if (showSearch()) {
+    <app-search (searchString)="searchAction($event)"></app-search>
+  }
 </div>
+
+<!-- <div class="breadcrumb-page-header bg-white border-bottom border-black-100">
+  @if (backTo()) {
+  <a href="javascript:void(0);" class="btn btn-sm btn-icon border-neutral-100 text-neutral-500" (click)="goBack()">
+    <svg width="16" viewBox="0 0 12 8" fill="currentColor">
+      <use href="assets/sprite.svg#svg-arrow-left"></use>
+    </svg>
+  </a>
+  }
+  <nav class="breadcrumb-menu me-auto">
+    <ul>
+      <li>
+        <a href="javascript:void(0);" class="active">
+          {{ crumbs().length ? crumbs()[0].label : 'Home' }}
+        </a>
+      </li>
+      @for (c of crumbs().slice(1); track $index) {
+      <li>
+        <a href="javascript:void(0);">{{ c.label }}</a>
+      </li>
+      }
+    </ul>
+  </nav>
+
+  <div class="action-group nav gap-3">
+    @if (showViewArchiveButton()) {
+    <button type="button" class="btn btn-lg border-neutral-100 text-neutral-500" (click)="toggleArchiveView()"
+      [class.theme-btn]="status() === ActivationStatusEnum.Inactive">
+      <svg width="16" viewBox="0 0 14 12" fill="currentColor" class="m-0">
+        <use href="assets/sprite.svg#svg-archive"></use>
+      </svg>
+      {{ `${status() === ActivationStatusEnum.Active ? 'View Archive' : 'View Active'} List` }}
+    </button>
+    }
+
+    @if (showPreviewButton()) {
+    <button type="button" class="btn btn-lg border-neutral-100 text-neutral-500">
+      <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+        <use href="assets/sprite.svg#print-icon"></use>
+      </svg>
+
+      Preview
+    </button>
+    }
+
+    @if (showExportButton()) {
+    <div class="dropdown-action position-relative" dropdown placement="bottom right">
+      <button type="button" class="btn btn-lg border-neutral-100 text-neutral-500" dropdownToggle>
+        <svg width="16" viewBox="0 0 16 16" fill="currentColor">
+          <use href="assets/sprite.svg#svg-export-icon"></use>
+        </svg>
+
+        Export
+      </button>
+      <ul *dropdownMenu class="dropdown-menu dropdown-menu-right mt-2">
+        <li>
+          <button class="dropdown-item">Product List</button>
+        </li>
+        <li>
+          <button class="dropdown-item">Supplier Product Quantities</button>
+        </li>
+      </ul>
+    </div>
+    }
+
+    @if (showMoreButton()) {
+    <div class="dropdown-action" dropdown placement="bottom right">
+      <button type="button" class="btn btn-lg border-neutral-100 text-neutral-500" dropdownToggle>
+        <svg fill="currentColor" width="16" viewBox="0 0 16 16">
+          <use href="assets/sprite.svg#svg-cog"></use>
+        </svg>
+
+        More
+      </button>
+      <ul *dropdownMenu class="dropdown-menu mt-2 dropdown-menu-right">
+        <li>
+          <button class="dropdown-item" type="button" (click)="onBatchEditClick()">
+            Batch Edit
+          </button>
+        </li>
+        <li>
+          <button class="dropdown-item" (click)="onImportProduct()">Import Products</button>
+        </li>
+        <li>
+          <button class="dropdown-item" (click)="onUploadSupplierProduct()">
+            Upload Supplier Product Quantities
+          </button>
+        </li>
+        <li>
+          <button class="dropdown-item">Upload Supplier Product Price</button>
+        </li>
+      </ul>
+    </div>
+    }
+  </div>
+</div> -->

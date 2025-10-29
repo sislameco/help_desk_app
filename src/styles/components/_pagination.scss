@@ -1,3 +1,4 @@
+@use '../base/variable';
 .app-pagination {
   p {
     color: rgba(13, 13, 13, 0.4);
@@ -28,7 +29,7 @@
         &:hover,
         &:focus,
         &.active {
-          background: #59b96b;
+          background: variable.$themeColor;
           color: #fff;
           svg {
             color: #fff;
