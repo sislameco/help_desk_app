@@ -251,6 +251,11 @@
     color: #fff;
     border-color: #08a8ff;
   }
+  &.disabled-hover:hover {
+    background: #fff;
+    color: #444444;
+    border-color: #d2d1d4;
+  }
   &.btn-secondary {
     background: #08a8ff;
     color: #fff;
@@ -274,7 +279,7 @@
   }
   &.disabled-hover {
     background: #fff;
-    border-color: #fff;
+    // border-color: #fff;
   }
   &.disabled {
     background: #d2d1d4;

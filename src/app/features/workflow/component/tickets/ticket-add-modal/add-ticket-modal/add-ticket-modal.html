@@ -1,16 +1,6 @@
 <div class="app-modal">
-  <!-- <div class="app-modal ticket-create-modal"> -->
   <div class="modal-header">
     <h5 class="modal-title">Create New Ticket</h5>
-    <button type="button" class="btn-minimize d-none" (click)="toggleMinimize()">
-      @if (isMinimized()) {
-        <i class="bi bi-arrows-fullscreen"></i>
-        <!-- maximize -->
-      } @else {
-        <i class="bi bi-dash-lg"></i>
-        <!-- minimize -->
-      }
-    </button>
     <button class="close" aria-label="Close" (click)="closeModal()">
       <svg width="10" viewBox="0 0 10 10"><use href="assets/sprite.svg#svg-close"></use></svg>
     </button>
@@ -18,7 +8,6 @@
 
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="app-form">
-      <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form"> -->
       <!-- 🧾 Basic Information -->
       <section class="ticket-section card p-3">
         <h6 class="text-muted">Basic Information</h6>
@@ -109,6 +98,7 @@
                 [items]="customers()"
                 bindLabel="fullName"
                 bindValue="id"
+                [virtualScroll]="true"
                 [formControlName]="'fkCustomerId'"
                 [searchable]="true"
                 placeholder="Select customer"
@@ -124,6 +114,7 @@
                 [items]="projects()"
                 bindLabel="referenceNumber"
                 bindValue="id"
+                [virtualScroll]="true"
                 [formControlName]="'fkProjectId'"
                 [searchable]="true"
                 placeholder="Select project"
@@ -273,6 +264,7 @@
               [items]="users()"
               bindLabel="name"
               bindValue="id"
+              [virtualScroll]="true"
               [formControlName]="'fkAssignUser'"
               [searchable]="true"
               placeholder="Select user"
@@ -281,7 +273,7 @@
           </div>
 
           <!-- Departments (multi-select) -->
-          <div class="form-group full">
+          <div class="form-group">
             <!-- <p>Departments</p> -->
             <label for="departments" class="input-label">Departments</label>
             <ng-select
@@ -302,7 +294,7 @@
 
       <div class="form-group card mt-3 p-3 pt-4">
         <h6 class="text-muted">Attachments</h6>
-        <label for="upload" class="ch-btn ch-btn-blue cursor-pointer mb-0"
+        <!-- <label for="upload" class="ch-btn ch-btn-blue cursor-pointer mb-0"
           ><span>Upload File</span></label
         >
         <input
@@ -312,12 +304,15 @@
           multiple
           (change)="onFileSelected($event)"
           hidden=""
-        />
+        /> -->
 
-        <!-- <div class="d-flex justify-content-center">
-          <div class="imagew">asdsa</div>
+        <div class="d-flex justify-content-center align-items-center p-3 gap-3 file-box">
+          <div class="icon-text-group d-flex justify-content-center align-items-center gap-2">
+            <img class="d-block" src="assets/images/upload-paste-icon.svg" alt="Upload" />
+            <p class="mb-0">Click to upload file</p>
+          </div>
           <div class="file-input">
-            <label for="upload" class="ch-btn ch-btn-blue cursor-pointer mb-0"
+            <label for="upload" class="ch-icon-btn disabled-hover cursor-pointer"
               ><span>Upload File</span></label
             >
             <input
@@ -329,7 +324,7 @@
               hidden=""
             />
           </div>
-        </div> -->
+        </div>
         <!-- <p>Attachments</p>
         <div class="upload-box">
           <input type="file" multiple (change)="onFileSelected($event)" />
