@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { TicketFileDto } from '../../../../models/ticket.model.model';
 
 @Component({
   selector: 'app-ticket-attachment',
@@ -7,4 +8,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './ticket-attachment.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TicketAttachment {}
+export class TicketAttachment {
+  attachments = input<TicketFileDto[]>([]);
+  isCollapsed = signal(false);
+
+  toggleCollapse() {
+    this.isCollapsed.update((val) => !val);
+  }
+}
