@@ -70,8 +70,7 @@ export class AddTicketModal implements OnDestroy {
     fkRelocationId: [null],
   });
 
-  selectedFiles: File[] = [];
-  uploadedFileIds: number[] = [];
+  addedFiles = signal<{ id: number; fileName: string }[]>([]);
   isSubmitting = signal(false);
 
   // =======================================
@@ -166,19 +165,30 @@ export class AddTicketModal implements OnDestroy {
   // =======================================
   onFileSelected(event: Event) {
     const files = (event.target as HTMLInputElement).files as FileList;
-    this.selectedFiles = Array.from(files);
+    const filesToUpload = Array.from(files).filter((f) =>
+      this.addedFiles().every((af) => af.fileName !== f.name),
+    );
+
+    if (filesToUpload.length) {
+      this.uploadFiles(filesToUpload);
+    }
   }
 
-  uploadFiles() {
-    if (this.selectedFiles.length === 0) {
-      return;
-    }
-
-    this.fileService.uploadFiles(this.selectedFiles).subscribe({
+  uploadFiles(files: File[]) {
+    this.fileService.uploadFiles(files).subscribe({
       next: (res) => {
-        this.uploadedFileIds = res; // Assuming the API returns { fileIds: number[] }
-        this.form.patchValue({ files: this.uploadedFileIds });
+        res.forEach((id, index) => {
+          this.addedFiles.update((current) => [...current, { id, fileName: files[index].name }]);
+        });
       },
+    });
+  }
+
+  removeFile(index: number) {
+    this.addedFiles.update((current) => {
+      const updated = [...current];
+      updated.splice(index, 1);
+      return updated;
     });
   }
 
@@ -200,7 +210,8 @@ export class AddTicketModal implements OnDestroy {
       fkProjectId: this.form.value.fkProjectId,
       fkAssignUser: this.form.value.fkAssignUser,
       fkDepartmentId: this.form.value.fkDepartmentId,
-      files: this.form.value.files,
+      // files: this.form.value.files,
+      files: this.addedFiles().map((f) => f.id),
       fkTicketTypeId: this.form.value.fkTicketTypeId,
       subForm: this.getSubFormData(this.form.value.subForm),
       fkRelocationId: this.form.value.fkRelocationId,

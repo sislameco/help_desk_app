@@ -14,7 +14,6 @@
 
         <div class="form-grid">
           <div class="form-group my-3">
-            <!-- <p>Company</p> -->
             <label for="fkCompanyId" class="input-label">Company</label>
             <ng-select
               id="fkCompanyId"
@@ -38,7 +37,6 @@
           </div>
 
           <div class="form-group mb-3">
-            <!-- <p>Subject</p> -->
             <label for="subject" class="input-label">Subject</label>
             <input
               id="subject"
@@ -50,7 +48,6 @@
           </div>
 
           <div class="form-group mb-0">
-            <!-- <p>Summary Note</p> -->
             <label for="summaryNote" class="input-label">Description</label>
             <ngx-editor-menu [editor]="editorRef"></ngx-editor-menu>
             <ngx-editor
@@ -68,8 +65,6 @@
           </div>
         </div>
       </section>
-
-      <!-- <hr /> -->
 
       <!-- 👤 Customer & Project -->
       <section class="ticket-section mt-3 card p-3">
@@ -124,8 +119,6 @@
           }
         </div>
       </section>
-
-      <!-- <hr /> -->
 
       <!-- 📂 Ticket Type & Details -->
       <section class="ticket-section card p-3 mt-3">
@@ -187,10 +180,8 @@
         <section class="subform card mt-3 p-3">
           <h6 class="text-muted">Additional Info</h6>
           <div formArrayName="subForm" class="form-grid mt-3">
-            <!-- @for (field of subforms; track field.id; let i = $index) { -->
             @for (field of subFormArray.controls; track $index; let i = $index) {
               <div class="form-group" [formGroupName]="i">
-                <!-- <p>{{ field.displayName }}</p> -->
                 <label for="{{ i }}" class="input-label">{{ field.value.displayName }}</label>
 
                 @switch (field.value.dataType) {
@@ -249,8 +240,6 @@
         </section>
       }
 
-      <!-- <hr /> -->
-
       <!-- 👥 Assignment & Attachments -->
       <section class="ticket-section card mt-3 p-3">
         <h6 class="text-muted">Assignment</h6>
@@ -274,7 +263,6 @@
 
           <!-- Departments (multi-select) -->
           <div class="form-group">
-            <!-- <p>Departments</p> -->
             <label for="departments" class="input-label">Departments</label>
             <ng-select
               id="departments"
@@ -294,18 +282,6 @@
 
       <div class="form-group card mt-3 p-3 pt-4">
         <h6 class="text-muted">Attachments</h6>
-        <!-- <label for="upload" class="ch-btn ch-btn-blue cursor-pointer mb-0"
-          ><span>Upload File</span></label
-        >
-        <input
-          type="file"
-          name="upload"
-          id="upload"
-          multiple
-          (change)="onFileSelected($event)"
-          hidden=""
-        /> -->
-
         <div class="d-flex justify-content-center align-items-center p-3 gap-3 file-box">
           <div class="icon-text-group d-flex justify-content-center align-items-center gap-2">
             <img class="d-block" src="assets/images/upload-paste-icon.svg" alt="Upload" />
@@ -325,15 +301,25 @@
             />
           </div>
         </div>
-        <!-- <p>Attachments</p>
-        <div class="upload-box">
-          <input type="file" multiple (change)="onFileSelected($event)" />
-        </div> -->
 
-        @if (uploadedFileIds.length > 0) {
-          <ul class="uploaded-list mt-2">
-            @for (id of uploadedFileIds; track id) {
-              <li>File ID: {{ id }}</li>
+        @if (addedFiles().length) {
+          <ul class="attached-file-list mt-3 d-flex align-items-center flex-wrap gap-2">
+            @for (file of addedFiles(); track $index) {
+              <li class="attached-file-item">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="file-name">{{ file.fileName }}</div>
+                  <button class="file-close" (click)="removeFile($index)">
+                    <svg
+                      width="10"
+                      viewBox="0 0 13 13"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <use href="assets/sprite.svg#red-close-icon"></use>
+                    </svg>
+                  </button>
+                </div>
+              </li>
             }
           </ul>
         }
