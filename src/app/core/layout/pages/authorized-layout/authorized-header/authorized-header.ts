@@ -10,7 +10,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
   imports: [BsDropdownModule],
 })
 export class AuthorizedHeader {
-  private authStore = inject(AuthStore);
+  readonly authStore = inject(AuthStore);
   logout() {
     this.authStore.logout();
   }

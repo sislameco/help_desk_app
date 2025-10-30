@@ -24,7 +24,7 @@ export const fakeBackendInterceptor: HttpInterceptorFn = (
         isPasswordChange: false,
         message: 'Login successful',
         refreshToken: 'your-refresh-token',
-        user: { email: 'test@example.com', name: 'Test User' },
+        user: { email: 'test@example.com', name: 'Test User', image: '' },
       };
 
       return of(

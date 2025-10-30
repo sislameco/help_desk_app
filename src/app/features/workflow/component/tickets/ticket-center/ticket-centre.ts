@@ -28,6 +28,7 @@ export class TicketCentre {
   readonly route = inject(ActivatedRoute);
   private readonly ticketService = inject(TicketService);
   private readonly modalService = inject(BsModalService);
+  private readonly refreshTrigger = signal(0);
 
   private ngUnsubscribe$ = new Subject<void>();
 
@@ -71,10 +72,15 @@ export class TicketCentre {
   }
 
   openAddTicket() {
-    this.modalService.show(AddTicketModal, {
+    const modalRef = this.modalService.show(AddTicketModal, {
       backdrop: true,
       ignoreBackdropClick: true,
       class: 'modal-xl',
+    });
+
+    modalRef.content?.saved.subscribe(() => {
+      // Refresh ticket list after adding a new ticket
+      this.refreshTrigger.update((n) => n + 1);
     });
   }
 

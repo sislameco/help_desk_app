@@ -51,37 +51,61 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of rootResolutions(); index as i">
-        <td>{{ i + 1 }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.description }}</td>
-        <td>{{ item.type | enumToString: enumRootResolutionType }}</td>
-        <td class="text-center">
-          <button
-            class="btn btn-sm btn-outline-info me-1"
-            (click)="openModal(addEditTemplate, 'view', item)"
-          >
-            👁️
-          </button>
-          <button
-            class="btn btn-sm btn-outline-warning me-1"
-            (click)="openModal(addEditTemplate, 'edit', item)"
-          >
-            ✏️
-          </button>
-          <button class="btn btn-sm btn-outline-danger" (click)="delete(item.id)">🗑️</button>
-        </td>
-      </tr>
+      @for (item of rootResolutions(); track item.id; let i = $index) {
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.type | enumToString: enumRootResolutionType }}</td>
+          <td class="text-center">
+            <div class="dropdown-action" dropdown placement="bottom left">
+              <button dropdownToggle type="button" class="active-btn" id="dropDownButton_{{ i }}">
+                <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                  <use href="assets/sprite.svg#svg-cog"></use>
+                </svg>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu dropdown-menu-left">
+                <li>
+                  <button class="dropdown-item" (click)="openModal(addEditTemplate, 'view', item)">
+                    <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                      <use href="assets/sprite.svg#edit-s-icon"></use>
+                    </svg>
+                    View
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" (click)="openModal(addEditTemplate, 'edit', item)">
+                    <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                      <use href="assets/sprite.svg#edit-s-icon"></use>
+                    </svg>
+                    Edit
+                  </button>
+                </li>
+                <li>
+                  <button class="dropdown-item" (click)="delete(item.id)">
+                    <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                      <use href="assets/sprite.svg#edit-s-icon"></use>
+                    </svg>
+                    Delete
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
 
-  <p *ngIf="!rootResolutions().length" class="text-muted text-center mt-3">
-    No records found for
-    <strong>{{
-      selectedType === enumRootResolutionType.RootCause ? 'Root Cause' : 'Resolution'
-    }}</strong
-    >.
-  </p>
+  @if (!rootResolutions().length) {
+    <p class="text-muted text-center mt-3">
+      No records found for
+      <strong>{{
+        selectedType === enumRootResolutionType.RootCause ? 'Root Cause' : 'Resolution'
+      }}</strong
+      >.
+    </p>
+  }
 </div>
 
 <!-- Modal Template -->
@@ -99,10 +123,11 @@
     </div>
 
     <div class="modal-body">
-      <form>
-        <div class="mb-3">
-          <p class="form-label fw-bold">Name*</p>
+      <form class="app-form">
+        <div class="form-group mb-3">
+          <label for="name" class="input-label fw-bold">Name*</label>
           <input
+            id="name"
             type="text"
             class="form-control"
             [(ngModel)]="formModel.name"
@@ -112,9 +137,10 @@
           />
         </div>
 
-        <div class="mb-3">
-          <p class="form-label fw-bold">Description*</p>
+        <div class="form-group mb-3">
+          <label for="description" class="input-label fw-bold">Description*</label>
           <textarea
+            id="description"
             class="form-control"
             rows="3"
             [(ngModel)]="formModel.description"
@@ -123,12 +149,14 @@
           ></textarea>
         </div>
       </form>
-      <div class="form-group text-nowrap text-center mt-4" *ngIf="!isViewMode">
-        <button type="button" class="ch-btn ch-btn-red-border" (click)="modalRef?.hide()">
-          Cancel
-        </button>
-        <button type="submit" class="ch-btn ch-btn-green ms-3" (click)="save()">Save</button>
-      </div>
+      @if (!isViewMode) {
+        <div class="form-group text-nowrap text-center mt-4">
+          <button type="button" class="ch-btn ch-btn-red-border" (click)="modalRef?.hide()">
+            Cancel
+          </button>
+          <button type="submit" class="ch-btn ch-btn-green ms-3" (click)="save()">Save</button>
+        </div>
+      }
     </div>
   </div>
 </ng-template>

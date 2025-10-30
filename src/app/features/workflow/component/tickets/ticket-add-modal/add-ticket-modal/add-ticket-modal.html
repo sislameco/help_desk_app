@@ -1,16 +1,6 @@
 <div class="app-modal">
-  <!-- <div class="app-modal ticket-create-modal"> -->
   <div class="modal-header">
     <h5 class="modal-title">Create New Ticket</h5>
-    <button type="button" class="btn-minimize d-none" (click)="toggleMinimize()">
-      @if (isMinimized()) {
-        <i class="bi bi-arrows-fullscreen"></i>
-        <!-- maximize -->
-      } @else {
-        <i class="bi bi-dash-lg"></i>
-        <!-- minimize -->
-      }
-    </button>
     <button class="close" aria-label="Close" (click)="closeModal()">
       <svg width="10" viewBox="0 0 10 10"><use href="assets/sprite.svg#svg-close"></use></svg>
     </button>
@@ -18,14 +8,12 @@
 
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="app-form">
-      <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" class="ticket-form"> -->
       <!-- 🧾 Basic Information -->
       <section class="ticket-section card p-3">
         <h6 class="text-muted">Basic Information</h6>
 
         <div class="form-grid">
           <div class="form-group my-3">
-            <!-- <p>Company</p> -->
             <label for="fkCompanyId" class="input-label">Company</label>
             <ng-select
               id="fkCompanyId"
@@ -34,6 +22,7 @@
               bindLabel="value"
               bindValue="id"
               formControlName="fkCompanyId"
+              (change)="reloadSetupData(form.value.fkCompanyId)"
               [searchable]="true"
               placeholder="Select company"
             >
@@ -48,7 +37,6 @@
           </div>
 
           <div class="form-group mb-3">
-            <!-- <p>Subject</p> -->
             <label for="subject" class="input-label">Subject</label>
             <input
               id="subject"
@@ -60,7 +48,6 @@
           </div>
 
           <div class="form-group mb-0">
-            <!-- <p>Summary Note</p> -->
             <label for="summaryNote" class="input-label">Description</label>
             <ngx-editor-menu [editor]="editorRef"></ngx-editor-menu>
             <ngx-editor
@@ -78,8 +65,6 @@
           </div>
         </div>
       </section>
-
-      <!-- <hr /> -->
 
       <!-- 👤 Customer & Project -->
       <section class="ticket-section mt-3 card p-3">
@@ -108,6 +93,7 @@
                 [items]="customers()"
                 bindLabel="fullName"
                 bindValue="id"
+                [virtualScroll]="true"
                 [formControlName]="'fkCustomerId'"
                 [searchable]="true"
                 placeholder="Select customer"
@@ -123,6 +109,7 @@
                 [items]="projects()"
                 bindLabel="referenceNumber"
                 bindValue="id"
+                [virtualScroll]="true"
                 [formControlName]="'fkProjectId'"
                 [searchable]="true"
                 placeholder="Select project"
@@ -132,8 +119,6 @@
           }
         </div>
       </section>
-
-      <!-- <hr /> -->
 
       <!-- 📂 Ticket Type & Details -->
       <section class="ticket-section card p-3 mt-3">
@@ -195,10 +180,8 @@
         <section class="subform card mt-3 p-3">
           <h6 class="text-muted">Additional Info</h6>
           <div formArrayName="subForm" class="form-grid mt-3">
-            <!-- @for (field of subforms; track field.id; let i = $index) { -->
             @for (field of subFormArray.controls; track $index; let i = $index) {
               <div class="form-group" [formGroupName]="i">
-                <!-- <p>{{ field.displayName }}</p> -->
                 <label for="{{ i }}" class="input-label">{{ field.value.displayName }}</label>
 
                 @switch (field.value.dataType) {
@@ -257,8 +240,6 @@
         </section>
       }
 
-      <!-- <hr /> -->
-
       <!-- 👥 Assignment & Attachments -->
       <section class="ticket-section card mt-3 p-3">
         <h6 class="text-muted">Assignment</h6>
@@ -272,6 +253,7 @@
               [items]="users()"
               bindLabel="name"
               bindValue="id"
+              [virtualScroll]="true"
               [formControlName]="'fkAssignUser'"
               [searchable]="true"
               placeholder="Select user"
@@ -280,8 +262,7 @@
           </div>
 
           <!-- Departments (multi-select) -->
-          <div class="form-group full">
-            <!-- <p>Departments</p> -->
+          <div class="form-group">
             <label for="departments" class="input-label">Departments</label>
             <ng-select
               id="departments"
@@ -301,26 +282,44 @@
 
       <div class="form-group card mt-3 p-3 pt-4">
         <h6 class="text-muted">Attachments</h6>
-        <label for="upload" class="ch-btn ch-btn-blue cursor-pointer mb-0"
-          ><span>Upload File</span></label
-        >
-        <input
-          type="file"
-          name="upload"
-          id="upload"
-          multiple
-          (change)="onFileSelected($event)"
-          hidden=""
-        />
-        <!-- <p>Attachments</p>
-        <div class="upload-box">
-          <input type="file" multiple (change)="onFileSelected($event)" />
-        </div> -->
+        <div class="d-flex justify-content-center align-items-center p-3 gap-3 file-box">
+          <div class="icon-text-group d-flex justify-content-center align-items-center gap-2">
+            <img class="d-block" src="assets/images/upload-paste-icon.svg" alt="Upload" />
+            <p class="mb-0">Click to upload file</p>
+          </div>
+          <div class="file-input">
+            <label for="upload" class="ch-icon-btn disabled-hover cursor-pointer"
+              ><span>Upload File</span></label
+            >
+            <input
+              type="file"
+              name="upload"
+              id="upload"
+              multiple
+              (change)="onFileSelected($event)"
+              hidden=""
+            />
+          </div>
+        </div>
 
-        @if (uploadedFileIds.length > 0) {
-          <ul class="uploaded-list mt-2">
-            @for (id of uploadedFileIds; track id) {
-              <li>File ID: {{ id }}</li>
+        @if (addedFiles().length) {
+          <ul class="attached-file-list mt-3 d-flex align-items-center flex-wrap gap-2">
+            @for (file of addedFiles(); track $index) {
+              <li class="attached-file-item">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="file-name">{{ file.fileName }}</div>
+                  <button class="file-close" (click)="removeFile($index)">
+                    <svg
+                      width="10"
+                      viewBox="0 0 13 13"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <use href="assets/sprite.svg#red-close-icon"></use>
+                    </svg>
+                  </button>
+                </div>
+              </li>
             }
           </ul>
         }
