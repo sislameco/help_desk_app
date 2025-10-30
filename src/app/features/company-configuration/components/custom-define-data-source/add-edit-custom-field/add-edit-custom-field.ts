@@ -23,6 +23,7 @@ import { map } from 'rxjs';
   styleUrl: './add-edit-custom-field.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  providers: [TicketReferenceService],
 })
 export class AddEditCustomField {
   field = input<CustomFieldOutputDto | null>();

@@ -26,6 +26,7 @@ import { EnumPriority, EnumQMSType } from '../../../models/sla.model';
   templateUrl: './add-edit-ticket-modal.html',
   styleUrl: './add-edit-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [TicketReferenceService],
 })
 export class AddEditTicketModal implements OnInit {
   @Input() selectedTicket: TicketTypeOutputDto | null = null;

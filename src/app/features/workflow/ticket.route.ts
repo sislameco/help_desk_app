@@ -4,7 +4,7 @@ import { TicketListView } from '../workflow/component/tickets/ticket-center/tick
 import { TicketKanbanView } from '../workflow/component/tickets/ticket-center/ticket-kanban-view/ticket-kanban-view';
 
 export const TicketRoutes: Routes = [
-  { path: '', redirectTo: 'tickets', pathMatch: 'full' },
+  // { path: '', redirectTo: 'tickets', pathMatch: 'full' },
   {
     path: '',
     component: TicketCentre,

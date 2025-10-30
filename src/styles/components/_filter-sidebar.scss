@@ -1,0 +1,107 @@
+@use '../base/colors' as *;
+.filter {
+  &-header {
+    padding: 16px;
+    h5 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    p {
+      font-size: 14px;
+    }
+  }
+  &-sidebar {
+    background: color('gray', 50);
+    border-radius: 10px;
+    // padding: 20px;
+    .collapse-button {
+      color: color('gray', 900);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 0;
+      border: none;
+      outline: none;
+      background: transparent;
+      display: block;
+      width: 100%;
+      text-align: left;
+      &::after {
+        left: auto;
+        right: 0px;
+      }
+    }
+    ul {
+      padding: 8px 0;
+      padding-top: 4px;
+      li {
+        padding: 7px 0;
+        position: relative;
+        line-height: 14px;
+        // display: flex;
+        // align-items: center;
+        // gap: 8px;
+        ul {
+          padding-right: 0px;
+        }
+        .remove-icon {
+          color: color('red', 500);
+          font-size: 16px;
+          line-height: 14px;
+          margin-left: 10px;
+          position: relative;
+          top: -2px;
+        }
+        .custom-checkbox {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+          color: color('gray', 900);
+          line-height: 16px;
+        }
+        p {
+          display: block;
+          font-size: 14px;
+          color: color('gray', 900);
+          position: absolute;
+          top: 5px;
+          right: 0;
+        }
+        .collapse-button {
+          position: absolute;
+          right: 16px;
+          top: 3px !important;
+          border: none;
+          display: inline-block;
+          width: auto;
+          background: transparent;
+          font-size: 14px;
+          font-weight: 400;
+          padding: 5px !important;
+          padding-right: 8px;
+          color: color('gray', 900);
+          &::after {
+            right: -15px;
+          }
+        }
+      }
+    }
+    .scroll-y {
+      height: calc(100vh - 300px);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+}
+.see-more-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: color('green', 700);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline !important;
+}

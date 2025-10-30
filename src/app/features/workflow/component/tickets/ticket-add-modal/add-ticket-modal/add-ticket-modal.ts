@@ -23,6 +23,7 @@ import { Editor, NgxEditorModule } from 'ngx-editor';
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [TicketReferenceService],
 })
 export class AddTicketModal implements OnDestroy {
   // 🔹 Inject services
