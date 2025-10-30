@@ -43,6 +43,71 @@ export interface SubFromInputDto {
   value: string;
 }
 
+export interface TicketCompanyViewDto {
+  id: number;
+  companyName: string;
+}
+
+export interface ListTicketOutputDto {
+  id: number;
+  ticketNumber: string;
+  subject: string;
+  description: string;
+}
+
+export interface TicketBasicDetailOutputDto {
+  id: number;
+  ticketNumber: string;
+  subject: string;
+  description: string;
+  company: TicketCompanyViewDto;
+  linkingItems: ListTicketOutputDto[];
+}
+
+export interface TicketSpecificationOutputDto {
+  rootCauseId?: number;
+  resolutionId?: number;
+  assigneeId?: number;
+  departmentIds: number[];
+}
+
+export interface TicketFileDto {
+  id: number;
+  fileName: string;
+  filePath: string;
+  addedBy: string;
+  addedOn: string;
+}
+
+export interface TicketLinkingItemOutputDto {
+  id: number;
+  ticketNumber: string;
+  subject: string;
+  url: string;
+}
+
+export interface TicketCommentOutputDto {
+  id: number;
+  fkUserId: number;
+  commentText: string;
+  commentedOn: Date;
+  commentedBy: string;
+}
+
+export interface TicketFieldOutputDto {
+  id: number;
+  fkTicketTypeId: number;
+  fkCustomeFieldId: number;
+  value: string;
+}
+
+export interface TicketWatcherOutputDto {
+  id: number;
+  fkUserId: number;
+  addedBy: string;
+  addedOn: Date;
+}
+
 export enum EnumTicketStatus {
   Open = 1,
   InProgress = 2,

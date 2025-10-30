@@ -1,19 +1,111 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Editor, NgxEditorModule } from 'ngx-editor';
+import { TicketService } from '../../../services/ticket.service';
+import { derivedAsync } from 'ngxtension/derived-async';
+import {
+  TicketBasicDetailOutputDto,
+  TicketCommentOutputDto,
+  TicketFieldOutputDto,
+  TicketFileDto,
+  TicketLinkingItemOutputDto,
+  TicketSpecificationOutputDto,
+  TicketWatcherOutputDto,
+} from '../../../models/ticket.model.model';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { TicketAttachment } from './ticket-attachment/ticket-attachment';
 
 @Component({
   selector: 'app-ticket-view-edit',
-  imports: [CommonModule, FormsModule, NgSelectModule, NgxEditorModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgSelectModule,
+    NgxEditorModule,
+    AccordionModule,
+    TicketAttachment,
+  ],
+  providers: [TicketService],
   templateUrl: './ticket-view-edit.html',
   styleUrl: './ticket-view-edit.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TicketViewEdit {
+  ticketId = input<number>();
+  private readonly ticketService = inject(TicketService);
   editor!: Editor;
   newComment = '';
+  isDescriptionCollapsed = signal(false);
+  readonly ticketBasicInfo = derivedAsync(
+    () => {
+      // this.refreshTrigger();
+      return this.ticketService.getTicketBasicDetails(Number(this.ticketId()));
+    },
+    {
+      initialValue: {} as TicketBasicDetailOutputDto,
+    },
+  );
+  // readonly specification = derivedAsync(
+  //   () => {
+  //     // this.refreshTrigger();
+  //     return this.ticketService.getTicketSpecifications(Number(this.ticketId()));
+  //   },
+  //   {
+  //     initialValue: {} as TicketSpecificationOutputDto,
+  //   },
+  // );
+  specification: TicketSpecificationOutputDto = {} as TicketSpecificationOutputDto;
+  readonly attachments = derivedAsync(
+    () => {
+      // this.refreshTrigger();
+      return this.ticketService.getTicketAttachments(Number(this.ticketId()));
+    },
+    {
+      initialValue: {} as TicketFileDto,
+    },
+  );
+  readonly linkingItems = derivedAsync(
+    () => {
+      // this.refreshTrigger();
+      return this.ticketService.getTicketLinkings(Number(this.ticketId()));
+    },
+    {
+      initialValue: {} as TicketLinkingItemOutputDto,
+    },
+  );
+  readonly comments = derivedAsync(
+    () => {
+      // this.refreshTrigger();
+      return this.ticketService.getTicketComments(Number(this.ticketId()));
+    },
+    {
+      initialValue: {} as TicketCommentOutputDto,
+    },
+  );
+  readonly fields = derivedAsync(
+    () => {
+      // this.refreshTrigger();
+      return this.ticketService.getTicketFields(Number(this.ticketId()));
+    },
+    {
+      initialValue: {} as TicketFieldOutputDto,
+    },
+  );
+  readonly watchers = derivedAsync(
+    () => {
+      // this.refreshTrigger();
+      return this.ticketService.getTicketWatchers(Number(this.ticketId()));
+    },
+    {
+      initialValue: {} as TicketWatcherOutputDto,
+    },
+  );
+
+  constructor() {
+    this.editor = new Editor();
+  }
 
   // ======= MAIN TICKET DATA =======
   ticket = {
@@ -129,5 +221,9 @@ export class TicketViewEdit {
 
   updateTicket() {
     alert('✅ Ticket updated successfully (mock save)');
+  }
+
+  toggleDescription() {
+    this.isDescriptionCollapsed.update((collapsed) => !collapsed);
   }
 }

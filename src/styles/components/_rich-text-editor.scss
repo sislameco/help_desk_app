@@ -1,3 +1,17 @@
+.ngx-editor-container {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  padding: 1px;
+
+  .NgxEditor__MenuBar {
+    border-bottom: 1px solid #ccc;
+  }
+  .NgxEditor {
+    border: none;
+  }
+}
+
 .NgxEditor {
   min-height: 120px;
 }

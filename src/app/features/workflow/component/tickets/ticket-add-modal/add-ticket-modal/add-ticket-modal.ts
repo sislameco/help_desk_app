@@ -6,7 +6,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of } from 'rxjs';
 import { TicketReferenceService } from '../../../../../company-configuration/services/ticket-reference-service';
@@ -30,7 +30,7 @@ import { Editor, NgxEditorModule } from 'ngx-editor';
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [TicketReferenceService],
+  providers: [TicketReferenceService, TicketService],
 })
 export class AddTicketModal implements OnDestroy {
   saved = output<void>();
@@ -56,17 +56,17 @@ export class AddTicketModal implements OnDestroy {
   // 🔹 Reactive form
   // =======================================
   form: FormGroup = this.fb.group({
-    fkCompanyId: [1],
-    subject: [''],
-    description: [''],
+    fkCompanyId: [1, Validators.required],
+    subject: ['', Validators.required],
+    description: ['', Validators.required],
     isCustomer: [false],
-    fkCustomerId: [null],
-    fkProjectId: [null],
-    fkAssignUser: [null],
-    fkDepartmentId: [[]],
+    fkCustomerId: [null, Validators.required],
+    fkProjectId: [null, Validators.required],
+    fkAssignUser: [null, Validators.required],
+    fkDepartmentId: [[], Validators.required],
     files: [[]],
-    fkRootCauseId: [null],
-    fkTicketTypeId: [null],
+    fkRootCauseId: [null, Validators.required],
+    fkTicketTypeId: [null, Validators.required],
     subForm: this.fb.array([]),
     fkRelocationId: [null],
   });
@@ -151,6 +151,19 @@ export class AddTicketModal implements OnDestroy {
 
   constructor() {
     this.editorRef = new Editor();
+    this.form.get('isCustomer')?.valueChanges.subscribe((isCustomer) => {
+      if (isCustomer) {
+        this.form.get('fkCustomerId')?.setValidators(Validators.required);
+        this.form.get('fkProjectId')?.clearValidators();
+        this.form.get('fkProjectId')?.setValue(null);
+      } else {
+        this.form.get('fkProjectId')?.setValidators(Validators.required);
+        this.form.get('fkCustomerId')?.clearValidators();
+        this.form.get('fkCustomerId')?.setValue(null);
+      }
+      this.form.get('fkCustomerId')?.updateValueAndValidity();
+      this.form.get('fkProjectId')?.updateValueAndValidity();
+    });
   }
 
   reloadSetupData(fkCompanyId: number) {
