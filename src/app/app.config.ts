@@ -1,9 +1,4 @@
-import {
-  ApplicationConfig,
-  importProvidersFrom,
-  isDevMode,
-  provideZonelessChangeDetection,
-} from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -27,7 +22,7 @@ import { errorHandlingInterceptor } from '@core/interceptors/error-handler-inter
 export const appConfig: ApplicationConfig = {
   providers: [
     // 👇 This tells Angular “I am zoneless, don’t expect Zone.js”
-    provideZonelessChangeDetection(),
+    // provideZonelessChangeDetection(),
 
     provideRouter(
       routes,

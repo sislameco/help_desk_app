@@ -109,12 +109,88 @@
           </button>
         }
       </app-filter-sidebar>
+      <!-- Ticket Priority -->
+      <app-filter-sidebar filterName="Ticket Priority" [isCollapsedShow]="true">
+        <ul>
+          <li>
+            <label class="custom-checkbox">
+              <input
+                type="checkbox"
+                class="peer hidden"
+                [checked]="isAllPriorityChecked()"
+                (change)="resetTicketPrioritySelection()"
+              />
+              <span></span>
+              All
+              <p>{{ allprioritysCount() }}</p>
+            </label>
+          </li>
+          @for (priority of prioritysToggle.visible(); track priority.value) {
+            <li>
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="peer hidden"
+                  [checked]="selectedPriorityIds().includes(priority.value)"
+                  (change)="ticketPriorityToggle(priority.value, $event.target.checked)"
+                />
+                <span></span>
+                {{ priority.label }}
+                <p>{{ 0 }}</p>
+              </label>
+            </li>
+          }
+        </ul>
+        @if (ticketStatusesToggle.title()) {
+          <button class="see-more-btn" type="button" (click)="ticketStatusesToggle.toggle()">
+            {{ ticketStatusesToggle.title() }}
+          </button>
+        }
+      </app-filter-sidebar>
+      <!-- User -->
+      <app-filter-sidebar filterName="User" [isCollapsedShow]="true">
+        <ul>
+          <li>
+            <label class="custom-checkbox">
+              <input
+                type="checkbox"
+                class="peer hidden"
+                [checked]="isAllUserChecked()"
+                (change)="resetUserSelection()"
+              />
+              <span></span>
+              All
+              <p>{{ allusersCount() }}</p>
+            </label>
+          </li>
+          @for (user of usersToggle.visible(); track user.id) {
+            <li>
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="peer hidden"
+                  [checked]="selectedUserIds().includes(user.id)"
+                  (change)="ticketUserToggle(user.id, $event.target.checked)"
+                />
+                <span></span>
+                {{ user.name }}
+                <p>{{ 0 }}</p>
+              </label>
+            </li>
+          }
+        </ul>
+        @if (usersToggle.title()) {
+          <button class="see-more-btn" type="button" (click)="usersToggle.toggle()">
+            {{ usersToggle.title() }}
+          </button>
+        }
+      </app-filter-sidebar>
 
       <!-- Price (Ex VAT) -->
-      <app-filter-sidebar filterName="Price (Ex VAT)" [isCollapsedShow]="true">
+      <app-filter-sidebar filterName="Date" [isCollapsedShow]="true">
         <!-- <ul class="filter-list"> -->
-        <!-- All -->
-        <!-- <li>
+        <!-- All
+        <li>
             <label class="custom-radio">
               <input type="radio" name="price" [checked]="!minPrice() && !maxPrice()" (change)="resetPriceRange()" />
               <span class="checkmark"></span>
@@ -146,18 +222,27 @@
         </ul> -->
 
         <!-- Custom Input Fields (min/max) -->
-        <!-- <div class="custom-range mt-2">
+        <div class="custom-range mt-2">
           <div class="row g-2">
-            <div class="col-6">
-              <input type="number" class="form-control form-control-lg" placeholder="Min" [ngModel]="minPrice()"
-                [disabled]="!customPrice()" (ngModelChange)="onPriceChange('min', $event)" />
+            <div class="col-12">
+              <input
+                type="text"
+                [(ngModel)]="dateTest"
+                placeholder="Datepicker"
+                class="form-control"
+                bsDaterangepicker
+                [bsConfig]="{ adaptivePosition: true }"
+              />
+              <!-- <input type="number" class="form-control form-control-lg" placeholder="Min" [ngModel]="minPrice()"
+                [disabled]="!customPrice()" (ngModelChange)="onPriceChange('min', $event)" /> -->
             </div>
-            <div class="col-6">
+            <!-- <div class="col-6">
+              <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker [bsConfig]="{ adaptivePosition: true }">
               <input type="number" class="form-control form-control-lg" placeholder="Max" [ngModel]="maxPrice()"
                 [disabled]="!customPrice()" (ngModelChange)="onPriceChange('max', $event)" />
-            </div>
+            </div> -->
           </div>
-        </div> -->
+        </div>
       </app-filter-sidebar>
       <!-- <div class="d-flex justify-content-between align-items-center gap-3 mt-4">
         <button class="btn theme-btn-outline" type="button" (click)="clearFilters()">

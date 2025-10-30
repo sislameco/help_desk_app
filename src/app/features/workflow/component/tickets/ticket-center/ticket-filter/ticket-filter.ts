@@ -20,18 +20,20 @@ import {
 } from '../../../../models/ticket.model.model';
 import { createToggleList } from '../../../../helpers/filter-function';
 import { toNums } from '@shared/helper/functions/common.function';
-import { JsonPipe } from '@angular/common';
 import { CommonSelectBoxGeneric } from '@shared/models/common.model';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ticket-filter',
-  imports: [FilterSidebar, JsonPipe],
+  imports: [FilterSidebar, BsDatepickerModule, FormsModule],
   templateUrl: './ticket-filter.html',
   styleUrl: './ticket-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TicketReferenceService],
 })
 export class TicketFilter {
+  dateTest: Date[] | null = null;
   private readonly router = inject(Router);
   readonly route = inject(ActivatedRoute);
   private readonly ticketRef = inject(TicketReferenceService);
@@ -61,16 +63,13 @@ export class TicketFilter {
   // ─────────────────────────────────────────────────────────────────────────────
   selectedSupplierIds = signal<number[]>([]);
 
-  prioritys = derivedAsync(
-    () =>
-      Object.entries(EnumPriority)
-        .filter(([key]) => isNaN(Number(key))) // keep only string keys
-        .map(([label, value]) => ({
-          label,
-          value: value as unknown as number,
-        }))
-        .map((r) => (Array.isArray(r) ? r : [r])),
-    { initialValue: [] },
+  prioritys = signal<CommonSelectBoxGeneric<number>[]>(
+    Object.entries(EnumPriority)
+      .filter(([key]) => isNaN(Number(key))) // keep only string keys
+      .map(([label, value]) => ({
+        label,
+        value: value as unknown as number,
+      })),
   );
   readonly prioritysToggle = createToggleList(this.prioritys, 5);
   selectedPriorityIds = signal<number[]>([]);
@@ -78,6 +77,18 @@ export class TicketFilter {
   allprioritysCount = computed(() => {
     return this.prioritys().length;
   });
+  ticketPriorityToggle(id: number, checked: boolean) {
+    const current = this.selectedPriorityIds();
+    const updated = checked ? [...current, id] : current.filter((sid) => sid !== id);
+    this.selectedPriorityIds.set(updated);
+    // If none checked, treat as 'All'
+    if (updated.length === 0) {
+      this.resetTicketPrioritySelection();
+    } else {
+      this.navigateRoute({ ticketPriorityIds: updated, page: 1 });
+    }
+    // this.refresh.update((x) => x + 1);
+  }
 
   readonly ticketStatuses = signal<CommonSelectBoxGeneric<number>[]>(
     Object.entries(EnumTicketStatus)
@@ -186,6 +197,24 @@ export class TicketFilter {
         : of([]),
     { initialValue: [] },
   );
+  readonly usersToggle = createToggleList(this.users, 5);
+  selectedUserIds = signal<number[]>([]);
+  readonly isAllUserChecked = computed(() => this.selectedUserIds().length === 0);
+  allusersCount = computed(() => {
+    return this.users().length;
+  });
+  ticketUserToggle(id: number, checked: boolean) {
+    const current = this.selectedUserIds();
+    const updated = checked ? [...current, id] : current.filter((sid) => sid !== id);
+    this.selectedUserIds.set(updated);
+    // If none checked, treat as 'All'
+    if (updated.length === 0) {
+      this.resetUserSelection();
+    } else {
+      this.navigateRoute({ userIds: updated, page: 1 });
+    }
+    // this.refresh.update((x) => x + 1);
+  }
   // selectedSubCategoryIds = signal<number[]>([]);
   // readonly isAllSupplierChecked = computed(() => this.selectedSupplierIds().length === 0);
 
@@ -238,6 +267,15 @@ export class TicketFilter {
       const ticketTypeIds = toNums(params['ticketTypeIds']) ?? [];
       this.selectedTicketTypeIds.set(ticketTypeIds);
 
+      const ticketStatusIds = toNums(params['ticketStatusIds']) ?? [];
+      this.selectedticketStatusIds.set(ticketStatusIds);
+
+      const ticketPriorityIds = toNums(params['ticketPriorityIds']) ?? [];
+      this.selectedPriorityIds.set(ticketPriorityIds);
+
+      const userIds = toNums(params['userIds']) ?? [];
+      this.selectedUserIds.set(userIds);
+
       // Sync supplier selection from URL params
       // const supplierIds = toNums(params['supplierIds']) ?? [];
       // this.selectedSupplierIds.set(supplierIds);
@@ -275,6 +313,14 @@ export class TicketFilter {
   }
   resetTicketStatusSelection() {
     this.selectedTicketTypeIds.set([]);
+    this.refresh.update((x) => x + 1);
+  }
+  resetTicketPrioritySelection() {
+    this.selectedPriorityIds.set([]);
+    this.refresh.update((x) => x + 1);
+  }
+  resetUserSelection() {
+    this.selectedUserIds.set([]);
     this.refresh.update((x) => x + 1);
   }
 
