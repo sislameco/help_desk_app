@@ -10,26 +10,19 @@
 }
 
 .file-box {
-  // border: 2px dashed #c3d2ff;
-  border: 2px dashed $themeColor;
-  // background: #f8faff;
+  border: 2px dashed #d2d1d4;
   border-radius: 8px;
-
-  // &:hover {
-  //   background: #e6f0ff;
-  // }
 }
 
 .attached-file-item {
-  border: 1px solid $themeColor;
+  border: 1px solid #d2d1d4;
   padding: 4px 8px;
 
   .file-name {
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;
-    color: #0d0d0d99 !important;
-    // color: $fontColor;
+    color: $light-gray;
     word-break: break-all;
   }
 
