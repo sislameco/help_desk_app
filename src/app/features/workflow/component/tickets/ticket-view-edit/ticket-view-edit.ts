@@ -7,12 +7,7 @@ import { TicketService } from '../../../services/ticket.service';
 import { derivedAsync } from 'ngxtension/derived-async';
 import {
   TicketBasicDetailOutputDto,
-  TicketCommentOutputDto,
-  TicketFieldOutputDto,
-  TicketFileDto,
-  TicketLinkingItemOutputDto,
   TicketSpecificationOutputDto,
-  TicketWatcherOutputDto,
 } from '../../../models/ticket.model.model';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { TicketAttachment } from './ticket-attachment/ticket-attachment';
@@ -63,7 +58,7 @@ export class TicketViewEdit {
       return this.ticketService.getTicketAttachments(Number(this.ticketId()));
     },
     {
-      initialValue: {} as TicketFileDto,
+      initialValue: [],
     },
   );
   readonly linkingItems = derivedAsync(
@@ -72,7 +67,7 @@ export class TicketViewEdit {
       return this.ticketService.getTicketLinkings(Number(this.ticketId()));
     },
     {
-      initialValue: {} as TicketLinkingItemOutputDto,
+      initialValue: [],
     },
   );
   readonly comments = derivedAsync(
@@ -81,7 +76,7 @@ export class TicketViewEdit {
       return this.ticketService.getTicketComments(Number(this.ticketId()));
     },
     {
-      initialValue: {} as TicketCommentOutputDto,
+      initialValue: [],
     },
   );
   readonly fields = derivedAsync(
@@ -90,7 +85,7 @@ export class TicketViewEdit {
       return this.ticketService.getTicketFields(Number(this.ticketId()));
     },
     {
-      initialValue: {} as TicketFieldOutputDto,
+      initialValue: [],
     },
   );
   readonly watchers = derivedAsync(
@@ -99,7 +94,7 @@ export class TicketViewEdit {
       return this.ticketService.getTicketWatchers(Number(this.ticketId()));
     },
     {
-      initialValue: {} as TicketWatcherOutputDto,
+      initialValue: [],
     },
   );
 

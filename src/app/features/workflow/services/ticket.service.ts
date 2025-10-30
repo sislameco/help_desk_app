@@ -38,38 +38,38 @@ export class TicketService {
     );
   }
 
-  getTicketSpecifications(ticketId: number): Observable<TicketSpecificationOutputDto> {
-    return this.http.get<TicketSpecificationOutputDto>(
+  getTicketSpecifications(ticketId: number): Observable<TicketSpecificationOutputDto[]> {
+    return this.http.get<TicketSpecificationOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/specification/${ticketId}`,
     );
   }
 
-  getTicketAttachments(ticketId: number): Observable<TicketFileDto> {
-    return this.http.get<TicketFileDto>(
+  getTicketAttachments(ticketId: number): Observable<TicketFileDto[]> {
+    return this.http.get<TicketFileDto[]>(
       `${environment.apiBaseUrl}/api/ticket/attachment/${ticketId}`,
     );
   }
 
-  getTicketLinkings(ticketId: number): Observable<TicketLinkingItemOutputDto> {
-    return this.http.get<TicketLinkingItemOutputDto>(
+  getTicketLinkings(ticketId: number): Observable<TicketLinkingItemOutputDto[]> {
+    return this.http.get<TicketLinkingItemOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/linking-item/${ticketId}`,
     );
   }
 
-  getTicketComments(ticketId: number): Observable<TicketCommentOutputDto> {
-    return this.http.get<TicketCommentOutputDto>(
+  getTicketComments(ticketId: number): Observable<TicketCommentOutputDto[]> {
+    return this.http.get<TicketCommentOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/comments/${ticketId}`,
     );
   }
 
-  getTicketFields(ticketId: number): Observable<TicketFieldOutputDto> {
-    return this.http.get<TicketFieldOutputDto>(
+  getTicketFields(ticketId: number): Observable<TicketFieldOutputDto[]> {
+    return this.http.get<TicketFieldOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/get-define-field/${ticketId}`,
     );
   }
 
-  getTicketWatchers(ticketId: number): Observable<TicketWatcherOutputDto> {
-    return this.http.get<TicketWatcherOutputDto>(
+  getTicketWatchers(ticketId: number): Observable<TicketWatcherOutputDto[]> {
+    return this.http.get<TicketWatcherOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/get-watchers/${ticketId}`,
     );
   }

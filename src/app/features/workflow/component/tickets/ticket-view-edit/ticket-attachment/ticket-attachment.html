@@ -1,1 +1,23 @@
-<p>ticket-attachment works!</p>
+<div class="mb-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <button class="collapse-btn mb-2" type="button" (click)="toggleCollapse()">
+      <span class="icon me-2" [class.collapsed]="isCollapsed()">
+        <svg width="9" viewBox="0 0 7 4" fill="currentColor">
+          <use xlink:href="assets/sprite.svg#svg-angle-down-2"></use>
+        </svg>
+      </span>
+      <span class="collapse-title">Attachments</span>
+    </button>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <button class="btn btn-sm btn-outline-primary"><i class="bi bi-upload"></i> Upload</button>
+    </div>
+  </div>
+  <ul class="list-group small" [class.d-none]="isCollapsed()">
+    @for (file of attachments(); track $index) {
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-file-earmark-text"></i> {{ file.fileName }}</span>
+        <span class="text-muted">{{ file.filePath }}</span>
+      </li>
+    }
+  </ul>
+</div>
