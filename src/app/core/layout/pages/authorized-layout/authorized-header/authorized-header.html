@@ -56,9 +56,13 @@
       <button dropdownToggle type="button">
         <div>
           <span>Welcome</span>
-          <small>Brian McLoughlin</small>
+          <small>{{ authStore.userInfo()?.name }}</small>
         </div>
-        <img class="h-6 w-6 min-w-[24px] rounded-full" src="/assets/images/user.svg" alt="user" />
+        <img
+          class="h-6 w-6 min-w-[24px] rounded-full"
+          [src]="authStore.userInfo()?.image || '/assets/images/user.svg'"
+          alt="user"
+        />
       </button>
       <ul *dropdownMenu class="dropdown-menu">
         <li>
