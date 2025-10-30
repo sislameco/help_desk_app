@@ -1,0 +1,11 @@
+<button
+  type="button"
+  class="collapse-button"
+  (click)="toggleCollapse()"
+  [class.active]="!isCollapsed()"
+>
+  {{ filterName() }}
+</button>
+<div [collapse]="isCollapsed()" [isAnimated]="true">
+  <ng-content></ng-content>
+</div>

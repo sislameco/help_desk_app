@@ -18,7 +18,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
   selector: 'app-ticket-type-component',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, EnumToStringPipe, BsDropdownModule],
-  providers: [BsModalService],
+  providers: [BsModalService, TicketReferenceService],
   templateUrl: './ticket-type-component.html',
   styleUrls: ['./ticket-type-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

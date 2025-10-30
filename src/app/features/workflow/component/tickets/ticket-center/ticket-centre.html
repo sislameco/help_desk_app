@@ -1,12 +1,12 @@
 <app-breadcrumbs></app-breadcrumbs>
 <div class="p-3">
   <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-primary me-2" (click)="openAddTicket()">
+    <button class="ch-icon-btn me-2" (click)="openAddTicket()">
       <i class="bi bi-plus-lg"></i> Add Ticket
     </button>
 
     <button
-      class="btn btn-outline-secondary me-2"
+      class="ch-icon-btn me-2"
       [class.active]="viewMode() === 'list'"
       (click)="setView('list')"
     >
@@ -14,7 +14,7 @@
     </button>
 
     <button
-      class="btn btn-outline-secondary"
+      class="ch-icon-btn"
       [class.active]="viewMode() === 'kanban'"
       (click)="setView('kanban')"
     >
@@ -22,10 +22,17 @@
     </button>
   </div>
 
-  @if (viewMode() === 'list') {
-    <app-ticket-list-view [tickets]="ticketsResponse().items"></app-ticket-list-view>
-  }
-  @if (viewMode() === 'kanban') {
-    <app-ticket-kanban-view [tickets]="ticketsResponse().items"></app-ticket-kanban-view>
-  }
+  <div class="d-flex gap-2">
+    <div class="col-md-2">
+      <app-ticket-filter></app-ticket-filter>
+    </div>
+    <div class="col-md-10">
+      @if (viewMode() === 'list') {
+        <app-ticket-list-view [tickets]="ticketsResponse()?.items || []"></app-ticket-list-view>
+      }
+      @if (viewMode() === 'kanban') {
+        <app-ticket-kanban-view [tickets]="ticketsResponse()?.items || []"></app-ticket-kanban-view>
+      }
+    </div>
+  </div>
 </div>

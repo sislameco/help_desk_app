@@ -22,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './update-department-setup.html',
   styleUrl: './update-department-setup.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DepartmentSettingService],
+  providers: [DepartmentSettingService, TicketReferenceService],
 })
 export class UpdateDepartmentSetup {
   bsModalRef = inject(BsModalRef);

@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Params } from '@angular/router';
 import { environment } from '../../../../environments/environment';
@@ -16,9 +16,6 @@ import {
 } from '../models/ticket.model.model';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
 export class TicketService {
   private readonly http = inject(HttpClient);
 

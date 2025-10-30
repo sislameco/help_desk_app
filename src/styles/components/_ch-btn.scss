@@ -246,7 +246,8 @@
       margin-left: 6px;
     }
   }
-  &:hover {
+  &:hover,
+  &.active {
     background: #08a8ff;
     color: #fff;
     border-color: #08a8ff;

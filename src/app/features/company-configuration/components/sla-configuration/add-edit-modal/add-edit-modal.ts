@@ -26,6 +26,7 @@ import { TicketTypeDDL } from '../../../models/ddl.model';
   templateUrl: './add-edit-modal.html',
   styleUrl: './add-edit-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [TicketReferenceService],
 })
 export class AddEditModal implements OnInit {
   mode: 'add' | 'edit' = 'add';

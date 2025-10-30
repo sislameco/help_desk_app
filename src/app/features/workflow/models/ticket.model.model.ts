@@ -1,3 +1,6 @@
+import { RStatusEnum } from '@shared/enums/r-status.enum';
+import { EnumSortBy } from '@shared/enums/sort-by.enum';
+
 export interface TicketListViewDto {
   id: number;
   ticketNumber: string;
@@ -117,4 +120,42 @@ export enum EnumPriority {
   High = 2,
   Medium = 3,
   Low = 4,
+}
+
+export interface TicketFilterParams
+  extends Record<string, string | number | number[] | boolean | undefined> {
+  page: number;
+  pageSize: number;
+  search?: string;
+  sort?: string;
+  status?: number;
+  isDynamic?: boolean;
+}
+export type TicketListFilterParams = TicketFilterParams & {
+  page: number;
+  pageSize: number;
+  status?: number;
+  sortColumn?: string;
+  sortBy?: EnumSortBy;
+  search?: string;
+  ticketTypeIds?: number[];
+  ticketStatusIds?: number[];
+  // supplierIds?: number[];
+  // selectedColumns?: number[];
+  minPrice?: number;
+  maxPrice?: number;
+};
+
+export interface TicketRequest {
+  page: number;
+  pageSize: number;
+  sort?: string;
+  search?: string;
+  ticketTypeIds?: number[];
+  ticketStatusIds?: number[];
+  // supplierIds?: number[];
+  minPrice?: number;
+  maxPrice?: number;
+  // selectedColumns?: number[];
+  status?: RStatusEnum;
 }

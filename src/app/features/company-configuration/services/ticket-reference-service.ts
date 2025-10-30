@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -10,7 +10,6 @@ import {
   TicketTypeDDL,
 } from '../models/ddl.model';
 
-@Injectable({ providedIn: 'root' })
 export class TicketReferenceService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiBaseUrl}/api/ticket-reference`;
