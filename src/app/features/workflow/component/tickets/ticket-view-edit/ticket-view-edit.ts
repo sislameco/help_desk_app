@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Editor, NgxEditorModule } from 'ngx-editor';
@@ -15,10 +15,19 @@ import {
   TicketWatcherOutputDto,
 } from '../../../models/ticket.model.model';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { TicketAttachment } from './ticket-attachment/ticket-attachment';
 
 @Component({
   selector: 'app-ticket-view-edit',
-  imports: [CommonModule, FormsModule, NgSelectModule, NgxEditorModule, AccordionModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgSelectModule,
+    NgxEditorModule,
+    AccordionModule,
+    TicketAttachment,
+  ],
+  providers: [TicketService],
   templateUrl: './ticket-view-edit.html',
   styleUrl: './ticket-view-edit.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,6 +37,7 @@ export class TicketViewEdit {
   private readonly ticketService = inject(TicketService);
   editor!: Editor;
   newComment = '';
+  isDescriptionCollapsed = signal(false);
   readonly ticketBasicInfo = derivedAsync(
     () => {
       // this.refreshTrigger();
@@ -211,5 +221,9 @@ export class TicketViewEdit {
 
   updateTicket() {
     alert('✅ Ticket updated successfully (mock save)');
+  }
+
+  toggleDescription() {
+    this.isDescriptionCollapsed.update((collapsed) => !collapsed);
   }
 }

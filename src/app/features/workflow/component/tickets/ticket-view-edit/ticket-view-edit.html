@@ -46,8 +46,16 @@
           </accordion-group>
         </accordion> -->
         <div class="mb-4">
-          <p class="form-label fw-semibold">Description</p>
-          <div class="ngx-editor-container">
+          <!-- <p class="form-label fw-semibold">Description</p> -->
+          <button class="collapse-btn mb-2" type="button" (click)="toggleDescription()">
+            <span class="icon me-2" [class.collapsed]="isDescriptionCollapsed()">
+              <svg width="9" viewBox="0 0 7 4" fill="currentColor">
+                <use xlink:href="assets/sprite.svg#svg-angle-down-2"></use>
+              </svg>
+            </span>
+            <span class="collapse-title">Description</span>
+          </button>
+          <div class="ngx-editor-container" [class.d-none]="isDescriptionCollapsed()">
             <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
             <ngx-editor
               [(ngModel)]="ticketBasicInfo().description"
@@ -59,7 +67,8 @@
         </div>
 
         <!-- Attachments -->
-        <div class="mb-4">
+        <app-ticket-attachment></app-ticket-attachment>
+        <!-- <div class="mb-4">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="fw-bold text-primary mb-0">Attachments</h6>
             <button class="btn btn-sm btn-outline-primary" (click)="uploadAttachment()">
@@ -77,7 +86,7 @@
               >
             </li>
           </ul>
-        </div>
+        </div> -->
 
         <!-- Comments -->
         <div class="mb-4">
