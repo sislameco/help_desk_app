@@ -139,3 +139,11 @@
   background: #ffe2d9;
   color: #b71c1c;
 }
+.description {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;     /* number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 6em;           /* optional for safety */
+}
