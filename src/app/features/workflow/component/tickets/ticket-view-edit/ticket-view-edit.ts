@@ -6,11 +6,15 @@ import { Editor, NgxEditorModule } from 'ngx-editor';
 import { TicketService } from '../../../services/ticket.service';
 import { derivedAsync } from 'ngxtension/derived-async';
 import {
+  EnumTicketStatus,
   TicketBasicDetailOutputDto,
   TicketSpecificationOutputDto,
 } from '../../../models/ticket.model.model';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { TicketAttachment } from './ticket-attachment/ticket-attachment';
+import { TicketComment } from './ticket-comment/ticket-comment';
+import { Dropdown } from '@shared/helper/components/dropdown/dropdown';
+import { TicketFields } from './ticket-fields/ticket-fields';
 
 @Component({
   selector: 'app-ticket-view-edit',
@@ -21,6 +25,9 @@ import { TicketAttachment } from './ticket-attachment/ticket-attachment';
     NgxEditorModule,
     AccordionModule,
     TicketAttachment,
+    TicketComment,
+    Dropdown,
+    TicketFields,
   ],
   providers: [TicketService],
   templateUrl: './ticket-view-edit.html',
@@ -32,6 +39,7 @@ export class TicketViewEdit {
   private readonly ticketService = inject(TicketService);
   editor!: Editor;
   newComment = '';
+  enumStatus = EnumTicketStatus;
   isDescriptionCollapsed = signal(false);
   readonly ticketBasicInfo = derivedAsync(
     () => {
@@ -70,15 +78,15 @@ export class TicketViewEdit {
       initialValue: [],
     },
   );
-  readonly comments = derivedAsync(
-    () => {
-      // this.refreshTrigger();
-      return this.ticketService.getTicketComments(Number(this.ticketId()));
-    },
-    {
-      initialValue: [],
-    },
-  );
+  // readonly comments = derivedAsync(
+  //   () => {
+  //     // this.refreshTrigger();
+  //     return this.ticketService.getTicketComments(Number(this.ticketId()));
+  //   },
+  //   {
+  //     initialValue: [],
+  //   },
+  // );
   readonly fields = derivedAsync(
     () => {
       // this.refreshTrigger();

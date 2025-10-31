@@ -1,1 +1,80 @@
-<p>ticket-comment works!</p>
+<div class="mb-4">
+  <app-dropdown heading="Comments">
+    <!-- <h6 class="fw-bold text-primary mb-2">Comments</h6> -->
+    @for (comment of comments(); track comment.id) {
+      <div class="border rounded p-2 mb-2">
+        <strong>{{ comment.commentedBy || 'Test User' }}</strong>
+        <small class="text-muted float-end">{{ comment.commentedOn }}</small>
+        <div class="mt-1 d-flex justify-content-between app-form">
+          @if (comment.isEditing) {
+            <div class="position-relative form-group mb-0 d-flex justify-content-between">
+              <textarea [(ngModel)]="editingComment" class="form-control mb-2"></textarea>
+              <!-- <input class="form-control" type="text" [(ngModel)]="editingComment"> -->
+              <div class="update-cancel-btns">
+                <button
+                  type="button"
+                  class="ch-icon-btn ch-icon-single"
+                  [disabled]="!editingComment.length"
+                  (click)="updateComment(comment.id, editingComment)"
+                >
+                  <svg width="12" viewBox="0 0 12 9" fill="currentColor">
+                    <use xlink:href="assets/sprite.svg#svg-approve-check"></use>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="ch-icon-btn ch-icon-single"
+                  (click)="undoChange(comment.id)"
+                >
+                  <svg width="12" viewBox="0 0 12 12" fill="currentColor">
+                    <use xlink:href="assets/sprite.svg#svg-undo"></use>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="view-grp">
+              <p>{{ comment.commentText }}</p>
+              <button
+                type="button"
+                class="ch-icon-btn ch-icon-single"
+                (click)="enableEditMode(comment.id, comment.commentText)"
+              >
+                <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                  <use xlink:href="assets/sprite.svg#svg-edit"></use>
+                </svg>
+              </button>
+            </div>
+          }
+
+          <button
+            type="button"
+            class="ch-icon-btn ch-icon-single disabled-hover"
+            [disabled]="!comment.isAuthorized"
+            (click)="deleteComment(comment.id)"
+          >
+            <span class="icon">
+              <svg width="13" viewBox="0 0 13 13" fill="currentColor">
+                <use xlink:href="assets/sprite.svg#red-close-icon"></use>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    }
+
+    <div class="mt-3 app-form">
+      <div class="form-group">
+        <textarea
+          rows="3"
+          [(ngModel)]="newComment"
+          class="form-control mb-2"
+          placeholder="Add a comment..."
+        ></textarea>
+        <button class="ch-btn ch-btn-green" (click)="addComment()" [disabled]="!newComment.length">
+          Add Comment
+        </button>
+      </div>
+    </div>
+  </app-dropdown>
+</div>

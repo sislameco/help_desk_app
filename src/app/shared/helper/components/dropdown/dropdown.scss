@@ -1,0 +1,14 @@
+.collapse-btn {
+  all: unset;
+  display: flex;
+  align-items: center;
+  .collapsed {
+    svg {
+      rotate: -90deg;
+    }
+  }
+}
+
+.add-btn {
+  all: unset;
+}

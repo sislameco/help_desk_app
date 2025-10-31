@@ -109,14 +109,3 @@
     border-color: #ff3f41;
   }
 }
-
-.collapse-btn {
-  all: unset;
-  display: flex;
-  align-items: center;
-  .collapsed {
-    svg {
-      rotate: -90deg;
-    }
-  }
-}

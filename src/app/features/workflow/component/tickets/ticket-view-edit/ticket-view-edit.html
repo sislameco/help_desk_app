@@ -5,7 +5,7 @@
       <div class="d-flex align-items-end gap-2">
         <h4 class="fw-bold">
           {{ ticketBasicInfo().ticketNumber }}
-          <!-- <span class="badge bg-secondary ms-2">{{ ticketBasicInfo().status }}</span> -->
+          <span class="badge bg-secondary ms-2">{{ enumStatus[ticketBasicInfo().status] }}</span>
         </h4>
         <small>{{ ticketBasicInfo().subject }}</small>
       </div>
@@ -22,73 +22,32 @@
         </div>
 
         <!-- Description -->
-        <!-- <accordion [isAnimated]="true">
-          <accordion-group>
-            <button class="btn" accordion-heading type="button">
-              <div class="heading-title">Personal Information</div>
-              <span class="icon">
-                <svg width="7" viewBox="0 0 7 4" fill="currentColor">
-                  <use xlink:href="assets/sprite.svg#svg-angle-down-2"></use>
-                </svg>
-              </span>
-            </button>
-            <ul class="navbar-nav app-or-menu">
-              <li>
-                <div class="app-or-menu-item">Sub Items</div>
-              </li>
-              <li>
-                <div class="app-or-menu-item">Sub Items</div>
-              </li>
-              <li>
-                <div class="app-or-menu-item">Sub Items</div>
-              </li>
-            </ul>
-          </accordion-group>
-        </accordion> -->
         <div class="mb-4">
           <!-- <p class="form-label fw-semibold">Description</p> -->
-          <button class="collapse-btn mb-2" type="button" (click)="toggleDescription()">
-            <span class="icon me-2" [class.collapsed]="isDescriptionCollapsed()">
-              <svg width="9" viewBox="0 0 7 4" fill="currentColor">
-                <use xlink:href="assets/sprite.svg#svg-angle-down-2"></use>
-              </svg>
-            </span>
-            <span class="collapse-title">Description</span>
-          </button>
-          <div class="ngx-editor-container" [class.d-none]="isDescriptionCollapsed()">
-            <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
-            <ngx-editor
-              [(ngModel)]="ticketBasicInfo().description"
-              [editor]="editor"
-              [disabled]="false"
-              [placeholder]="'Describe the issue in detail...'"
-            ></ngx-editor>
-          </div>
+          <app-dropdown heading="Description">
+            <div class="ngx-editor-container" [class.d-none]="isDescriptionCollapsed()">
+              <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
+              <ngx-editor
+                [(ngModel)]="ticketBasicInfo().description"
+                [editor]="editor"
+                [disabled]="false"
+                [placeholder]="'Describe the issue in detail...'"
+              ></ngx-editor>
+            </div>
+          </app-dropdown>
         </div>
 
         <!-- Attachments -->
         <app-ticket-attachment [attachments]="attachments()"></app-ticket-attachment>
 
         <!-- Comments -->
-        <div class="mb-4">
-          <h6 class="fw-bold text-primary mb-2">Comments</h6>
-          <div *ngFor="let c of ticket.comments" class="border rounded p-2 mb-2">
-            <strong>{{ c.user?.fullName }}</strong>
-            <small class="text-muted float-end">{{ c.createdDate }}</small>
-            <div class="mt-1">{{ c.text }}</div>
-          </div>
-
-          <div class="mt-3">
-            <textarea rows="3" class="form-control mb-2" placeholder="Add a comment..."></textarea>
-            <button class="btn btn-sm btn-primary" (click)="addComment()">
-              <i class="bi bi-send"></i> Post Comment
-            </button>
-          </div>
-        </div>
+        <!-- <app-ticket-comment [comments]="comments()"></app-ticket-comment> -->
+        <app-ticket-comment [ticketId]="ticketId()"></app-ticket-comment>
       </div>
 
       <!-- 🧱 Right Panel -->
       <div class="col-lg-4 col-md-5">
+        <app-ticket-fields [fields]="fields()"></app-ticket-fields>
         <div class="card shadow-sm border-0">
           <div class="card-body">
             <!-- Status -->

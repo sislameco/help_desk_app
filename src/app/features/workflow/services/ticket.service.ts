@@ -52,13 +52,33 @@ export class TicketService {
 
   getTicketLinkings(ticketId: number): Observable<TicketLinkingItemOutputDto[]> {
     return this.http.get<TicketLinkingItemOutputDto[]>(
-      `${environment.apiBaseUrl}/api/ticket/linking-item/${ticketId}`,
+      `${environment.apiBaseUrl}/api/ticket/linking-tickets/${ticketId}`,
     );
   }
 
   getTicketComments(ticketId: number): Observable<TicketCommentOutputDto[]> {
     return this.http.get<TicketCommentOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/comments/${ticketId}`,
+    );
+  }
+
+  addTicketComment(ticketId: number, comment: string): Observable<boolean> {
+    return this.http.post<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/comment/${ticketId}?comment=${comment}`,
+      {},
+    );
+  }
+
+  updateTicketComment(commentId: number, comment: string): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/comment/?id=${commentId}&comment=${comment}`,
+      {},
+    );
+  }
+
+  deleteTicktComment(ticketId: number, commentId: number): Observable<boolean> {
+    return this.http.delete<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/comment/${ticketId}?commentId=${commentId}`,
     );
   }
 

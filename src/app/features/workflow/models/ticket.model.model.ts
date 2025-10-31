@@ -1,5 +1,6 @@
 import { RStatusEnum } from '@shared/enums/r-status.enum';
 import { EnumSortBy } from '@shared/enums/sort-by.enum';
+import { EnumDataType } from '../../company-configuration/models/company.model';
 
 export interface TicketListViewDto {
   id: number;
@@ -61,7 +62,8 @@ export interface TicketBasicDetailOutputDto {
   subject: string;
   description: string;
   company: TicketCompanyViewDto;
-  linkingItems: ListTicketOutputDto[];
+  priority: number;
+  status: number;
 }
 
 export interface TicketSpecificationOutputDto {
@@ -92,6 +94,8 @@ export interface TicketCommentOutputDto {
   commentText: string;
   commentedOn: Date;
   commentedBy: string;
+  isAuthorized: boolean;
+  isEditing: boolean;
 }
 
 export interface TicketFieldOutputDto {
@@ -99,6 +103,11 @@ export interface TicketFieldOutputDto {
   fkTicketTypeId: number;
   fkCustomeFieldId: number;
   value: string;
+  ddlValue: string[];
+  displayName: string;
+  isRequired: boolean;
+  isMultiSelect: boolean;
+  dataType: EnumDataType;
 }
 
 export interface TicketWatcherOutputDto {

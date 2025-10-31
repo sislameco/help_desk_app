@@ -1,1 +1,65 @@
-<p>ticket-fields works!</p>
+<div class="card p-3">
+  <h4>Additional Fields</h4>
+  <!-- @for (field of fields(); track $index) {
+    <span>{{ field.value || 'No Value' }}, </span>
+  } -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="app-form">
+    <div class="addition-fields" formArrayName="additionalFields">
+      @for (field of additionalFieldsArray.controls; track $index; let i = $index) {
+        <div class="form-group" [formGroupName]="i">
+          <label for="{{ i }}" class="input-label">{{ field.value.displayName }}</label>
+          @switch (field.value.dataType) {
+            @case (EnumDataType.textInput) {
+              <input
+                id="{{ i }}"
+                type="text"
+                class="form-control"
+                placeholder="Enter {{ field.value.displayName }}"
+                formControlName="value"
+                [value]="field.value.value"
+              />
+            }
+            @case (EnumDataType.number) {
+              <input
+                id="{{ i }}"
+                type="number"
+                class="form-control"
+                placeholder="Enter {{ field.value.displayName }}"
+                formControlName="value"
+                [value]="field.value.value"
+              />
+            }
+
+            @case (EnumDataType.textArea) {
+              <textarea
+                id="{{ i }}"
+                rows="3"
+                class="form-control"
+                placeholder="Enter {{ field.value.displayName }}"
+                formControlName="value"
+                [value]="field.value.value"
+              ></textarea>
+            }
+
+            @case (EnumDataType.dropdownList) {
+              <ng-select
+                id="{{ i }}"
+                class="select-dropdown"
+                [items]="field.value.ddlValues"
+                [multiple]="true"
+                formControlName="value"
+                bindLabel="value"
+                bindValue="value"
+                placeholder="Select {{ field.value.displayName }}"
+              ></ng-select>
+            }
+
+            @default {
+              <input id="{{ i }}" type="text" class="form-control" formControlName="value" />
+            }
+          }
+        </div>
+      }
+    </div>
+  </form>
+</div>
