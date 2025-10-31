@@ -23,10 +23,40 @@
   </div>
 
   <div class="d-flex gap-2">
-    <div class="col-md-2">
-      <app-ticket-filter></app-ticket-filter>
+    <div
+      class="quotation-tree--container w-100"
+      style="height: calc(100vh - 260px)"
+      [class.collaps]="isCollaps()"
+    >
+      <div class="collaps-title">
+        <span>Filters</span>
+      </div>
+      <div class="wTree wTree-tiny wTree-draggable">
+        <div class="tree-list-head d-flex justify-content-between">
+          <div class="left d-flex align-items-center">
+            <div
+              class="circle-icon-btn"
+              (click)="toggleClass('isCollaps')"
+              tabindex="0"
+              role="button"
+            >
+              <svg
+                width="8"
+                viewBox="0 0 9 13"
+                xmlns="http://www.w3.org/2000/svg"
+                class="arrow-right"
+                fill="currentColor"
+              >
+                <use xlink:href="assets/sprite.svg#svg-angle-left"></use>
+              </svg>
+            </div>
+            <h5 class="ms-2">Filters</h5>
+          </div>
+        </div>
+        <app-ticket-filter></app-ticket-filter>
+      </div>
     </div>
-    <div class="col-md-10">
+    <div class="w-100">
       @if (viewMode() === 'list') {
         <app-ticket-list-view [tickets]="ticketsResponse()?.items || []"></app-ticket-list-view>
       }

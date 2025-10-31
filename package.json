@@ -42,7 +42,8 @@
     "ngx-toastr": "^19.0.0",
     "ngxtension": "^5.2.0",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
     "@analogjs/platform": "^1.20.2",

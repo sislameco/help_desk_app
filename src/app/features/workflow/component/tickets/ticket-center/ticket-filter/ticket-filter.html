@@ -1,38 +1,6 @@
-<div class="product-database-sidebar">
+<div class="product-database-sidebar pe-2">
   <div class="filter-sidebar">
-    <div class="filter-header border-bottom border-gray-100">
-      <h5 class="text-neutral-900">Filters</h5>
-      <p class="text-neutral-500">Filter by Category, Supplier, Price.</p>
-    </div>
-    <div class="scroll-y p-3">
-      <!-- Saved Filters -->
-      <!-- <app-filter-sidebar filterName="Saved Filter" [isCollapsedShow]="true">
-        <ul>
-          @for (filter of savedFiltersToggle.visible(); track filter.id) {
-          <li class="d-flex align-items-center justify-content-between">
-            <label class="custom-radio">
-              <input type="radio" name="saveFilter" [checked]="appliedFilterId() === filter.id"
-                (change)="applySavedFilter(filter.id)" />
-              <span class="checkmark"></span>
-              <span class="label-text">{{ filter.name }}</span>
-            </label>
-            @if (!filter.isPublic) {
-            <button type="button" class="text-red-700 bg-transparent border-0 p-0"
-              (click)="deleteSavedFilter(filter.id); $event.stopPropagation()" title="Delete filter">
-              <svg width="10" viewBox="0 0 12 11" fill="currentColor">
-                <use href="assets/sprite.svg#svg-close-icon"></use>
-              </svg>
-            </button>
-            }
-          </li>
-          }
-        </ul>
-        @if (savedFiltersToggle.title()) {
-        <button class="see-more-btn" type="button" (click)="savedFiltersToggle.toggle()">
-          {{ savedFiltersToggle.title() }}
-        </button>
-        }
-      </app-filter-sidebar> -->
+    <div class="scroll-y p-3" style="height: calc(100vh - 370px)">
       <!-- Ticket Type -->
       <app-filter-sidebar filterName="Ticket Type" [isCollapsedShow]="true">
         <ul>
@@ -109,62 +77,240 @@
           </button>
         }
       </app-filter-sidebar>
+      <!-- Ticket Priority -->
+      <app-filter-sidebar filterName="Ticket Priority" [isCollapsedShow]="true">
+        <ul>
+          <li>
+            <label class="custom-checkbox">
+              <input
+                type="checkbox"
+                class="peer hidden"
+                [checked]="isAllPriorityChecked()"
+                (change)="resetTicketPrioritySelection()"
+              />
+              <span></span>
+              All
+              <p>{{ allprioritysCount() }}</p>
+            </label>
+          </li>
+          @for (priority of prioritysToggle.visible(); track priority.value) {
+            <li>
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="peer hidden"
+                  [checked]="selectedPriorityIds().includes(priority.value)"
+                  (change)="ticketPriorityToggle(priority.value, $event.target.checked)"
+                />
+                <span></span>
+                {{ priority.label }}
+                <p>{{ 0 }}</p>
+              </label>
+            </li>
+          }
+        </ul>
+        @if (ticketStatusesToggle.title()) {
+          <button class="see-more-btn" type="button" (click)="ticketStatusesToggle.toggle()">
+            {{ ticketStatusesToggle.title() }}
+          </button>
+        }
+      </app-filter-sidebar>
+      <!-- User -->
+      <app-filter-sidebar filterName="User" [isCollapsedShow]="true">
+        <ul>
+          <li>
+            <label class="custom-checkbox">
+              <input
+                type="checkbox"
+                class="peer hidden"
+                [checked]="isAllUserChecked()"
+                (change)="resetUserSelection()"
+              />
+              <span></span>
+              All
+              <p>{{ allusersCount() }}</p>
+            </label>
+          </li>
+          @for (user of usersToggle.visible(); track user.id) {
+            <li>
+              <label class="custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="peer hidden"
+                  [checked]="selectedUserIds().includes(user.id)"
+                  (change)="ticketUserToggle(user.id, $event.target.checked)"
+                />
+                <span></span>
+                {{ user.name }}
+                <p>{{ 0 }}</p>
+              </label>
+            </li>
+          }
+        </ul>
+        @if (usersToggle.title()) {
+          <button class="see-more-btn" type="button" (click)="usersToggle.toggle()">
+            {{ usersToggle.title() }}
+          </button>
+        }
+      </app-filter-sidebar>
 
       <!-- Price (Ex VAT) -->
-      <app-filter-sidebar filterName="Price (Ex VAT)" [isCollapsedShow]="true">
-        <!-- <ul class="filter-list"> -->
-        <!-- All -->
-        <!-- <li>
-            <label class="custom-radio">
-              <input type="radio" name="price" [checked]="!minPrice() && !maxPrice()" (change)="resetPriceRange()" />
-              <span class="checkmark"></span>
-              <span class="label-text">All</span>
-            </label>
-          </li> -->
-
-        <!-- Predefined Ranges -->
-        <!-- @for (item of priceSlots(); track $index) {
+      <app-filter-sidebar filterName="Date" [isCollapsedShow]="true">
+        <ul>
           <li>
-            <label class="custom-radio">
-              <input type="radio" name="price"
-                [checked]="minPrice() === item.min && maxPrice() === item.max && !customPrice()"
-                (change)="priceRange(item)" />
-              <span class="checkmark"></span>
-              <span class="label-text">{{ item.min }} - {{ item.max }}</span>
+            <label
+              class="app-form--radio"
+              for="timePeriodAll"
+              (click)="setTimeFilter(enumTimePeriod.ALL)"
+              tabindex="0"
+              role="button"
+            >
+              <input
+                type="radio"
+                id="timePeriodAll"
+                [checked]="filters.value().timePeriod === enumTimePeriod.ALL"
+              />
+              <span class="class"></span>
+              <p>All</p>
             </label>
           </li>
-          } -->
-
-        <!-- Custom Range -->
-        <!-- <li>
-            <label class="custom-radio">
-              <input type="radio" name="price" [checked]="customPrice()" (change)="toggleCustomPrice()" />
-              <span class="checkmark"></span>
-              <span class="label-text">Custom Range</span>
+          <li>
+            <label
+              class="app-form--radio"
+              for="CurrentMonth"
+              (click)="setTimeFilter(enumTimePeriod.CurrentMonth)"
+              tabindex="0"
+              role="button"
+            >
+              <input
+                type="radio"
+                id="CurrentMonth"
+                [checked]="filters.value().timePeriod === enumTimePeriod.CurrentMonth"
+              />
+              <span class="class"></span>
+              <p>Current Month</p>
             </label>
           </li>
-        </ul> -->
+          <li>
+            <label
+              class="app-form--radio"
+              for="PreviousMonth"
+              (click)="setTimeFilter(enumTimePeriod.PreviousMonth)"
+              tabindex="0"
+              role="button"
+            >
+              <input
+                type="radio"
+                id="PreviousMonth"
+                [checked]="filters.value().timePeriod === enumTimePeriod.PreviousMonth"
+              />
+              <span class="class"></span>
+              <p>Previous Month</p>
+            </label>
+          </li>
+          <li>
+            <label
+              class="app-form--radio"
+              for="CurrentYear"
+              (click)="setTimeFilter(enumTimePeriod.CurrentYear)"
+              tabindex="0"
+              role="button"
+            >
+              <input
+                type="radio"
+                id="CurrentYear"
+                [checked]="filters.value().timePeriod === enumTimePeriod.CurrentYear"
+              />
+              <span class="class"></span>
+              <p>Current Year</p>
+            </label>
+          </li>
+          <li>
+            <label
+              class="app-form--radio"
+              for="LastYear"
+              (click)="setTimeFilter(enumTimePeriod.LastYear)"
+              tabindex="0"
+              role="button"
+            >
+              <input
+                type="radio"
+                id="LastYear"
+                [checked]="filters.value().timePeriod === enumTimePeriod.LastYear"
+              />
+              <span class="class"></span>
+              <p>Last Year</p>
+            </label>
+          </li>
+          <li>
+            <label
+              class="app-form--radio"
+              for="custom"
+              (click)="setTimeFilter(enumTimePeriod.Custom)"
+              tabindex="0"
+              role="button"
+            >
+              <input
+                type="radio"
+                id="custom"
+                [checked]="filters.value().timePeriod === enumTimePeriod.Custom"
+              />
+              <span class="class"></span>
+              <p>Custom</p>
+            </label>
+          </li>
+        </ul>
+        <div class="app-sidebar-date-field">
+          <div class="d-flex align-items-center has-date-icon">
+            <div class="position-relative">
+              <input
+                type="text"
+                id="price-min-input1"
+                name="price-min"
+                (ngModelChange)="minDateChange($event)"
+                class="form-control form-control-circle h-30"
+                placeholder="Start Date"
+                [(ngModel)]="minDate"
+                [maxDate]="maxDate()"
+                [readonly]="true"
+                bsDatepicker
+                appDateMask
+                [bsConfig]="{
+                  adaptivePosition: true,
+                }"
+                autocomplete="off"
+                [class.disabled]="!(filters.value().timePeriod === enumTimePeriod.Custom)"
+              />
+            </div>
 
-        <!-- Custom Input Fields (min/max) -->
-        <!-- <div class="custom-range mt-2">
-          <div class="row g-2">
-            <div class="col-6">
-              <input type="number" class="form-control form-control-lg" placeholder="Min" [ngModel]="minPrice()"
-                [disabled]="!customPrice()" (ngModelChange)="onPriceChange('min', $event)" />
+            <span class="px-2"></span>
+            <div class="position-relative">
+              <input
+                type="text"
+                id="price-min-input2"
+                name="price-min"
+                (ngModelChange)="maxDateChange($event)"
+                class="form-control form-control-circle h-30"
+                placeholder="End Date"
+                [(ngModel)]="maxDate"
+                bsDatepicker
+                appDateMask
+                [bsConfig]="{ adaptivePosition: true }"
+                autocomplete="off"
+                [minDate]="minDate()"
+                [readonly]="true"
+                [class.disabled]="!(filters.value().timePeriod === enumTimePeriod.Custom)"
+              />
             </div>
-            <div class="col-6">
-              <input type="number" class="form-control form-control-lg" placeholder="Max" [ngModel]="maxPrice()"
-                [disabled]="!customPrice()" (ngModelChange)="onPriceChange('max', $event)" />
-            </div>
+            <span></span>
           </div>
-        </div> -->
+        </div>
       </app-filter-sidebar>
-      <!-- <div class="d-flex justify-content-between align-items-center gap-3 mt-4">
-        <button class="btn theme-btn-outline" type="button" (click)="clearFilters()">
-          Clear Filters
-        </button>
-        <button class="btn theme-btn" type="button" (click)="saveFilters()">Save Filters</button>
-      </div> -->
+    </div>
+    <div class="d-flex justify-content-center gap-2 mt-2">
+      <button class="ch-btn ch-btn-red-border" type="button" (click)="resetToDefault()">
+        Reset
+      </button>
     </div>
   </div>
 </div>

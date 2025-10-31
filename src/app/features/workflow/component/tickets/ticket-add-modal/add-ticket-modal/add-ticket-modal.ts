@@ -19,14 +19,13 @@ import { AddTicketInputDto } from '../../../../models/ticket.model.model';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { EnumDataType } from '../../../../../company-configuration/models/company.model';
-import { NgxControlError } from 'ngxtension/control-error';
 import { FileManagementService } from '../../../../services/file-manager-service';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 
 @Component({
   selector: 'app-add-ticket-modal',
   standalone: true,
-  imports: [ReactiveFormsModule, NgSelectComponent, NgxControlError, NgxEditorModule],
+  imports: [ReactiveFormsModule, NgSelectComponent, NgxEditorModule],
   templateUrl: './add-ticket-modal.html',
   styleUrl: './add-ticket-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

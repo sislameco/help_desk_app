@@ -9,7 +9,11 @@ import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 import { TicketFilter } from './ticket-filter/ticket-filter';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@shared/const/pagination.const';
 import { FilterParams } from '@shared/helper/classes/filter-params.class';
-import { TicketListFilterParams, TicketRequest } from '../../../models/ticket.model.model';
+import {
+  EnumTimePeriod,
+  TicketListFilterParams,
+  TicketRequest,
+} from '../../../models/ticket.model.model';
 import { shareReplay, Subject, takeUntil } from 'rxjs';
 import { toNums } from '@shared/helper/functions/common.function';
 import { EnumSortBy } from '@shared/enums/sort-by.enum';
@@ -34,6 +38,26 @@ export class TicketCentre {
 
   readonly viewMode = signal<'list' | 'kanban'>('list');
   selectedTicketTypeIds = signal<number[]>([]);
+  selectedticketStatusIds = signal<number[]>([]);
+  selectedPriorityIds = signal<number[]>([]);
+  selecteduserIds = signal<number[]>([]);
+  readonly isCollaps = signal(false);
+
+  // readonly selectedViewMode = derivedAsync(() => this.viewMode(), {
+  //   initialValue: 'list' as 'list' | 'kanban',
+  // });
+
+  // readonly isListView = derivedAsync(() => this.viewMode() === 'list', {
+  //   initialValue: true,
+  // });
+
+  // readonly isKanbanView = derivedAsync(() => this.viewMode() === 'kanban', {
+  //   initialValue: false,
+  // });
+
+  // readonly isTicketTypeSelected = derivedAsync(() => this.selectedTicketTypeIds().length > 0, {
+  //   initialValue: false,
+  // });
 
   setView(mode: 'list' | 'kanban') {
     this.viewMode.set(mode);
@@ -41,6 +65,7 @@ export class TicketCentre {
   readonly filters = new FilterParams<TicketListFilterParams>({
     page: DEFAULT_PAGE,
     pageSize: DEFAULT_PAGE_SIZE,
+    timePeriod: EnumTimePeriod.ALL,
   });
 
   private readonly refresh = signal(0);
@@ -99,9 +124,13 @@ export class TicketCentre {
       search: params.search,
       ticketTypeIds: toNums(params.ticketTypeIds),
       ticketStatusIds: toNums(params.ticketStatusIds),
+      userIds: toNums(params.userIds),
+      timePeriod: Number(params.timePeriod),
+      minDate: params.minDate,
+      maxDate: params.maxDate,
       // supplierIds: toNums(params.supplierIds),
-      minPrice: params.minPrice,
-      maxPrice: params.maxPrice,
+      // minPrice: params.minPrice,
+      // maxPrice: params.maxPrice,
       // selectedColumns: params.selectedColumns,
       status: params.status,
     };
@@ -143,8 +172,15 @@ export class TicketCentre {
       // Sync category selection from URL params
       const ticketTypeIds = toNums(params['ticketTypeIds']) ?? [];
       this.selectedTicketTypeIds.set(ticketTypeIds);
+
       const ticketStatusIds = toNums(params['ticketStatusIds']) ?? [];
-      this.selectedTicketTypeIds.set(ticketStatusIds);
+      this.selectedticketStatusIds.set(ticketStatusIds);
+
+      const ticketPriorityIds = toNums(params['ticketPriorityIds']) ?? [];
+      this.selectedPriorityIds.set(ticketPriorityIds);
+
+      const userIds = toNums(params['userIds']) ?? [];
+      this.selecteduserIds.set(userIds);
 
       // Sync supplier selection from URL params
       // const supplierIds = toNums(params['supplierIds']) ?? [];
@@ -174,5 +210,21 @@ export class TicketCentre {
       // Let normalizeValue handle all conversions
       this.filters.setMany(params as Partial<TicketListFilterParams>);
     });
+  }
+  toggleClass(collapsVariant: 'isCollaps') {
+    switch (collapsVariant) {
+      case 'isCollaps':
+        this.isCollaps.set(!this.isCollaps());
+        break;
+      // case 'isPagesOrSectionCollaps':
+      //   this.isPagesOrSectionCollaps = !this.isPagesOrSectionCollaps;
+      //   break;
+      // case 'isAddFieldCollaps':
+      //   this.isAddFieldCollaps = !this.isAddFieldCollaps;
+      //   break;
+      // case 'collaps4':
+      //   this.isCollaps4 = !this.isCollaps4;
+      //   break;
+    }
   }
 }

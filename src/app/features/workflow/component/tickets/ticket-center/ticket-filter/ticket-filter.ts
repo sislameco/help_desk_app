@@ -16,22 +16,25 @@ import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@shared/const/pagination.const'
 import {
   EnumPriority,
   EnumTicketStatus,
+  EnumTimePeriod,
   TicketListFilterParams,
 } from '../../../../models/ticket.model.model';
 import { createToggleList } from '../../../../helpers/filter-function';
 import { toNums } from '@shared/helper/functions/common.function';
-import { JsonPipe } from '@angular/common';
 import { CommonSelectBoxGeneric } from '@shared/models/common.model';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ticket-filter',
-  imports: [FilterSidebar, JsonPipe],
+  imports: [FilterSidebar, BsDatepickerModule, FormsModule],
   templateUrl: './ticket-filter.html',
   styleUrl: './ticket-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [TicketReferenceService],
 })
 export class TicketFilter {
+  dateTest: Date[] | null = null;
   private readonly router = inject(Router);
   readonly route = inject(ActivatedRoute);
   private readonly ticketRef = inject(TicketReferenceService);
@@ -51,26 +54,25 @@ export class TicketFilter {
   // - Custom range toggled when no predefined slot matches current min/max
   // - Query params keep state in URL
   // ─────────────────────────────────────────────────────────────────────────────
-  readonly minPrice = signal<number | null>(null);
-  readonly maxPrice = signal<number | null>(null);
-  readonly customPrice = signal(false);
-  private priceDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  enumTimePeriod = EnumTimePeriod;
+  // startDate: Date | undefined = undefined;
+  // endDate: Date | undefined = undefined;
+  readonly minDate = signal<Date>(new Date());
+  readonly maxDate = signal<Date>(new Date());
+  readonly customDate = signal(false);
 
   // ─────────────────────────────────────────────────────────────────────────────
   // Supplier selection (sidebar)
   // ─────────────────────────────────────────────────────────────────────────────
   selectedSupplierIds = signal<number[]>([]);
 
-  prioritys = derivedAsync(
-    () =>
-      Object.entries(EnumPriority)
-        .filter(([key]) => isNaN(Number(key))) // keep only string keys
-        .map(([label, value]) => ({
-          label,
-          value: value as unknown as number,
-        }))
-        .map((r) => (Array.isArray(r) ? r : [r])),
-    { initialValue: [] },
+  prioritys = signal<CommonSelectBoxGeneric<number>[]>(
+    Object.entries(EnumPriority)
+      .filter(([key]) => isNaN(Number(key))) // keep only string keys
+      .map(([label, value]) => ({
+        label,
+        value: value as unknown as number,
+      })),
   );
   readonly prioritysToggle = createToggleList(this.prioritys, 5);
   selectedPriorityIds = signal<number[]>([]);
@@ -78,6 +80,18 @@ export class TicketFilter {
   allprioritysCount = computed(() => {
     return this.prioritys().length;
   });
+  ticketPriorityToggle(id: number, checked: boolean) {
+    const current = this.selectedPriorityIds();
+    const updated = checked ? [...current, id] : current.filter((sid) => sid !== id);
+    this.selectedPriorityIds.set(updated);
+    // If none checked, treat as 'All'
+    if (updated.length === 0) {
+      this.resetTicketPrioritySelection();
+    } else {
+      this.navigateRoute({ ticketPriorityIds: updated, page: 1 });
+    }
+    // this.refresh.update((x) => x + 1);
+  }
 
   readonly ticketStatuses = signal<CommonSelectBoxGeneric<number>[]>(
     Object.entries(EnumTicketStatus)
@@ -105,16 +119,6 @@ export class TicketFilter {
     }
     // this.refresh.update((x) => x + 1);
   }
-
-  departments = derivedAsync(
-    () =>
-      this.fkCompanyId
-        ? this.ticketRef
-            .getDepartments(this.fkCompanyId)
-            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
-    { initialValue: [] },
-  );
 
   ticketTypes = derivedAsync(
     () =>
@@ -149,35 +153,7 @@ export class TicketFilter {
     // this.refresh.update((x) => x + 1);
   }
 
-  rootCauses = derivedAsync(
-    () =>
-      this.fkCompanyId
-        ? this.ticketRef
-            .getRootCauses(this.fkCompanyId)
-            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
-    { initialValue: [] },
-  );
-
-  customers = derivedAsync(
-    () =>
-      this.fkCompanyId
-        ? this.ticketRef
-            .getCustomers(this.fkCompanyId)
-            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
-    { initialValue: [] },
-  );
-
-  projects = derivedAsync(
-    () =>
-      this.fkCompanyId
-        ? this.ticketRef
-            .getProjects(this.fkCompanyId)
-            .pipe(map((r) => (Array.isArray(r) ? r : [r])))
-        : of([]),
-    { initialValue: [] },
-  );
+  timePeriod = signal<number>(0);
 
   users = derivedAsync(
     () =>
@@ -186,27 +162,31 @@ export class TicketFilter {
         : of([]),
     { initialValue: [] },
   );
-  // selectedSubCategoryIds = signal<number[]>([]);
-  // readonly isAllSupplierChecked = computed(() => this.selectedSupplierIds().length === 0);
+  readonly usersToggle = createToggleList(this.users, 5);
+  selectedUserIds = signal<number[]>([]);
+  readonly isAllUserChecked = computed(() => this.selectedUserIds().length === 0);
+  allusersCount = computed(() => {
+    return this.users().length;
+  });
+  ticketUserToggle(id: number, checked: boolean) {
+    const current = this.selectedUserIds();
+    const updated = checked ? [...current, id] : current.filter((sid) => sid !== id);
+    this.selectedUserIds.set(updated);
+    // If none checked, treat as 'All'
+    if (updated.length === 0) {
+      this.resetUserSelection();
+    } else {
+      this.navigateRoute({ userIds: updated, page: 1 });
+    }
+    // this.refresh.update((x) => x + 1);
+  }
 
   constructor() {
     afterNextRender(async () => {
-      // const list = await firstValueFrom(this.userProductFilterService.userProductFilters(true));
-
-      // if (!this.hasAppliedDefaultOnInit()) {
-      //   const def = (list || []).find((f) => f.isDefault);
-      //   if (def) {
-      //     // todo need to add later
-      //     //  this.applySavedFilter(def.id);
-      //   }
-      //   this.hasAppliedDefaultOnInit.set(true);
-      // }
-      // Apply default saved filter only once when saved filters first load
       this.listenQueryParams();
-      // Load fields initially without using effect()
-      // this.loadFields(this.appliedFilterId() ?? undefined);
     });
   }
+
   refreshFilters() {
     this.refresh.update((x) => x + 1);
   }
@@ -219,100 +199,75 @@ export class TicketFilter {
   private listenQueryParams() {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe$)).subscribe((raw) => {
       const params: Record<string, unknown> = { ...raw };
-
-      // Set defaults for missing params
-      // if (params['search'] || !params['page']) {
-      //   params['page'] = DEFAULT_PAGE;
-      // }
-      // if (!params['status']) {
-      //   params['status'] = SettingsStatusEnum.Active;
-      // }
-      // if (!params['sortColumn']) {
-      //   params['sortColumn'] = 'ProductCode';
-      // }
-      // if (params['sortBy'] === undefined) {
-      //   params['sortBy'] = EnumSortBy.DESC;
-      // }
-
       // Sync category selection from URL params
       const ticketTypeIds = toNums(params['ticketTypeIds']) ?? [];
       this.selectedTicketTypeIds.set(ticketTypeIds);
 
-      // Sync supplier selection from URL params
-      // const supplierIds = toNums(params['supplierIds']) ?? [];
-      // this.selectedSupplierIds.set(supplierIds);
+      const ticketStatusIds = toNums(params['ticketStatusIds']) ?? [];
+      this.selectedticketStatusIds.set(ticketStatusIds);
 
-      // // Handle price slot selection logic (accept 0 values)
-      // if ('minPrice' in params && 'maxPrice' in params) {
-      //   const minNum = Number(params['minPrice']);
-      //   const maxNum = Number(params['maxPrice']);
+      const ticketPriorityIds = toNums(params['ticketPriorityIds']) ?? [];
+      this.selectedPriorityIds.set(ticketPriorityIds);
 
-      //   this.minPrice.set(minNum);
-      //   this.maxPrice.set(maxNum);
+      const userIds = toNums(params['userIds']) ?? [];
+      this.selectedUserIds.set(userIds);
 
-      //   // Check if the price matches any predefined slot
-      //   const slots = this.priceSlots();
-      //   const matchingSlot = slots.find((slot) => slot.min === minNum && slot.max === maxNum);
+      this.minDate.set(params['minDate'] ? new Date(params['minDate'] as string) : new Date());
+      this.maxDate.set(params['maxDate'] ? new Date(params['maxDate'] as string) : new Date());
 
-      //   // If no matching slot, set custom price mode
-      //   this.customPrice.set(!matchingSlot);
-      // } else {
-      //   // No price filter applied
-      //   this.minPrice.set(null);
-      //   this.maxPrice.set(null);
-      //   this.customPrice.set(false);
-      // }
+      const timePeriod = Number(params['timePeriod']) || EnumTimePeriod.ALL;
+      this.filters.value().timePeriod = timePeriod;
+      this.timePeriod.set(timePeriod);
 
-      // Let normalizeValue handle all conversions
       this.filters.setMany(params as Partial<TicketListFilterParams>);
+    });
+  }
+  resetToDefault() {
+    this.navigateRoute({
+      page: 1,
+      timePeriod: EnumTimePeriod.ALL,
+      ticketTypeIds: [],
+      ticketStatusIds: [],
+      ticketPriorityIds: [],
+      userIds: [],
+      minDate: new Date().toISOString(),
+      maxDate: new Date().toISOString(),
     });
   }
 
   // Reset all categories (when "All" is checked)
   resetTicketTypeSelection() {
     this.selectedTicketTypeIds.set([]);
+    this.navigateRoute({ ticketTypeIds: [], page: 1 });
     this.refresh.update((x) => x + 1);
   }
   resetTicketStatusSelection() {
-    this.selectedTicketTypeIds.set([]);
+    this.selectedticketStatusIds.set([]);
+    this.navigateRoute({ ticketStatusIds: [], page: 1 });
+    this.refresh.update((x) => x + 1);
+  }
+  resetTicketPrioritySelection() {
+    this.selectedPriorityIds.set([]);
+    this.navigateRoute({ ticketPriorityIds: [], page: 1 });
+    this.refresh.update((x) => x + 1);
+  }
+  resetUserSelection() {
+    this.selectedUserIds.set([]);
+    this.navigateRoute({ userIds: [], page: 1 });
     this.refresh.update((x) => x + 1);
   }
 
-  toggleCustomPrice() {
-    this.customPrice.set(true);
-    this.minPrice.set(0);
-    this.maxPrice.set(5000);
+  toggleCustomDate() {
+    this.customDate.set(true);
+    this.minDate.set(new Date());
+    this.maxDate.set(new Date(Date.now() + 5000));
     this.navigateRoute({
-      minPrice: 0,
-      maxPrice: 5000,
+      minDate: this.minDate().toISOString(),
+      maxDate: this.maxDate().toISOString(),
       page: 1,
     });
   }
-  onPriceChange(type: 'min' | 'max', value: number | null) {
-    if (type === 'min') {
-      this.minPrice.set(value);
-    } else {
-      this.maxPrice.set(value);
-    }
 
-    // Debounce navigation
-    if (this.priceDebounceTimer) {
-      clearTimeout(this.priceDebounceTimer);
-    }
-
-    this.priceDebounceTimer = setTimeout(() => {
-      const min = this.minPrice();
-      const max = this.maxPrice();
-
-      if (min !== null && max !== null) {
-        this.navigateRoute({
-          minPrice: min,
-          maxPrice: max,
-          page: 1,
-        });
-      }
-    }, 500);
-  }
   private navigateRoute(changes: Partial<TicketListFilterParams> = {}, isReplace = false) {
     const queryParams = isReplace ? changes : { ...this.filters.value(), ...changes };
     // Remove undefined or null keys (for cleared filters)
@@ -328,32 +283,77 @@ export class TicketFilter {
       })
       .then();
   }
-  /**
-   * Clears the price filter ("All"): removes minPrice/maxPrice from both local state and URL.
-   * Uses replace to ensure URL is reset cleanly (no merge reintroducing the keys).
-   */
-  resetPriceRange() {
-    // reset local signals
-    this.minPrice.set(null);
-    this.maxPrice.set(null);
-    this.customPrice.set(false);
 
-    // remove from internal filter state so they don't come back on merge
-    this.filters.remove('minPrice').remove('maxPrice');
-
-    // replace the URL query params with the current filter state (without min/max)
-    const next = { ...this.filters.value(), page: 1 };
-    this.navigateRoute(next, true);
+  setTimeFilter(timePeriod: EnumTimePeriod = EnumTimePeriod.ALL) {
+    this.timePeriod.set(timePeriod);
+    const { fromDate, toDate } = this.setTimePeriod(timePeriod);
+    this.navigateRoute({
+      timePeriod,
+      minDate: fromDate.toISOString(),
+      maxDate: toDate.toISOString(),
+      page: 1,
+    });
   }
-  /**
-   * Toggles a supplier in the current selection and triggers a refresh.
-   * @param id Supplier ID
-   * @param checked True when selected, false when removed
-   */
-  supplierToggle(id: number, checked: boolean) {
-    const current = this.selectedSupplierIds();
-    const updated = checked ? [...current, id] : current.filter((sid) => sid !== id);
-    this.selectedSupplierIds.set(updated);
-    this.refresh.update((x) => x + 1);
+
+  minDateChange(value: Date | null) {
+    this.navigateRoute({
+      minDate: value?.toISOString(),
+      page: 1,
+    });
+  }
+
+  maxDateChange(value: Date | null) {
+    this.navigateRoute({
+      maxDate: value?.toISOString(),
+      page: 1,
+    });
+  }
+
+  setTimePeriod(type: EnumTimePeriod): { fromDate: Date; toDate: Date } {
+    const dates = { fromDate: new Date(), toDate: new Date() };
+    const now = new Date();
+
+    switch (type) {
+      case EnumTimePeriod.ALL:
+        return dates;
+
+      case EnumTimePeriod.CurrentMonth: {
+        const fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const toDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.PreviousMonth: {
+        const fromDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const toDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.CurrentYear: {
+        const fromDate = new Date(now.getFullYear(), 0, 1);
+        const toDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.LastYear: {
+        const fromDate = new Date(now.getFullYear() - 1, 0, 1);
+        const toDate = new Date(now.getFullYear() - 1, 11, 31, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.Custom: {
+        dates.fromDate = new Date();
+        dates.toDate = new Date();
+        return dates;
+      }
+    }
   }
 }
