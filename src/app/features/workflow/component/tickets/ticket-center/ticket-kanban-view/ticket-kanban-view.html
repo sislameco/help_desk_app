@@ -39,7 +39,7 @@
           <div class="ticket-card-body">
             <div class="ticket-title">{{ t.title }}</div>
             <div class="ticket-subject">{{ t.subject }}</div>
-            <div class="ticket-desc">{{ t.description }}</div>
+            <div class="description" [innerHTML]="t.description"></div>
           </div>
           <div class="ticket-card-footer">
             <span class="assignee">Submitted By {{ t.reporter }}</span>
