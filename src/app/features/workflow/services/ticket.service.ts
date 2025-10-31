@@ -38,6 +38,16 @@ export class TicketService {
     );
   }
 
+  updateTicketBasicDetails(
+    ticketId: number,
+    input: { id: number; description: string },
+  ): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/basic-detail/${ticketId}`,
+      input,
+    );
+  }
+
   getTicketSpecifications(ticketId: number): Observable<TicketSpecificationOutputDto[]> {
     return this.http.get<TicketSpecificationOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/specification/${ticketId}`,
@@ -47,6 +57,19 @@ export class TicketService {
   getTicketAttachments(ticketId: number): Observable<TicketFileDto[]> {
     return this.http.get<TicketFileDto[]>(
       `${environment.apiBaseUrl}/api/ticket/attachment/${ticketId}`,
+    );
+  }
+
+  addTicketAttachment(ticketId: number, fileIds: number[]): Observable<boolean> {
+    return this.http.post<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/attachment/${ticketId}`,
+      fileIds,
+    );
+  }
+
+  deleteTicketAttachment(attachmentId: number): Observable<boolean> {
+    return this.http.delete<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/attachment?id=${attachmentId}`,
     );
   }
 

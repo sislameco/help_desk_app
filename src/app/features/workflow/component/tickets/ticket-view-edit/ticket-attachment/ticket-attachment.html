@@ -1,12 +1,30 @@
-<div class="mb-4">
-  <app-dropdown heading="Attachments" [hasAddButon]="true" (addTrigger)="uploadAttachment()">
-    <ul class="list-group small" [class.d-none]="isCollapsed()">
+<div class="mb-4 position-relative">
+  <app-dropdown heading="Attachments">
+    <ul class="attached-file-list mt-3 d-flex align-items-center flex-wrap gap-2">
       @for (file of attachments(); track $index) {
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span><i class="bi bi-file-earmark-text"></i> {{ file.fileName }}</span>
-          <span class="text-muted">{{ file.filePath }}</span>
+        <li class="attached-file-item">
+          <div class="d-flex align-items-start gap-3">
+            <div class="file-name">
+              <p>{{ file.fileName }}</p>
+              <small> {{ file.addedBy }}, {{ file.addedOn }}</small>
+            </div>
+            <button class="file-close" (click)="removeFile($index)">
+              <svg
+                width="10"
+                viewBox="0 0 13 13"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <use href="assets/sprite.svg#red-close-icon"></use>
+              </svg>
+            </button>
+          </div>
         </li>
       }
     </ul>
   </app-dropdown>
+  <label for="upload" class="ch-icon-btn ch-icon-single disabled-hover cursor-pointer mb-0 plus-btn"
+    ><svg width="11" viewBox="0 0 11 10" fill="currentColor">
+      <use xlink:href="assets/sprite.svg#plus-icon"></use></svg></label
+  ><input type="file" name="upload" id="upload" hidden="" (change)="uploadAttachment($event)" />
 </div>

@@ -1,0 +1,9 @@
+@use '../../../../../../../styles/base/variable' as *;
+.plus-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  &:hover {
+    color: $fontColor;
+  }
+}

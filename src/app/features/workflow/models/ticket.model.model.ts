@@ -78,7 +78,7 @@ export interface TicketFileDto {
   fileName: string;
   filePath: string;
   addedBy: string;
-  addedOn: string;
+  addedOn: Date;
 }
 
 export interface TicketLinkingItemOutputDto {

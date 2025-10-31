@@ -8,18 +8,6 @@
       </span>
       <span class="collapse-title cursor-pointer">{{ heading() }}</span>
     </button>
-    <!-- <div class="d-flex justify-content-between align-items-center mb-2">
-      <button class="btn btn-sm btn-outline-primary"><i class="bi bi-upload"></i> Upload</button>
-    </div> -->
-    <div class="buttons">
-      @if (hasAddButon()) {
-        <button class="add-btn" (click)="triggerAdd()">
-          <svg width="11" viewBox="0 0 11 10" fill="currentColor">
-            <use xlink:href="assets/sprite.svg#plus-icon"></use>
-          </svg>
-        </button>
-      }
-    </div>
   </div>
   <div class="dropdown-content" [class.d-none]="isCollapsed()">
     <ng-content></ng-content>

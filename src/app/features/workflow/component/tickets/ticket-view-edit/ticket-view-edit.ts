@@ -15,6 +15,7 @@ import { TicketAttachment } from './ticket-attachment/ticket-attachment';
 import { TicketComment } from './ticket-comment/ticket-comment';
 import { Dropdown } from '@shared/helper/components/dropdown/dropdown';
 import { TicketFields } from './ticket-fields/ticket-fields';
+import { TicketLinkedItems } from './ticket-linked-items/ticket-linked-items';
 
 @Component({
   selector: 'app-ticket-view-edit',
@@ -28,6 +29,7 @@ import { TicketFields } from './ticket-fields/ticket-fields';
     TicketComment,
     Dropdown,
     TicketFields,
+    TicketLinkedItems,
   ],
   providers: [TicketService],
   templateUrl: './ticket-view-edit.html',
@@ -41,9 +43,10 @@ export class TicketViewEdit {
   newComment = '';
   enumStatus = EnumTicketStatus;
   isDescriptionCollapsed = signal(false);
+  ticketBasicDescriptionRefresh = signal(0);
   readonly ticketBasicInfo = derivedAsync(
     () => {
-      // this.refreshTrigger();
+      this.ticketBasicDescriptionRefresh();
       return this.ticketService.getTicketBasicDetails(Number(this.ticketId()));
     },
     {
@@ -60,24 +63,24 @@ export class TicketViewEdit {
   //   },
   // );
   specification: TicketSpecificationOutputDto = {} as TicketSpecificationOutputDto;
-  readonly attachments = derivedAsync(
-    () => {
-      // this.refreshTrigger();
-      return this.ticketService.getTicketAttachments(Number(this.ticketId()));
-    },
-    {
-      initialValue: [],
-    },
-  );
-  readonly linkingItems = derivedAsync(
-    () => {
-      // this.refreshTrigger();
-      return this.ticketService.getTicketLinkings(Number(this.ticketId()));
-    },
-    {
-      initialValue: [],
-    },
-  );
+  // readonly attachments = derivedAsync(
+  //   () => {
+  //     // this.refreshTrigger();
+  //     return this.ticketService.getTicketAttachments(Number(this.ticketId()));
+  //   },
+  //   {
+  //     initialValue: [],
+  //   },
+  // );
+  // readonly linkingItems = derivedAsync(
+  //   () => {
+  //     // this.refreshTrigger();
+  //     return this.ticketService.getTicketLinkings(Number(this.ticketId()));
+  //   },
+  //   {
+  //     initialValue: [],
+  //   },
+  // );
   // readonly comments = derivedAsync(
   //   () => {
   //     // this.refreshTrigger();
@@ -226,7 +229,18 @@ export class TicketViewEdit {
     alert('✅ Ticket updated successfully (mock save)');
   }
 
-  toggleDescription() {
-    this.isDescriptionCollapsed.update((collapsed) => !collapsed);
+  updateDescription(newDescription: string) {
+    this.ticketService
+      .updateTicketBasicDetails(Number(this.ticketId()), {
+        id: Number(this.ticketId()),
+        description: newDescription,
+      })
+      .subscribe({
+        next: (res) => {
+          if (res) {
+            this.ticketBasicDescriptionRefresh.update((val) => val + 1);
+          }
+        },
+      });
   }
 }

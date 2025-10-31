@@ -25,7 +25,7 @@
         <div class="mb-4">
           <!-- <p class="form-label fw-semibold">Description</p> -->
           <app-dropdown heading="Description">
-            <div class="ngx-editor-container" [class.d-none]="isDescriptionCollapsed()">
+            <div class="ngx-editor-container">
               <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
               <ngx-editor
                 [(ngModel)]="ticketBasicInfo().description"
@@ -34,11 +34,20 @@
                 [placeholder]="'Describe the issue in detail...'"
               ></ngx-editor>
             </div>
+            <button
+              class="ch-btn ch-btn-green mt-3"
+              (click)="updateDescription(ticketBasicInfo().description)"
+            >
+              Update Description
+            </button>
           </app-dropdown>
         </div>
 
         <!-- Attachments -->
-        <app-ticket-attachment [attachments]="attachments()"></app-ticket-attachment>
+        <app-ticket-attachment [ticketId]="ticketId()"></app-ticket-attachment>
+
+        <!-- Linked tickets -->
+        <app-ticket-linked-items [ticketId]="ticketId()"></app-ticket-linked-items>
 
         <!-- Comments -->
         <!-- <app-ticket-comment [comments]="comments()"></app-ticket-comment> -->

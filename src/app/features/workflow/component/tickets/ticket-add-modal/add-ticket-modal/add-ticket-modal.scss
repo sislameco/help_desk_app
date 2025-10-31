@@ -30,3 +30,13 @@
     all: unset;
   }
 }
+.upload-btn {
+  border-color: $light-gray;
+  // border-radius: 4px;
+  // padding: 6px 12px;
+  // font-size: 14px;
+  // color: #000;
+  &:hover {
+    color: $fontColor;
+  }
+}

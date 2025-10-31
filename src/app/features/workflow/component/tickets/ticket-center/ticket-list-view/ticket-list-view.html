@@ -8,6 +8,7 @@
         <th>Priority</th>
         <th>Assignee</th>
         <th>Created Date</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -40,6 +41,25 @@
           </td>
           <td>{{ t.assignee }}</td>
           <td>{{ t.createdDate | customDate }}</td>
+          <td>
+            <div class="dropdown-action" dropdown placement="bottom right">
+              <button dropdownToggle type="button" class="active-btn">
+                <svg fill="currentColor" width="16" viewBox="0 0 18 18">
+                  <use href="assets/sprite.svg#svg-cog"></use>
+                </svg>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                <li>
+                  <button class="dropdown-item" (click)="navigateToTicketDetail(t.id)">
+                    <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+                      <use href="assets/sprite.svg#edit-s-icon"></use>
+                    </svg>
+                    View
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </td>
         </tr>
       }
     </tbody>

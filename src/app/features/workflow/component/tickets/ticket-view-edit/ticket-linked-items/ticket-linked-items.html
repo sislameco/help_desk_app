@@ -1,0 +1,35 @@
+<div class="mb-4 position-relative">
+  <app-dropdown heading="Linked Tickets">
+    <div class="linked-tickets mt-3">
+      <button
+        for="upload"
+        class="ch-icon-btn ch-icon-single disabled-hover cursor-pointer mb-0 plus-btn"
+      >
+        <svg width="11" viewBox="0 0 11 10" fill="currentColor">
+          <use xlink:href="assets/sprite.svg#plus-icon"></use>
+        </svg>
+      </button>
+
+      <ul class="tickets">
+        @for (ticket of linkingItems(); track ticket.id) {
+          <li class="ticket">{{ ticket.ticketNumber }}: {{ ticket.subject }}</li>
+        }
+      </ul>
+    </div>
+    <div class="app-form mt-3">
+      <div class="form-group">
+        <label for="linkedTickets" class="input-label">Linked Tickets</label>
+        <ng-select
+          id="linkedTickets"
+          class="select-dropdown"
+          [items]="linkingItems()"
+          bindLabel="ticketNumber"
+          bindValue="id"
+          [virtualScroll]="true"
+          [multiple]="true"
+        >
+        </ng-select>
+      </div>
+    </div>
+  </app-dropdown>
+</div>
