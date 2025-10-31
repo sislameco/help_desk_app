@@ -9,7 +9,11 @@ import { Breadcrumbs } from '@shared/helper/components/breadcrumbs/breadcrumbs';
 import { TicketFilter } from './ticket-filter/ticket-filter';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@shared/const/pagination.const';
 import { FilterParams } from '@shared/helper/classes/filter-params.class';
-import { TicketListFilterParams, TicketRequest } from '../../../models/ticket.model.model';
+import {
+  EnumTimePeriod,
+  TicketListFilterParams,
+  TicketRequest,
+} from '../../../models/ticket.model.model';
 import { shareReplay, Subject, takeUntil } from 'rxjs';
 import { toNums } from '@shared/helper/functions/common.function';
 import { EnumSortBy } from '@shared/enums/sort-by.enum';
@@ -37,6 +41,7 @@ export class TicketCentre {
   selectedticketStatusIds = signal<number[]>([]);
   selectedPriorityIds = signal<number[]>([]);
   selecteduserIds = signal<number[]>([]);
+  readonly isCollaps = signal(false);
 
   // readonly selectedViewMode = derivedAsync(() => this.viewMode(), {
   //   initialValue: 'list' as 'list' | 'kanban',
@@ -60,6 +65,7 @@ export class TicketCentre {
   readonly filters = new FilterParams<TicketListFilterParams>({
     page: DEFAULT_PAGE,
     pageSize: DEFAULT_PAGE_SIZE,
+    timePeriod: EnumTimePeriod.ALL,
   });
 
   private readonly refresh = signal(0);
@@ -119,6 +125,9 @@ export class TicketCentre {
       ticketTypeIds: toNums(params.ticketTypeIds),
       ticketStatusIds: toNums(params.ticketStatusIds),
       userIds: toNums(params.userIds),
+      timePeriod: Number(params.timePeriod),
+      minDate: params.minDate,
+      maxDate: params.maxDate,
       // supplierIds: toNums(params.supplierIds),
       // minPrice: params.minPrice,
       // maxPrice: params.maxPrice,
@@ -201,5 +210,21 @@ export class TicketCentre {
       // Let normalizeValue handle all conversions
       this.filters.setMany(params as Partial<TicketListFilterParams>);
     });
+  }
+  toggleClass(collapsVariant: 'isCollaps') {
+    switch (collapsVariant) {
+      case 'isCollaps':
+        this.isCollaps.set(!this.isCollaps());
+        break;
+      // case 'isPagesOrSectionCollaps':
+      //   this.isPagesOrSectionCollaps = !this.isPagesOrSectionCollaps;
+      //   break;
+      // case 'isAddFieldCollaps':
+      //   this.isAddFieldCollaps = !this.isAddFieldCollaps;
+      //   break;
+      // case 'collaps4':
+      //   this.isCollaps4 = !this.isCollaps4;
+      //   break;
+    }
   }
 }

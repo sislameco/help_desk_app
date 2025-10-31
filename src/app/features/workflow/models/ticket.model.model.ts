@@ -143,8 +143,8 @@ export type TicketListFilterParams = TicketFilterParams & {
   userIds?: number[];
   // supplierIds?: number[];
   // selectedColumns?: number[];
-  minDate?: Date;
-  maxDate?: Date;
+  minDate?: string;
+  maxDate?: string;
   timePeriod?: EnumTimePeriod;
 };
 
@@ -156,9 +156,10 @@ export interface TicketRequest {
   ticketTypeIds?: number[];
   ticketStatusIds?: number[];
   userIds?: number[];
+  timePeriod: number;
   // supplierIds?: number[];
-  minDate?: Date;
-  maxDate?: Date;
+  minDate?: string;
+  maxDate?: string;
   // selectedColumns?: number[];
   status?: RStatusEnum;
 }

@@ -6,7 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FilterSidebar } from '@shared/helper/components/filter-sidebar/filter-sidebar';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of, Subject, takeUntil } from 'rxjs';
@@ -24,11 +24,10 @@ import { toNums } from '@shared/helper/functions/common.function';
 import { CommonSelectBoxGeneric } from '@shared/models/common.model';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { FormsModule } from '@angular/forms';
-import { TooltipDirective } from 'ngx-bootstrap/tooltip';
 
 @Component({
   selector: 'app-ticket-filter',
-  imports: [FilterSidebar, BsDatepickerModule, FormsModule, TooltipDirective, RouterLink],
+  imports: [FilterSidebar, BsDatepickerModule, FormsModule],
   templateUrl: './ticket-filter.html',
   styleUrl: './ticket-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,7 +61,6 @@ export class TicketFilter {
   readonly minDate = signal<Date>(new Date());
   readonly maxDate = signal<Date>(new Date());
   readonly customDate = signal(false);
-  readonly isMeasuresCollaps = signal(false);
   private dateDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -167,6 +165,8 @@ export class TicketFilter {
     // this.refresh.update((x) => x + 1);
   }
 
+  timePeriod = signal<number>(0);
+
   rootCauses = derivedAsync(
     () =>
       this.fkCompanyId
@@ -244,28 +244,6 @@ export class TicketFilter {
     });
   }
 
-  toggleClass(
-    collapsVariant:
-      | 'isMeasuresCollaps'
-      | 'isPagesOrSectionCollaps'
-      | 'isAddFieldCollaps'
-      | 'collaps4',
-  ) {
-    switch (collapsVariant) {
-      case 'isMeasuresCollaps':
-        this.isMeasuresCollaps.set(!this.isMeasuresCollaps());
-        break;
-      // case 'isPagesOrSectionCollaps':
-      //   this.isPagesOrSectionCollaps = !this.isPagesOrSectionCollaps;
-      //   break;
-      // case 'isAddFieldCollaps':
-      //   this.isAddFieldCollaps = !this.isAddFieldCollaps;
-      //   break;
-      // case 'collaps4':
-      //   this.isCollaps4 = !this.isCollaps4;
-      //   break;
-    }
-  }
   refreshFilters() {
     this.refresh.update((x) => x + 1);
   }
@@ -306,6 +284,13 @@ export class TicketFilter {
       const userIds = toNums(params['userIds']) ?? [];
       this.selectedUserIds.set(userIds);
 
+      this.minDate.set(params['minDate'] ? new Date(params['minDate'] as string) : new Date());
+      this.maxDate.set(params['maxDate'] ? new Date(params['maxDate'] as string) : new Date());
+
+      const timePeriod = Number(params['timePeriod']) || EnumTimePeriod.ALL;
+      this.filters.value().timePeriod = timePeriod;
+      this.timePeriod.set(timePeriod);
+
       // Sync supplier selection from URL params
       // const supplierIds = toNums(params['supplierIds']) ?? [];
       // this.selectedSupplierIds.set(supplierIds);
@@ -335,22 +320,42 @@ export class TicketFilter {
       this.filters.setMany(params as Partial<TicketListFilterParams>);
     });
   }
+  resetToDefault() {
+    // this.filters.value().timePeriod = EnumTimePeriod.ALL;
+    // this.setTimePeriod(EnumTimePeriod.ALL);
+    // this.resetTicketTypeSelection();
+    // this.resetTicketStatusSelection();
+    // this.resetTicketPrioritySelection();
+    // this.resetUserSelection();
+    this.navigateRoute({
+      page: 1,
+      timePeriod: EnumTimePeriod.ALL,
+      ticketTypeIds: [],
+      ticketStatusIds: [],
+      ticketPriorityIds: [],
+      userIds: [],
+    });
+  }
 
   // Reset all categories (when "All" is checked)
   resetTicketTypeSelection() {
     this.selectedTicketTypeIds.set([]);
+    this.navigateRoute({ ticketTypeIds: [], page: 1 });
     this.refresh.update((x) => x + 1);
   }
   resetTicketStatusSelection() {
-    this.selectedTicketTypeIds.set([]);
+    this.selectedticketStatusIds.set([]);
+    this.navigateRoute({ ticketStatusIds: [], page: 1 });
     this.refresh.update((x) => x + 1);
   }
   resetTicketPrioritySelection() {
     this.selectedPriorityIds.set([]);
+    this.navigateRoute({ ticketPriorityIds: [], page: 1 });
     this.refresh.update((x) => x + 1);
   }
   resetUserSelection() {
     this.selectedUserIds.set([]);
+    this.navigateRoute({ userIds: [], page: 1 });
     this.refresh.update((x) => x + 1);
   }
 
@@ -359,8 +364,8 @@ export class TicketFilter {
     this.minDate.set(new Date());
     this.maxDate.set(new Date(Date.now() + 5000));
     this.navigateRoute({
-      minDate: this.minDate() as Date,
-      maxDate: this.maxDate() as Date,
+      minDate: this.minDate().toISOString(),
+      maxDate: this.maxDate().toISOString(),
       page: 1,
     });
   }
@@ -382,8 +387,8 @@ export class TicketFilter {
 
       if (min !== null && max !== null) {
         this.navigateRoute({
-          minDate: min,
-          maxDate: max,
+          minDate: min.toISOString(),
+          maxDate: max.toISOString(),
           page: 1,
         });
       }
@@ -434,6 +439,76 @@ export class TicketFilter {
   }
 
   setTimeFilter(timePeriod: EnumTimePeriod = EnumTimePeriod.ALL) {
-    this.filters.setMany({ timePeriod });
+    // this.minDate.set(new Date());
+    // this.maxDate.set(new Date());
+    this.timePeriod.set(timePeriod);
+    const { fromDate, toDate } = this.setTimePeriod(timePeriod);
+    this.navigateRoute({
+      timePeriod,
+      minDate: fromDate.toISOString(),
+      maxDate: toDate.toISOString(),
+      page: 1,
+    });
+  }
+  minDateChange(value: Date | null) {
+    // this.minDate.set(value ?? new Date());
+    this.navigateRoute({
+      minDate: value?.toISOString(),
+      page: 1,
+    });
+  }
+  maxDateChange(value: Date | null) {
+    // this.maxDate.set(value ?? new Date());
+    this.navigateRoute({
+      maxDate: value?.toISOString(),
+      page: 1,
+    });
+  }
+  setTimePeriod(type: EnumTimePeriod): { fromDate: Date; toDate: Date } {
+    const dates = { fromDate: new Date(), toDate: new Date() };
+    const now = new Date();
+
+    switch (type) {
+      case EnumTimePeriod.ALL:
+        return dates;
+
+      case EnumTimePeriod.CurrentMonth: {
+        const fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        const toDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.PreviousMonth: {
+        const fromDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const toDate = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.CurrentYear: {
+        const fromDate = new Date(now.getFullYear(), 0, 1);
+        const toDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.LastYear: {
+        const fromDate = new Date(now.getFullYear() - 1, 0, 1);
+        const toDate = new Date(now.getFullYear() - 1, 11, 31, 23, 59, 59, 999);
+        dates.fromDate = fromDate;
+        dates.toDate = toDate;
+        return dates;
+      }
+
+      case EnumTimePeriod.Custom: {
+        dates.fromDate = new Date();
+        dates.toDate = new Date();
+        return dates;
+      }
+    }
   }
 }
