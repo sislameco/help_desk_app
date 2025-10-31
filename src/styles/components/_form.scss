@@ -471,6 +471,8 @@
       margin: 1px 0 0 0;
       transition: color 0.4s ease;
       line-height: 11px;
+      top: 0 !important;
+      position: relative !important;
     }
 
     input {

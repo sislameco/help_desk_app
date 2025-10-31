@@ -120,3 +120,15 @@
     }
   }
 }
+.circle-icon-btn {
+  color: white;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #204971;
+  cursor: pointer;
+  line-height: 21px;
+  text-align: center;
+  min-width: 24px;
+  transition: all 0.3s linear;
+}

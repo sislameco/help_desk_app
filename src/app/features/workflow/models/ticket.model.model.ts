@@ -123,7 +123,7 @@ export enum EnumPriority {
 }
 
 export interface TicketFilterParams
-  extends Record<string, string | number | number[] | boolean | undefined> {
+  extends Record<string, string | number | number[] | boolean | Date | undefined> {
   page: number;
   pageSize: number;
   search?: string;
@@ -140,10 +140,12 @@ export type TicketListFilterParams = TicketFilterParams & {
   search?: string;
   ticketTypeIds?: number[];
   ticketStatusIds?: number[];
+  userIds?: number[];
   // supplierIds?: number[];
   // selectedColumns?: number[];
-  minPrice?: number;
-  maxPrice?: number;
+  minDate?: Date;
+  maxDate?: Date;
+  timePeriod?: EnumTimePeriod;
 };
 
 export interface TicketRequest {
@@ -153,9 +155,19 @@ export interface TicketRequest {
   search?: string;
   ticketTypeIds?: number[];
   ticketStatusIds?: number[];
+  userIds?: number[];
   // supplierIds?: number[];
-  minPrice?: number;
-  maxPrice?: number;
+  minDate?: Date;
+  maxDate?: Date;
   // selectedColumns?: number[];
   status?: RStatusEnum;
+}
+
+export enum EnumTimePeriod {
+  ALL = 0,
+  CurrentMonth = 1,
+  PreviousMonth = 2,
+  CurrentYear = 3,
+  LastYear = 4,
+  Custom = 5,
 }

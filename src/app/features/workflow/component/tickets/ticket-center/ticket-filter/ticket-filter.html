@@ -1,255 +1,277 @@
-<div class="product-database-sidebar">
-  <div class="filter-sidebar">
-    <div class="filter-header border-bottom border-gray-100">
-      <h5 class="text-neutral-900">Filters</h5>
-      <p class="text-neutral-500">Filter by Category, Supplier, Price.</p>
-    </div>
-    <div class="scroll-y p-3">
-      <!-- Saved Filters -->
-      <!-- <app-filter-sidebar filterName="Saved Filter" [isCollapsedShow]="true">
-        <ul>
-          @for (filter of savedFiltersToggle.visible(); track filter.id) {
-          <li class="d-flex align-items-center justify-content-between">
-            <label class="custom-radio">
-              <input type="radio" name="saveFilter" [checked]="appliedFilterId() === filter.id"
-                (change)="applySavedFilter(filter.id)" />
-              <span class="checkmark"></span>
-              <span class="label-text">{{ filter.name }}</span>
-            </label>
-            @if (!filter.isPublic) {
-            <button type="button" class="text-red-700 bg-transparent border-0 p-0"
-              (click)="deleteSavedFilter(filter.id); $event.stopPropagation()" title="Delete filter">
-              <svg width="10" viewBox="0 0 12 11" fill="currentColor">
-                <use href="assets/sprite.svg#svg-close-icon"></use>
-              </svg>
-            </button>
-            }
-          </li>
-          }
-        </ul>
-        @if (savedFiltersToggle.title()) {
-        <button class="see-more-btn" type="button" (click)="savedFiltersToggle.toggle()">
-          {{ savedFiltersToggle.title() }}
-        </button>
-        }
-      </app-filter-sidebar> -->
-      <!-- Ticket Type -->
-      <app-filter-sidebar filterName="Ticket Type" [isCollapsedShow]="true">
-        <ul>
-          <li>
-            <label class="custom-checkbox">
-              <input
-                type="checkbox"
-                class="peer hidden"
-                [checked]="isAllTicketTypeChecked()"
-                (change)="resetTicketTypeSelection()"
-              />
-              <span></span>
-              All
-              <p>{{ ticketTypesToggle.visible().length }}</p>
-            </label>
-          </li>
-          @for (ticketType of ticketTypesToggle.visible(); track ticketType.id) {
-            <li>
-              <label class="custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="peer hidden"
-                  [checked]="selectedTicketTypeIds().includes(ticketType.id)"
-                  (change)="ticketTypeToggle(ticketType.id, $event.target.checked)"
-                />
-                <span></span>
-                {{ ticketType.title }}
-                <p>{{ 0 }}</p>
-              </label>
-            </li>
-          }
-        </ul>
-        @if (ticketTypesToggle.title()) {
-          <button class="see-more-btn" type="button" (click)="ticketTypesToggle.toggle()">
-            {{ ticketTypesToggle.title() }}
-          </button>
-        }
-      </app-filter-sidebar>
-      <!-- Ticket Status -->
-      <app-filter-sidebar filterName="Ticket Status" [isCollapsedShow]="true">
-        <ul>
-          <li>
-            <label class="custom-checkbox">
-              <input
-                type="checkbox"
-                class="peer hidden"
-                [checked]="isAllticketStatuseChecked()"
-                (change)="resetTicketStatusSelection()"
-              />
-              <span></span>
-              All
-              <p>{{ allticketStatusesCount() }}</p>
-            </label>
-          </li>
-          @for (ticketStatus of ticketStatusesToggle.visible(); track ticketStatus.value) {
-            <li>
-              <label class="custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="peer hidden"
-                  [checked]="selectedticketStatusIds().includes(ticketStatus.value)"
-                  (change)="ticketStatusToggle(ticketStatus.value, $event.target.checked)"
-                />
-                <span></span>
-                {{ ticketStatus.label }}
-                <p>{{ 0 }}</p>
-              </label>
-            </li>
-          }
-        </ul>
-        @if (ticketStatusesToggle.title()) {
-          <button class="see-more-btn" type="button" (click)="ticketStatusesToggle.toggle()">
-            {{ ticketStatusesToggle.title() }}
-          </button>
-        }
-      </app-filter-sidebar>
-      <!-- Ticket Priority -->
-      <app-filter-sidebar filterName="Ticket Priority" [isCollapsedShow]="true">
-        <ul>
-          <li>
-            <label class="custom-checkbox">
-              <input
-                type="checkbox"
-                class="peer hidden"
-                [checked]="isAllPriorityChecked()"
-                (change)="resetTicketPrioritySelection()"
-              />
-              <span></span>
-              All
-              <p>{{ allprioritysCount() }}</p>
-            </label>
-          </li>
-          @for (priority of prioritysToggle.visible(); track priority.value) {
-            <li>
-              <label class="custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="peer hidden"
-                  [checked]="selectedPriorityIds().includes(priority.value)"
-                  (change)="ticketPriorityToggle(priority.value, $event.target.checked)"
-                />
-                <span></span>
-                {{ priority.label }}
-                <p>{{ 0 }}</p>
-              </label>
-            </li>
-          }
-        </ul>
-        @if (ticketStatusesToggle.title()) {
-          <button class="see-more-btn" type="button" (click)="ticketStatusesToggle.toggle()">
-            {{ ticketStatusesToggle.title() }}
-          </button>
-        }
-      </app-filter-sidebar>
-      <!-- User -->
-      <app-filter-sidebar filterName="User" [isCollapsedShow]="true">
-        <ul>
-          <li>
-            <label class="custom-checkbox">
-              <input
-                type="checkbox"
-                class="peer hidden"
-                [checked]="isAllUserChecked()"
-                (change)="resetUserSelection()"
-              />
-              <span></span>
-              All
-              <p>{{ allusersCount() }}</p>
-            </label>
-          </li>
-          @for (user of usersToggle.visible(); track user.id) {
-            <li>
-              <label class="custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="peer hidden"
-                  [checked]="selectedUserIds().includes(user.id)"
-                  (change)="ticketUserToggle(user.id, $event.target.checked)"
-                />
-                <span></span>
-                {{ user.name }}
-                <p>{{ 0 }}</p>
-              </label>
-            </li>
-          }
-        </ul>
-        @if (usersToggle.title()) {
-          <button class="see-more-btn" type="button" (click)="usersToggle.toggle()">
-            {{ usersToggle.title() }}
-          </button>
-        }
-      </app-filter-sidebar>
-
-      <!-- Price (Ex VAT) -->
-      <app-filter-sidebar filterName="Date" [isCollapsedShow]="true">
-        <!-- <ul class="filter-list"> -->
-        <!-- All
-        <li>
-            <label class="custom-radio">
-              <input type="radio" name="price" [checked]="!minPrice() && !maxPrice()" (change)="resetPriceRange()" />
-              <span class="checkmark"></span>
-              <span class="label-text">All</span>
-            </label>
-          </li> -->
-
-        <!-- Predefined Ranges -->
-        <!-- @for (item of priceSlots(); track $index) {
-          <li>
-            <label class="custom-radio">
-              <input type="radio" name="price"
-                [checked]="minPrice() === item.min && maxPrice() === item.max && !customPrice()"
-                (change)="priceRange(item)" />
-              <span class="checkmark"></span>
-              <span class="label-text">{{ item.min }} - {{ item.max }}</span>
-            </label>
-          </li>
-          } -->
-
-        <!-- Custom Range -->
-        <!-- <li>
-            <label class="custom-radio">
-              <input type="radio" name="price" [checked]="customPrice()" (change)="toggleCustomPrice()" />
-              <span class="checkmark"></span>
-              <span class="label-text">Custom Range</span>
-            </label>
-          </li>
-        </ul> -->
-
-        <!-- Custom Input Fields (min/max) -->
-        <div class="custom-range mt-2">
-          <div class="row g-2">
-            <div class="col-12">
-              <input
-                type="text"
-                [(ngModel)]="dateTest"
-                placeholder="Datepicker"
-                class="form-control"
-                bsDaterangepicker
-                [bsConfig]="{ adaptivePosition: true }"
-              />
-              <!-- <input type="number" class="form-control form-control-lg" placeholder="Min" [ngModel]="minPrice()"
-                [disabled]="!customPrice()" (ngModelChange)="onPriceChange('min', $event)" /> -->
-            </div>
-            <!-- <div class="col-6">
-              <input type="text" placeholder="Datepicker" class="form-control" bsDatepicker [bsConfig]="{ adaptivePosition: true }">
-              <input type="number" class="form-control form-control-lg" placeholder="Max" [ngModel]="maxPrice()"
-                [disabled]="!customPrice()" (ngModelChange)="onPriceChange('max', $event)" />
-            </div> -->
-          </div>
+<div
+  class="quotation-tree--container"
+  style="height: calc(100vh - 260px)"
+  [class.collaps]="isMeasuresCollaps()"
+>
+  <div class="collaps-title">
+    <span>Measures</span>
+  </div>
+  <div class="wTree wTree-tiny wTree-draggable">
+    <div class="tree-list-head d-flex justify-content-between">
+      <div class="left d-flex align-items-center">
+        <div
+          class="circle-icon-btn"
+          (click)="toggleClass('isMeasuresCollaps')"
+          tabindex="0"
+          role="button"
+        >
+          <svg
+            width="8"
+            viewBox="0 0 9 13"
+            xmlns="http://www.w3.org/2000/svg"
+            class="arrow-right"
+            fill="currentColor"
+          >
+            <use xlink:href="assets/sprite.svg#svg-angle-left"></use>
+          </svg>
         </div>
-      </app-filter-sidebar>
-      <!-- <div class="d-flex justify-content-between align-items-center gap-3 mt-4">
-        <button class="btn theme-btn-outline" type="button" (click)="clearFilters()">
-          Clear Filters
-        </button>
-        <button class="btn theme-btn" type="button" (click)="saveFilters()">Save Filters</button>
+        <h5 class="ms-2">Measures</h5>
+      </div>
+      <!-- <div class="right d-flex">
+        <div class="search-icon cursor-pointer"  tabindex="0" role="button">
+          <svg width="12" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+            class="arrow-right">
+            <use xlink:href="assets/sprite.svg#svg-search"></use>
+          </svg>
+        </div>
+        <div class="plus-icon ml-3 cursor-pointer">
+          
+        </div>
       </div> -->
+    </div>
+    <div class="product-database-sidebar pe-2">
+      <div class="filter-sidebar">
+        <div class="scroll-y p-3" style="height: calc(100vh - 326px)">
+          <!-- Saved Filters -->
+          <!-- <app-filter-sidebar filterName="Saved Filter" [isCollapsedShow]="true">
+              <ul>
+                @for (filter of savedFiltersToggle.visible(); track filter.id) {
+                <li class="d-flex align-items-center justify-content-between">
+                  <label class="custom-radio">
+                    <input type="radio" name="saveFilter" [checked]="appliedFilterId() === filter.id"
+                      (change)="applySavedFilter(filter.id)" />
+                    <span class="checkmark"></span>
+                    <span class="label-text">{{ filter.name }}</span>
+                  </label>
+                  @if (!filter.isPublic) {
+                  <button type="button" class="text-red-700 bg-transparent border-0 p-0"
+                    (click)="deleteSavedFilter(filter.id); $event.stopPropagation()" title="Delete filter">
+                    <svg width="10" viewBox="0 0 12 11" fill="currentColor">
+                      <use href="assets/sprite.svg#svg-close-icon"></use>
+                    </svg>
+                  </button>
+                  }
+                </li>
+                }
+              </ul>
+              @if (savedFiltersToggle.title()) {
+              <button class="see-more-btn" type="button" (click)="savedFiltersToggle.toggle()">
+                {{ savedFiltersToggle.title() }}
+              </button>
+              }
+            </app-filter-sidebar> -->
+          <!-- Ticket Type -->
+          <app-filter-sidebar filterName="Ticket Type" [isCollapsedShow]="true">
+            <ul>
+              <li>
+                <label class="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="peer hidden"
+                    [checked]="isAllTicketTypeChecked()"
+                    (change)="resetTicketTypeSelection()"
+                  />
+                  <span></span>
+                  All
+                  <p>{{ ticketTypesToggle.visible().length }}</p>
+                </label>
+              </li>
+              @for (ticketType of ticketTypesToggle.visible(); track ticketType.id) {
+                <li>
+                  <label class="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="peer hidden"
+                      [checked]="selectedTicketTypeIds().includes(ticketType.id)"
+                      (change)="ticketTypeToggle(ticketType.id, $event.target.checked)"
+                    />
+                    <span></span>
+                    {{ ticketType.title }}
+                    <p>{{ 0 }}</p>
+                  </label>
+                </li>
+              }
+            </ul>
+            @if (ticketTypesToggle.title()) {
+              <button class="see-more-btn" type="button" (click)="ticketTypesToggle.toggle()">
+                {{ ticketTypesToggle.title() }}
+              </button>
+            }
+          </app-filter-sidebar>
+          <!-- Ticket Status -->
+          <app-filter-sidebar filterName="Ticket Status" [isCollapsedShow]="true">
+            <ul>
+              <li>
+                <label class="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="peer hidden"
+                    [checked]="isAllticketStatuseChecked()"
+                    (change)="resetTicketStatusSelection()"
+                  />
+                  <span></span>
+                  All
+                  <p>{{ allticketStatusesCount() }}</p>
+                </label>
+              </li>
+              @for (ticketStatus of ticketStatusesToggle.visible(); track ticketStatus.value) {
+                <li>
+                  <label class="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="peer hidden"
+                      [checked]="selectedticketStatusIds().includes(ticketStatus.value)"
+                      (change)="ticketStatusToggle(ticketStatus.value, $event.target.checked)"
+                    />
+                    <span></span>
+                    {{ ticketStatus.label }}
+                    <p>{{ 0 }}</p>
+                  </label>
+                </li>
+              }
+            </ul>
+            @if (ticketStatusesToggle.title()) {
+              <button class="see-more-btn" type="button" (click)="ticketStatusesToggle.toggle()">
+                {{ ticketStatusesToggle.title() }}
+              </button>
+            }
+          </app-filter-sidebar>
+          <!-- Ticket Priority -->
+          <app-filter-sidebar filterName="Ticket Priority" [isCollapsedShow]="true">
+            <ul>
+              <li>
+                <label class="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="peer hidden"
+                    [checked]="isAllPriorityChecked()"
+                    (change)="resetTicketPrioritySelection()"
+                  />
+                  <span></span>
+                  All
+                  <p>{{ allprioritysCount() }}</p>
+                </label>
+              </li>
+              @for (priority of prioritysToggle.visible(); track priority.value) {
+                <li>
+                  <label class="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="peer hidden"
+                      [checked]="selectedPriorityIds().includes(priority.value)"
+                      (change)="ticketPriorityToggle(priority.value, $event.target.checked)"
+                    />
+                    <span></span>
+                    {{ priority.label }}
+                    <p>{{ 0 }}</p>
+                  </label>
+                </li>
+              }
+            </ul>
+            @if (ticketStatusesToggle.title()) {
+              <button class="see-more-btn" type="button" (click)="ticketStatusesToggle.toggle()">
+                {{ ticketStatusesToggle.title() }}
+              </button>
+            }
+          </app-filter-sidebar>
+          <!-- User -->
+          <app-filter-sidebar filterName="User" [isCollapsedShow]="true">
+            <ul>
+              <li>
+                <label class="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="peer hidden"
+                    [checked]="isAllUserChecked()"
+                    (change)="resetUserSelection()"
+                  />
+                  <span></span>
+                  All
+                  <p>{{ allusersCount() }}</p>
+                </label>
+              </li>
+              @for (user of usersToggle.visible(); track user.id) {
+                <li>
+                  <label class="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="peer hidden"
+                      [checked]="selectedUserIds().includes(user.id)"
+                      (change)="ticketUserToggle(user.id, $event.target.checked)"
+                    />
+                    <span></span>
+                    {{ user.name }}
+                    <p>{{ 0 }}</p>
+                  </label>
+                </li>
+              }
+            </ul>
+            @if (usersToggle.title()) {
+              <button class="see-more-btn" type="button" (click)="usersToggle.toggle()">
+                {{ usersToggle.title() }}
+              </button>
+            }
+          </app-filter-sidebar>
+
+          <!-- Price (Ex VAT) -->
+          <!-- <app-filter-sidebar filterName="Date" [isCollapsedShow]="true">
+            <ul>
+              <li>
+
+                <label class="app-form--radio" for="timePeriodAll" (click)="setTimeFilter(enumTimePeriod.ALL)" tabindex="0" role="button">
+                  <input type="radio" id="timePeriodAll" [checked]="filters.value().timePeriod === enumTimePeriod.ALL
+                            " />
+                  <span class="class"></span>
+                  <p>All</p>
+                </label>
+              </li>
+              <li>
+                <label class="app-form--radio" for="custom" (click)="setTimeFilter(enumTimePeriod.Custom)" tabindex="0"
+                  role="button">
+                  <input type="radio" id="custom" [checked]="filters.value().timePeriod === enumTimePeriod.Custom
+                                            " />
+                  <span class="class"></span>
+                  <p>Custom</p>
+                </label>
+              </li>
+            </ul>
+            <div class="app-sidebar-date-field">
+              <div class="d-flex align-items-center has-date-icon">
+                <div class="position-relative">
+                  <input type="text" id="price-min-input1" name="price-min"
+                    class="form-control form-control-circle h-30" placeholder="Start Date" [(ngModel)]="minDate"
+                    [maxDate]="maxDate()" [readonly]="true" bsDatepicker appDateMask [bsConfig]="{
+                            adaptivePosition: true
+                          }" autocomplete="off" [class.disabled]="
+                            !(filters.value().timePeriod === enumTimePeriod.Custom)
+                          " />
+                </div>
+
+                <span class="px-2"></span>
+                <div class="position-relative">
+                  <input type="text" id="price-min-input2" name="price-min"
+                    class="form-control form-control-circle h-30" placeholder="End Date" [(ngModel)]="maxDate"
+                    bsDatepicker appDateMask [bsConfig]="{ adaptivePosition: true }" autocomplete="off"
+                    [minDate]="minDate()" [readonly]="true" [class.disabled]="
+                            !(filters.value().timePeriod === enumTimePeriod.Custom)
+                          " />
+                </div>
+                <span></span>
+              </div>
+            </div>
+          </app-filter-sidebar> -->
+        </div>
+      </div>
     </div>
   </div>
 </div>

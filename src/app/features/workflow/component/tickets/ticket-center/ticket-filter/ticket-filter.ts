@@ -6,7 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FilterSidebar } from '@shared/helper/components/filter-sidebar/filter-sidebar';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { map, of, Subject, takeUntil } from 'rxjs';
@@ -16,6 +16,7 @@ import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@shared/const/pagination.const'
 import {
   EnumPriority,
   EnumTicketStatus,
+  EnumTimePeriod,
   TicketListFilterParams,
 } from '../../../../models/ticket.model.model';
 import { createToggleList } from '../../../../helpers/filter-function';
@@ -23,10 +24,11 @@ import { toNums } from '@shared/helper/functions/common.function';
 import { CommonSelectBoxGeneric } from '@shared/models/common.model';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { FormsModule } from '@angular/forms';
+import { TooltipDirective } from 'ngx-bootstrap/tooltip';
 
 @Component({
   selector: 'app-ticket-filter',
-  imports: [FilterSidebar, BsDatepickerModule, FormsModule],
+  imports: [FilterSidebar, BsDatepickerModule, FormsModule, TooltipDirective, RouterLink],
   templateUrl: './ticket-filter.html',
   styleUrl: './ticket-filter.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,10 +55,15 @@ export class TicketFilter {
   // - Custom range toggled when no predefined slot matches current min/max
   // - Query params keep state in URL
   // ─────────────────────────────────────────────────────────────────────────────
-  readonly minPrice = signal<number | null>(null);
-  readonly maxPrice = signal<number | null>(null);
-  readonly customPrice = signal(false);
-  private priceDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  protected readonly String = String;
+  enumTimePeriod = EnumTimePeriod;
+  // startDate: Date | undefined = undefined;
+  // endDate: Date | undefined = undefined;
+  readonly minDate = signal<Date>(new Date());
+  readonly maxDate = signal<Date>(new Date());
+  readonly customDate = signal(false);
+  readonly isMeasuresCollaps = signal(false);
+  private dateDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   // ─────────────────────────────────────────────────────────────────────────────
   // Supplier selection (sidebar)
@@ -236,6 +243,29 @@ export class TicketFilter {
       // this.loadFields(this.appliedFilterId() ?? undefined);
     });
   }
+
+  toggleClass(
+    collapsVariant:
+      | 'isMeasuresCollaps'
+      | 'isPagesOrSectionCollaps'
+      | 'isAddFieldCollaps'
+      | 'collaps4',
+  ) {
+    switch (collapsVariant) {
+      case 'isMeasuresCollaps':
+        this.isMeasuresCollaps.set(!this.isMeasuresCollaps());
+        break;
+      // case 'isPagesOrSectionCollaps':
+      //   this.isPagesOrSectionCollaps = !this.isPagesOrSectionCollaps;
+      //   break;
+      // case 'isAddFieldCollaps':
+      //   this.isAddFieldCollaps = !this.isAddFieldCollaps;
+      //   break;
+      // case 'collaps4':
+      //   this.isCollaps4 = !this.isCollaps4;
+      //   break;
+    }
+  }
   refreshFilters() {
     this.refresh.update((x) => x + 1);
   }
@@ -324,36 +354,36 @@ export class TicketFilter {
     this.refresh.update((x) => x + 1);
   }
 
-  toggleCustomPrice() {
-    this.customPrice.set(true);
-    this.minPrice.set(0);
-    this.maxPrice.set(5000);
+  toggleCustomDate() {
+    this.customDate.set(true);
+    this.minDate.set(new Date());
+    this.maxDate.set(new Date(Date.now() + 5000));
     this.navigateRoute({
-      minPrice: 0,
-      maxPrice: 5000,
+      minDate: this.minDate() as Date,
+      maxDate: this.maxDate() as Date,
       page: 1,
     });
   }
-  onPriceChange(type: 'min' | 'max', value: number | null) {
+  onDateChange(type: 'min' | 'max', value: Date) {
     if (type === 'min') {
-      this.minPrice.set(value);
+      this.minDate.set(value);
     } else {
-      this.maxPrice.set(value);
+      this.maxDate.set(value);
     }
 
     // Debounce navigation
-    if (this.priceDebounceTimer) {
-      clearTimeout(this.priceDebounceTimer);
+    if (this.dateDebounceTimer) {
+      clearTimeout(this.dateDebounceTimer);
     }
 
-    this.priceDebounceTimer = setTimeout(() => {
-      const min = this.minPrice();
-      const max = this.maxPrice();
+    this.dateDebounceTimer = setTimeout(() => {
+      const min = this.minDate();
+      const max = this.maxDate();
 
       if (min !== null && max !== null) {
         this.navigateRoute({
-          minPrice: min,
-          maxPrice: max,
+          minDate: min,
+          maxDate: max,
           page: 1,
         });
       }
@@ -378,14 +408,14 @@ export class TicketFilter {
    * Clears the price filter ("All"): removes minPrice/maxPrice from both local state and URL.
    * Uses replace to ensure URL is reset cleanly (no merge reintroducing the keys).
    */
-  resetPriceRange() {
+  resetDateRange() {
     // reset local signals
-    this.minPrice.set(null);
-    this.maxPrice.set(null);
-    this.customPrice.set(false);
+    // this.minDate.set(null);
+    // this.maxDate.set(null);
+    this.customDate.set(false);
 
     // remove from internal filter state so they don't come back on merge
-    this.filters.remove('minPrice').remove('maxPrice');
+    this.filters.remove('minDate').remove('maxDate');
 
     // replace the URL query params with the current filter state (without min/max)
     const next = { ...this.filters.value(), page: 1 };
@@ -401,5 +431,9 @@ export class TicketFilter {
     const updated = checked ? [...current, id] : current.filter((sid) => sid !== id);
     this.selectedSupplierIds.set(updated);
     this.refresh.update((x) => x + 1);
+  }
+
+  setTimeFilter(timePeriod: EnumTimePeriod = EnumTimePeriod.ALL) {
+    this.filters.setMany({ timePeriod });
   }
 }

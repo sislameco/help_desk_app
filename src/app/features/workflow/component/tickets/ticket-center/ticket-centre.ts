@@ -36,6 +36,7 @@ export class TicketCentre {
   selectedTicketTypeIds = signal<number[]>([]);
   selectedticketStatusIds = signal<number[]>([]);
   selectedPriorityIds = signal<number[]>([]);
+  selecteduserIds = signal<number[]>([]);
 
   // readonly selectedViewMode = derivedAsync(() => this.viewMode(), {
   //   initialValue: 'list' as 'list' | 'kanban',
@@ -117,9 +118,10 @@ export class TicketCentre {
       search: params.search,
       ticketTypeIds: toNums(params.ticketTypeIds),
       ticketStatusIds: toNums(params.ticketStatusIds),
+      userIds: toNums(params.userIds),
       // supplierIds: toNums(params.supplierIds),
-      minPrice: params.minPrice,
-      maxPrice: params.maxPrice,
+      // minPrice: params.minPrice,
+      // maxPrice: params.maxPrice,
       // selectedColumns: params.selectedColumns,
       status: params.status,
     };
@@ -167,6 +169,9 @@ export class TicketCentre {
 
       const ticketPriorityIds = toNums(params['ticketPriorityIds']) ?? [];
       this.selectedPriorityIds.set(ticketPriorityIds);
+
+      const userIds = toNums(params['userIds']) ?? [];
+      this.selecteduserIds.set(userIds);
 
       // Sync supplier selection from URL params
       // const supplierIds = toNums(params['supplierIds']) ?? [];
