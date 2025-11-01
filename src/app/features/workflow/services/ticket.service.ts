@@ -88,7 +88,7 @@ export class TicketService {
   addTicketComment(ticketId: number, comment: string): Observable<boolean> {
     return this.http.post<boolean>(
       `${environment.apiBaseUrl}/api/ticket/comment/${ticketId}?comment=${comment}`,
-      {},
+      null,
     );
   }
 
