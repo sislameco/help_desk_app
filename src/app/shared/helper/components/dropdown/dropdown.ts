@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 
 @Component({
   selector: 'app-dropdown',
@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core
 })
 export class Dropdown {
   heading = input<string>('');
-  isCollapsed = signal(false);
+  isCollapsed = model<boolean>(false);
 
   toggleCollapse() {
     this.isCollapsed.update((val) => !val);

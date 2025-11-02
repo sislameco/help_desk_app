@@ -1,19 +1,20 @@
 <div class="mb-4">
-  <app-dropdown heading="Comments">
-    <!-- <h6 class="fw-bold text-primary mb-2">Comments</h6> -->
+  <app-dropdown heading="Comments" [isCollapsed]="true">
     @for (comment of comments(); track comment.id) {
-      <div class="border rounded p-2 mb-2">
-        <strong>{{ comment.commentedBy || 'Test User' }}</strong>
-        <small class="text-muted float-end">{{ comment.commentedOn }}</small>
-        <div class="mt-1 d-flex justify-content-between app-form">
+      <div class="p-2">
+        <div class="d-flex justify-content-between align-items-center">
+          <strong>{{ comment.commentedBy || 'Test User' }}</strong>
+          <small class="text-muted float-end">{{ comment.commentedOn | date: 'medium' }}</small>
+        </div>
+        <div class="mt-1 app-form">
           @if (comment.isEditing) {
-            <div class="position-relative form-group mb-0 d-flex justify-content-between">
+            <div class="position-relative form-group mb-0">
               <textarea [(ngModel)]="editingComment" class="form-control mb-2"></textarea>
               <!-- <input class="form-control" type="text" [(ngModel)]="editingComment"> -->
-              <div class="update-cancel-btns">
+              <div class="update-cancel-btns mt-2">
                 <button
                   type="button"
-                  class="ch-icon-btn ch-icon-single"
+                  class="ch-icon-btn ch-icon-single me-2 disabled-hover p-0 w-auto"
                   [disabled]="!editingComment.length"
                   (click)="updateComment(comment.id, editingComment)"
                 >
@@ -23,7 +24,7 @@
                 </button>
                 <button
                   type="button"
-                  class="ch-icon-btn ch-icon-single"
+                  class="ch-icon-btn ch-icon-single disabled-hover p-0 w-auto"
                   (click)="undoChange(comment.id)"
                 >
                   <svg width="12" viewBox="0 0 12 12" fill="currentColor">
@@ -33,21 +34,31 @@
               </div>
             </div>
           } @else {
-            <div class="view-grp">
+            <div class="view-group">
               <p>{{ comment.commentText }}</p>
               <button
                 type="button"
-                class="ch-icon-btn ch-icon-single"
+                class="ch-icon-btn ch-icon-single disabled-hover p-0 w-auto me-2"
                 (click)="enableEditMode(comment.id, comment.commentText)"
               >
                 <svg width="11" viewBox="0 0 11 10" fill="currentColor">
                   <use xlink:href="assets/sprite.svg#svg-edit"></use>
                 </svg>
               </button>
+              <button
+                type="button"
+                class="ch-icon-btn ch-icon-single disabled-hover p-0 w-auto"
+                [disabled]="!comment.isAuthorized"
+                (click)="deleteComment(comment.id)"
+              >
+                <svg width="13" viewBox="0 0 13 13" fill="currentColor">
+                  <use xlink:href="assets/sprite.svg#red-close-icon"></use>
+                </svg>
+              </button>
             </div>
           }
 
-          <button
+          <!-- <button
             type="button"
             class="ch-icon-btn ch-icon-single disabled-hover"
             [disabled]="!comment.isAuthorized"
@@ -58,7 +69,7 @@
                 <use xlink:href="assets/sprite.svg#red-close-icon"></use>
               </svg>
             </span>
-          </button>
+          </button> -->
         </div>
       </div>
     }

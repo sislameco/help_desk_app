@@ -14,11 +14,13 @@ import { ConfirmationModal } from '@shared/helper/components/confirmation-modal/
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { map } from 'rxjs';
 import { TicketCommentOutputDto } from '../../../../models/ticket.model.model';
+import { DatePipe } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-ticket-comment',
-  imports: [FormsModule, Dropdown],
-  providers: [TicketService, BsModalService],
+  imports: [FormsModule, Dropdown, DatePipe],
+  providers: [TicketService, BsModalService, ToastrService],
   templateUrl: './ticket-comment.html',
   styleUrl: './ticket-comment.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +29,7 @@ export class TicketComment {
   ticketId = input<number>();
   private readonly ticketService = inject(TicketService);
   private readonly modalService = inject(BsModalService);
+  private readonly toastr = inject(ToastrService);
   readonly refreshTrigger = signal<number>(0);
   comments = linkedSignal(() => this.initialComments());
   initialComments = derivedAsync(
@@ -61,6 +64,7 @@ export class TicketComment {
         .subscribe(() => {
           this.refreshTrigger.update((val) => val + 1);
           this.newComment = '';
+          this.toastr.success('Comment added successfully.');
         });
     }
   }
@@ -68,6 +72,7 @@ export class TicketComment {
   updateComment(commentId: number, updatedText: string) {
     this.ticketService.updateTicketComment(commentId, updatedText).subscribe(() => {
       this.refreshTrigger.update((val) => val + 1);
+      this.toastr.success('Comment updated successfully.');
     });
   }
 
@@ -97,6 +102,7 @@ export class TicketComment {
       if (result) {
         this.ticketService.deleteTicktComment(Number(this.ticketId()), commentId).subscribe(() => {
           this.refreshTrigger.update((val) => val + 1);
+          this.toastr.success('Comment deleted successfully.');
         });
       }
     });
