@@ -64,21 +64,23 @@
           alt="user"
         />
       </button>
-      <ul *dropdownMenu class="dropdown-menu">
-        <li>
-          <a class="dropdown-item" href="javascript:void(0);" (click)="logout()">
-            <svg
-              width="12"
-              viewBox="0 0 12 7"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <use href="assets/sprite.svg#deactivate-s-icon"></use>
-            </svg>
-            Sign Out
-          </a>
-        </li>
-      </ul>
+      @if (!isIframe()) {
+        <ul *dropdownMenu class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href="javascript:void(0);" (click)="logout()">
+              <svg
+                width="12"
+                viewBox="0 0 12 7"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <use href="assets/sprite.svg#deactivate-s-icon"></use>
+              </svg>
+              Sign Out
+            </a>
+          </li>
+        </ul>
+      }
     </div>
   </div>
 </div>

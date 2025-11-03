@@ -44,8 +44,9 @@ export const AuthStore = signalStore(
             tap({
               next: (response: LoginResponse) => {
                 localStorage.setItem('auth_token', response.token);
-                cookieService.setCookie('token', response.token);
-                localStorage.setItem('user', JSON.stringify(response.user));
+                cookieService.setCookie('hd_token', response.token);
+                cookieService.setCookie('hd_refreshToken', response.refreshToken);
+                localStorage.setItem('hd_user', JSON.stringify(response.user));
                 patchState(store, {
                   isLogin: true,
                   userInfo: response.user,
@@ -74,12 +75,42 @@ export const AuthStore = signalStore(
           localStorage.removeItem('user');
         }
       },
-
+      /**
+       * Login with userId (impersonation or SSO)
+       */
+      async loginWithUserId(
+        params: { userId: number; appId: number },
+        company: string,
+        authKey: string,
+      ) {
+        // Call API to get token
+        const response = await authService.loginWithUserId(params, company, authKey).toPromise();
+        const token = response?.token;
+        if (token) {
+          localStorage.setItem('auth_token', token);
+          cookieService.setCookie('hd_token', token);
+          cookieService.setCookie('hd_refreshToken', response.refreshToken);
+          patchState(store, { isLogin: true, token });
+        }
+      },
+      async refreshToken(refreshToken: string) {
+        // Call API to get token
+        const response = await authService.refreshToken(refreshToken).toPromise();
+        const token = response?.token;
+        if (token) {
+          localStorage.setItem('auth_token', token);
+          cookieService.setCookie('hd_token', token);
+          cookieService.setCookie('hd_refreshToken', response.refreshToken);
+          patchState(store, { isLogin: true, token });
+        }
+        return token as string;
+      },
       /**
        * Logout user
        */
       logout() {
-        cookieService.removeCookie('token');
+        cookieService.removeCookie('hd_token');
+        cookieService.removeCookie('hd_refreshToken');
         localStorage.clear();
         patchState(store, { isLogin: false, userInfo: null, token: '' });
         router.navigateByUrl('/auth/login');
@@ -96,8 +127,8 @@ export const AuthStore = signalStore(
       const cookieService = inject(CookieService);
       const localStorage = inject(LocalStorageService);
 
-      const token = cookieService.getCookie('token');
-      const user = localStorage.getItem<LoginResponse['user'] | null>('user');
+      const token = cookieService.getCookie('hd_token');
+      const user = localStorage.getItem<LoginResponse['user'] | null>('hd_user');
 
       if (token && user) {
         store.setUserInfo(user);

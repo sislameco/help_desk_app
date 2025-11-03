@@ -1,11 +1,4 @@
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { AddTicketModal } from '../ticket-add-modal/add-ticket-modal/add-ticket-modal';
 import { derivedAsync } from 'ngxtension/derived-async';
@@ -35,7 +28,7 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BsModalService, TicketService],
 })
-export class TicketCentre implements OnInit {
+export class TicketCentre {
   readonly route = inject(ActivatedRoute);
   private readonly ticketService = inject(TicketService);
   private readonly modalService = inject(BsModalService);
@@ -70,17 +63,10 @@ export class TicketCentre implements OnInit {
   });
 
   constructor() {
+    // this.route.snapshot.queryParams;
     this.listenQueryParams();
     afterNextRender(async () => {
       this.listenQueryParams();
-    });
-  }
-
-  ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.userId = params['userId'];
-      this.token = params['token'];
-      this.isIframe = params['ifram'] === 'true';
     });
   }
 

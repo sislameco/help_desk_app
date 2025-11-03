@@ -1,9 +1,11 @@
 import { HttpRequest, HttpHandlerFn, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs'; // Keep throwError for now, but we'll discuss alternatives
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorHandlerStore } from '@core/store/error-handler/error-handler.store'; // Assuming the path to your store
+import { CookieService } from '@core/services/cookie.service';
+import { AuthService } from '@core/auth/services/auth.service';
 
 export const errorHandlingInterceptor = (
   request: HttpRequest<unknown>, // Use 'unknown' for better type safety
@@ -12,6 +14,8 @@ export const errorHandlingInterceptor = (
   // Use 'unknown' here as well
   const errorHandlerStore = inject(ErrorHandlerStore);
   const toastr = inject(ToastrService);
+  const cookieService = inject(CookieService);
+  const authService = inject(AuthService);
 
   return next(request).pipe(
     catchError((error: unknown) => {
@@ -20,8 +24,29 @@ export const errorHandlingInterceptor = (
         toastr.error(error.error.message, error.error.title);
         switch (error.status) {
           case 401:
-            errorHandlerStore.handleError401(error);
-            return throwError(() => error); // Modern way to use throwError
+            // errorHandlerStore.handleError401(error);
+            // return throwError(() => error); // Modern way to use throwError
+            const token = cookieService.getCookie('hd_refreshToken');
+            if (token) {
+              return authService.refreshToken(token).pipe(
+                switchMap((result: { token: string; refreshToken: string }) => {
+                  cookieService.setCookie('hd_token', result.token);
+                  cookieService.setCookie('hd_refreshToken', result.refreshToken, 1);
+                  return next(
+                    request.clone({
+                      setHeaders: {
+                        Authorization: `Bearer ${result.token}`,
+                      },
+                    }),
+                  );
+                }),
+                catchError((err) => {
+                  return throwError(err);
+                }),
+              );
+            } else {
+              return throwError(() => error);
+            }
           case 404:
             errorHandlerStore.handleError404(error);
             // Re-throw the error after handling
