@@ -1,27 +1,31 @@
 <div class="mb-4 position-relative">
-  <app-dropdown heading="Attachments">
-    <ul class="attached-file-list mt-3 d-flex align-items-center flex-wrap gap-2">
-      @for (file of attachments(); track $index) {
-        <li class="attached-file-item">
-          <div class="d-flex align-items-start gap-3">
-            <div class="file-name">
-              <p>{{ file.fileName }}</p>
-              <small> {{ file.addedBy }}, {{ file.addedOn }}</small>
+  <app-dropdown heading="Attachments" [isCollapsed]="true">
+    @if (attachments().length) {
+      <ul class="attached-file-list mt-3 d-flex flex-column gap-2">
+        @for (file of attachments(); track $index) {
+          <li class="attached-file-item">
+            <div class="d-flex align-items-start justify-content-between gap-3">
+              <div class="file-name">
+                <p>{{ file.fileName }}</p>
+                <small> {{ file.addedBy }}, {{ file.addedOn }}</small>
+              </div>
+              <button class="file-close" (click)="removeFile($index)">
+                <svg
+                  width="10"
+                  viewBox="0 0 13 13"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <use href="assets/sprite.svg#red-close-icon"></use>
+                </svg>
+              </button>
             </div>
-            <button class="file-close" (click)="removeFile($index)">
-              <svg
-                width="10"
-                viewBox="0 0 13 13"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <use href="assets/sprite.svg#red-close-icon"></use>
-              </svg>
-            </button>
-          </div>
-        </li>
-      }
-    </ul>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p>There is no attachment</p>
+    }
   </app-dropdown>
   <label for="upload" class="ch-icon-btn ch-icon-single disabled-hover cursor-pointer mb-0 plus-btn"
     ><svg width="11" viewBox="0 0 11 10" fill="currentColor">

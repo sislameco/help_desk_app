@@ -47,7 +47,12 @@
         <app-ticket-attachment [ticketId]="ticketId()"></app-ticket-attachment>
 
         <!-- Linked tickets -->
-        <app-ticket-linked-items [ticketId]="ticketId()"></app-ticket-linked-items>
+        @if (companyId()) {
+          <app-ticket-linked-items
+            [companyId]="companyId()"
+            [ticketId]="ticketId()"
+          ></app-ticket-linked-items>
+        }
 
         <!-- Comments -->
         <!-- <app-ticket-comment [comments]="comments()"></app-ticket-comment> -->
@@ -56,7 +61,7 @@
 
       <!-- 🧱 Right Panel -->
       <div class="col-lg-4 col-md-5">
-        <app-ticket-fields [fields]="fields()"></app-ticket-fields>
+        <app-ticket-fields [ticketId]="ticketId()"></app-ticket-fields>
         <div class="card shadow-sm border-0">
           <div class="card-body">
             <!-- Status -->
