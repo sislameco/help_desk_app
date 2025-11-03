@@ -102,7 +102,7 @@ export interface TicketFieldOutputDto {
   id: number;
   fkTicketTypeId: number;
   fkCustomeFieldId: number;
-  value: string;
+  value: string | string[];
   ddlValue: string[];
   displayName: string;
   isRequired: boolean;

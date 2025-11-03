@@ -1,10 +1,11 @@
 <div class="card p-3">
-  <h4>Additional Fields</h4>
+  <h6>Additional Fields</h6>
   <!-- @for (field of fields(); track $index) {
     <span>{{ field.value || 'No Value' }}, </span>
   } -->
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="app-form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="app-form mt-4">
     <div class="addition-fields" formArrayName="additionalFields">
+      <!-- <pre>{{ additionalFieldsArray.controls | json }}</pre> -->
       @for (field of additionalFieldsArray.controls; track $index; let i = $index) {
         <div class="form-group" [formGroupName]="i">
           <label for="{{ i }}" class="input-label">{{ field.value.displayName }}</label>
@@ -16,7 +17,6 @@
                 class="form-control"
                 placeholder="Enter {{ field.value.displayName }}"
                 formControlName="value"
-                [value]="field.value.value"
               />
             }
             @case (EnumDataType.number) {
@@ -26,7 +26,6 @@
                 class="form-control"
                 placeholder="Enter {{ field.value.displayName }}"
                 formControlName="value"
-                [value]="field.value.value"
               />
             }
 
@@ -37,7 +36,6 @@
                 class="form-control"
                 placeholder="Enter {{ field.value.displayName }}"
                 formControlName="value"
-                [value]="field.value.value"
               ></textarea>
             }
 
@@ -48,8 +46,6 @@
                 [items]="field.value.ddlValues"
                 [multiple]="true"
                 formControlName="value"
-                bindLabel="value"
-                bindValue="value"
                 placeholder="Select {{ field.value.displayName }}"
               ></ng-select>
             }

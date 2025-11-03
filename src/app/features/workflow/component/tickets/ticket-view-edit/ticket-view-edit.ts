@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Editor, NgxEditorModule } from 'ngx-editor';
@@ -44,6 +44,9 @@ export class TicketViewEdit {
   enumStatus = EnumTicketStatus;
   isDescriptionCollapsed = signal(false);
   ticketBasicDescriptionRefresh = signal(0);
+  companyId = computed(() =>
+    this.ticketBasicInfo().company ? Number(this.ticketBasicInfo().company.id) : 0,
+  );
   readonly ticketBasicInfo = derivedAsync(
     () => {
       this.ticketBasicDescriptionRefresh();
@@ -90,15 +93,15 @@ export class TicketViewEdit {
   //     initialValue: [],
   //   },
   // );
-  readonly fields = derivedAsync(
-    () => {
-      // this.refreshTrigger();
-      return this.ticketService.getTicketFields(Number(this.ticketId()));
-    },
-    {
-      initialValue: [],
-    },
-  );
+  // readonly fields = derivedAsync(
+  //   () => {
+  //     // this.refreshTrigger();
+  //     return this.ticketService.getTicketFields(Number(this.ticketId()));
+  //   },
+  //   {
+  //     initialValue: [],
+  //   },
+  // );
   readonly watchers = derivedAsync(
     () => {
       // this.refreshTrigger();

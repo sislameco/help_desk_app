@@ -14,11 +14,12 @@ import { TicketService } from '../../../../services/ticket.service';
 import { FileManagementService } from '../../../../services/file-manager-service';
 import { Subject, takeUntil } from 'rxjs';
 import { ConfirmationModal } from '@shared/helper/components/confirmation-modal/confirmation-modal';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-ticket-attachment',
   imports: [Dropdown],
-  providers: [TicketService, BsModalService],
+  providers: [TicketService, BsModalService, ToastrService],
   templateUrl: './ticket-attachment.html',
   styleUrl: './ticket-attachment.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +28,7 @@ export class TicketAttachment implements OnDestroy {
   ticketId = input<number>();
   private readonly ticketService = inject(TicketService);
   private readonly modalService = inject(BsModalService);
+  private readonly toastr = inject(ToastrService);
   private readonly fileService = inject(FileManagementService);
   ngUnsubscribe$ = new Subject<void>();
   attachments = linkedSignal(() => this.nonWriteableAttachments());
@@ -59,6 +61,7 @@ export class TicketAttachment implements OnDestroy {
                 .pipe(takeUntil(this.ngUnsubscribe$))
                 .subscribe(() => {
                   this.attachmentsRefresh.update((v) => v + 1);
+                  this.toastr.success('Attachment added successfully');
                 });
             });
           },
@@ -73,7 +76,7 @@ export class TicketAttachment implements OnDestroy {
       class: 'modal-dialog-centered',
       initialState: {
         title: 'Warning',
-        message: 'Are you sure you want to delete this file?',
+        message: 'Are you sure you want to delete this attachment?',
       },
     };
     const bsModalRef = this.modalService.show(ConfirmationModal, modalConfig);
@@ -86,6 +89,7 @@ export class TicketAttachment implements OnDestroy {
           .pipe(takeUntil(this.ngUnsubscribe$))
           .subscribe(() => {
             this.attachmentsRefresh.update((v) => v + 1);
+            this.toastr.success('Attachment deleted successfully');
           });
       }
     });

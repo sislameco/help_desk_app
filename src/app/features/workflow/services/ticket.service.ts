@@ -15,6 +15,7 @@ import {
   TicketWatcherOutputDto,
 } from '../models/ticket.model.model';
 import { Observable } from 'rxjs';
+import { DropdownOutputDto } from '../../company-configuration/models/ddl.model';
 
 export class TicketService {
   private readonly http = inject(HttpClient);
@@ -73,9 +74,22 @@ export class TicketService {
     );
   }
 
+  getCompanyTicketsDdl(companyId: number): Observable<DropdownOutputDto[]> {
+    return this.http.get<DropdownOutputDto[]>(
+      `${environment.apiBaseUrl}/api/ticket/get-tickets/${companyId}`,
+    );
+  }
+
   getTicketLinkings(ticketId: number): Observable<TicketLinkingItemOutputDto[]> {
     return this.http.get<TicketLinkingItemOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/linking-tickets/${ticketId}`,
+    );
+  }
+
+  updateTicketLinkings(ticketId: number, linkedTicketIds: number[]): Observable<boolean> {
+    return this.http.post<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/linking-tickets/${ticketId}`,
+      linkedTicketIds,
     );
   }
 
