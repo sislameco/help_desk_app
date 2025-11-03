@@ -7,6 +7,7 @@ import {
   AddTicketInputDto,
   TicketBasicDetailOutputDto,
   TicketCommentOutputDto,
+  TicketFieldInputDto,
   TicketFieldOutputDto,
   TicketFileDto,
   TicketLinkingItemOutputDto,
@@ -49,12 +50,14 @@ export class TicketService {
     );
   }
 
-  getTicketSpecifications(ticketId: number): Observable<TicketSpecificationOutputDto[]> {
-    return this.http.get<TicketSpecificationOutputDto[]>(
+  // ticket specification apis
+  getTicketSpecifications(ticketId: number): Observable<TicketSpecificationOutputDto> {
+    return this.http.get<TicketSpecificationOutputDto>(
       `${environment.apiBaseUrl}/api/ticket/specification/${ticketId}`,
     );
   }
 
+  // ticket attachment apis
   getTicketAttachments(ticketId: number): Observable<TicketFileDto[]> {
     return this.http.get<TicketFileDto[]>(
       `${environment.apiBaseUrl}/api/ticket/attachment/${ticketId}`,
@@ -74,6 +77,7 @@ export class TicketService {
     );
   }
 
+  // ticket linking apis
   getCompanyTicketsDdl(companyId: number): Observable<DropdownOutputDto[]> {
     return this.http.get<DropdownOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/get-tickets/${companyId}`,
@@ -86,13 +90,20 @@ export class TicketService {
     );
   }
 
-  updateTicketLinkings(ticketId: number, linkedTicketIds: number[]): Observable<boolean> {
+  addTicketLinkings(ticketId: number, linkedTicketIds: number[]): Observable<boolean> {
     return this.http.post<boolean>(
       `${environment.apiBaseUrl}/api/ticket/linking-tickets/${ticketId}`,
       linkedTicketIds,
     );
   }
 
+  deleteTicketLinking(linkingId: number): Observable<boolean> {
+    return this.http.delete<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/linking-ticket/${linkingId}`,
+    );
+  }
+
+  // ticket comments apis
   getTicketComments(ticketId: number): Observable<TicketCommentOutputDto[]> {
     return this.http.get<TicketCommentOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/comments/${ticketId}`,
@@ -119,12 +130,21 @@ export class TicketService {
     );
   }
 
+  // ticket field apis
   getTicketFields(ticketId: number): Observable<TicketFieldOutputDto[]> {
     return this.http.get<TicketFieldOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/get-define-field/${ticketId}`,
     );
   }
 
+  updateTicketFields(ticketId: number, fields: TicketFieldInputDto[]): Observable<boolean> {
+    return this.http.put<boolean>(
+      `${environment.apiBaseUrl}/api/ticket/define-field/${ticketId}`,
+      fields,
+    );
+  }
+
+  // ticket watcher apis
   getTicketWatchers(ticketId: number): Observable<TicketWatcherOutputDto[]> {
     return this.http.get<TicketWatcherOutputDto[]>(
       `${environment.apiBaseUrl}/api/ticket/get-watchers/${ticketId}`,

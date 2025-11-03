@@ -1,17 +1,11 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  linkedSignal,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { TicketService } from '../../../../services/ticket.service';
 import { Dropdown } from '@shared/helper/components/dropdown/dropdown';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-ticket-linked-items',
@@ -27,8 +21,11 @@ export class TicketLinkedItems {
   private readonly toast = inject(ToastrService);
   isAdding = signal(false);
   refreshTrigger = signal(0);
-  selectedLickedItems = linkedSignal(() => this.linkingItems().map((item) => item.id));
-  linkingItems = linkedSignal(() => this.linkingItemsSignal());
+  selectedLinkedItems: number[] = [];
+  linkedItemsToExclude = computed(() => [
+    Number(this.ticketId()),
+    ...this.linkingItemsSignal().map((item) => item.linkingTicketId),
+  ]);
   readonly linkingItemsSignal = derivedAsync(
     () => {
       this.refreshTrigger();
@@ -41,7 +38,12 @@ export class TicketLinkedItems {
 
   ticketDropdownItems = derivedAsync(
     () => {
-      return this.ticketService.getCompanyTicketsDdl(Number(this.companyId()));
+      this.refreshTrigger();
+      return this.ticketService
+        .getCompanyTicketsDdl(Number(this.companyId()))
+        .pipe(
+          map((items) => items.filter((item) => !this.linkedItemsToExclude().includes(item.id))),
+        );
     },
     {
       initialValue: [],
@@ -52,13 +54,31 @@ export class TicketLinkedItems {
     this.isAdding.update((val) => !val);
   }
 
-  updateLinkedItems() {
+  addLinkedItems() {
     this.ticketService
-      .updateTicketLinkings(Number(this.ticketId()), this.selectedLickedItems())
-      .subscribe(() => {
-        this.refreshTrigger.update((v) => v + 1);
-        this.isAdding.set(false);
-        this.toast.success('Linked items updated successfully');
+      .addTicketLinkings(Number(this.ticketId()), this.selectedLinkedItems)
+      .subscribe({
+        next: () => {
+          this.refreshTrigger.update((v) => v + 1);
+          this.isAdding.set(false);
+          this.toast.success('Linked items added successfully');
+          this.selectedLinkedItems = [];
+        },
+        error: () => {
+          this.toast.error('Error adding linked items');
+        },
       });
+  }
+
+  deleteLinking(linkingId: number) {
+    this.ticketService.deleteTicketLinking(linkingId).subscribe({
+      next: () => {
+        this.refreshTrigger.update((v) => v + 1);
+        this.toast.success('Linking item deleted successfully');
+      },
+      error: () => {
+        this.toast.error('Error deleting linking item');
+      },
+    });
   }
 }

@@ -1,0 +1,12 @@
+<div class="card mt-4 p-3">
+  <div class="app-form">
+    <p class="mb-3">Watchers</p>
+    <ng-select
+      class="select-dropdown"
+      [items]="watchers()"
+      [multiple]="true"
+      [(ngModel)]="selectedWatchers"
+      placeholder="Select Watchers"
+    ></ng-select>
+  </div>
+</div>

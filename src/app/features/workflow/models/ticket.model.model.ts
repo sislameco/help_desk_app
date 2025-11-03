@@ -67,9 +67,13 @@ export interface TicketBasicDetailOutputDto {
 }
 
 export interface TicketSpecificationOutputDto {
+  fkTicketTypeId: number;
   rootCauseId?: number;
   resolutionId?: number;
   assigneeId?: number;
+  projectId?: number;
+  customerId?: number;
+  isCustomer: boolean;
   departmentIds: number[];
 }
 
@@ -83,6 +87,7 @@ export interface TicketFileDto {
 
 export interface TicketLinkingItemOutputDto {
   id: number;
+  linkingTicketId: number;
   ticketNumber: string;
   subject: string;
   url: string;
@@ -98,12 +103,30 @@ export interface TicketCommentOutputDto {
   isEditing: boolean;
 }
 
+export interface TicketFieldInputDto {
+  id: number;
+  fkCustomField: number;
+  value: string;
+}
+
 export interface TicketFieldOutputDto {
   id: number;
   fkTicketTypeId: number;
   fkCustomeFieldId: number;
   value: string | string[];
   ddlValue: string[];
+  displayName: string;
+  isRequired: boolean;
+  isMultiSelect: boolean;
+  dataType: EnumDataType;
+}
+
+export interface TicketFieldFormDto {
+  id: number;
+  fkTicketTypeId: number;
+  fkCustomeFieldId: number;
+  value: string | { id: number; name: string }[];
+  ddlValue: { id: number; name: string }[];
   displayName: string;
   isRequired: boolean;
   isMultiSelect: boolean;

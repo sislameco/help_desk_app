@@ -1,5 +1,5 @@
 <div class="mb-4 position-relative">
-  <app-dropdown heading="Linked Tickets">
+  <app-dropdown heading="Linked Tickets" [isCollapsed]="true">
     <div class="linked-tickets mt-3">
       <button
         for="upload"
@@ -13,8 +13,25 @@
 
       @if (!isAdding()) {
         <ul class="tickets">
-          @for (ticket of linkingItems(); track ticket.id) {
-            <li class="ticket">{{ ticket.ticketNumber }}: {{ ticket.subject }}</li>
+          @for (ticket of linkingItemsSignal(); track ticket.id) {
+            <li class="ticket d-flex justify-content-between align-items-center">
+              <span class="ticket-info"> {{ ticket.ticketNumber }}: {{ ticket.subject }} </span>
+              <button
+                class="ch-icon-btn ch-icon-single disabled-hover"
+                (click)="deleteLinking(ticket.id)"
+              >
+                <svg
+                  width="10"
+                  viewBox="0 0 13 13"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <use href="assets/sprite.svg#red-close-icon"></use>
+                </svg>
+              </button>
+            </li>
+          } @empty {
+            <li>There is no linked ticket</li>
           }
         </ul>
       }
@@ -26,7 +43,7 @@
           <ng-select
             id="linkedTickets"
             class="select-dropdown"
-            [(ngModel)]="selectedLickedItems"
+            [(ngModel)]="selectedLinkedItems"
             [items]="ticketDropdownItems()"
             bindLabel="name"
             bindValue="id"
@@ -34,7 +51,8 @@
             [multiple]="true"
           >
           </ng-select>
-          <button class="ch-btn ch-btn-green mt-3" (click)="updateLinkedItems()">Save</button>
+          <button class="ch-btn ch-btn-green mt-3" (click)="addLinkedItems()">Save</button>
+          <button class="ch-btn ch-btn-red-border ms-2" (click)="toggleAddMode()">Cancel</button>
         </div>
       </div>
     }

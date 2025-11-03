@@ -8,7 +8,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { TicketFieldOutputDto } from '../../../../models/ticket.model.model';
+import { TicketFieldInputDto, TicketFieldOutputDto } from '../../../../models/ticket.model.model';
 import { EnumDataType } from '../../../../../company-configuration/models/company.model';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FieldOutputDto } from '../../../../../company-configuration/models/ddl.model';
@@ -16,11 +16,10 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import { TicketReferenceService } from '../../../../../company-configuration/services/ticket-reference-service';
 import { derivedAsync } from 'ngxtension/derived-async';
 import { TicketService } from '../../../../services/ticket.service';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-fields',
-  imports: [ReactiveFormsModule, NgSelectComponent, JsonPipe],
+  imports: [ReactiveFormsModule, NgSelectComponent],
   providers: [TicketReferenceService],
   templateUrl: './ticket-fields.html',
   styleUrl: './ticket-fields.scss',
@@ -38,6 +37,8 @@ export class TicketFields {
   form: FormGroup = this.fb.group({
     additionalFields: this.fb.array([]),
   });
+
+  isFormValueChanged = signal(false);
 
   refreshTrigger = signal(0);
   readonly fieldsApiData = derivedAsync(
@@ -90,8 +91,10 @@ export class TicketFields {
         this.cdr.markForCheck();
       }
     });
-    // this.patchForm();
-    // this.cdr.markForCheck();
+    this.form.valueChanges.subscribe(() => {
+      // console.log('Form value changed');
+      this.isFormValueChanged.set(true);
+    });
   }
 
   patchForm(fields: TicketFieldOutputDto[]) {
@@ -101,7 +104,8 @@ export class TicketFields {
     fields.forEach((v) => {
       additionalFieldsArray.push(
         this.fb.group({
-          id: [v.fkCustomeFieldId],
+          id: [v.id],
+          fkCustomeFieldId: [v.fkCustomeFieldId],
           dataType: [v.dataType || EnumDataType.textInput],
           isMultiSelect: [v.isMultiSelect || false],
           displayName: [v.displayName || ''],
@@ -110,37 +114,35 @@ export class TicketFields {
         }),
       );
     });
-    // const newFormArray = this.fb.array(
-    //   fields.map((v) =>
-    //     this.fb.group({
-    //       id: [v.fkCustomeFieldId],
-    //       dataType: [v.dataType || EnumDataType.textInput],
-    //       isMultiSelect: [v.isMultiSelect || false],
-    //       displayName: [v.displayName || ''],
-    //       value: [v.value],
-    //       ddlValues: [v.ddlValue || []],
-    //     }),
-    //   ),
-    // );
-
-    // 🔥 Replace the old FormArray reference so Angular’s view re-renders
-    // this.form.setControl('additionalFields', newFormArray);
-    // this.form.get('additionalFields')?.setValue(newFormArray);
   }
 
   get additionalFieldsArray(): FormArray {
     return this.form.get('additionalFields') as FormArray;
   }
 
-  getadditionalFieldsData(additionalFields: FieldOutputDto[]) {
-    return additionalFields.flatMap(({ id, value }) =>
+  getadditionalFieldsData(additionalFields: TicketFieldOutputDto[]): TicketFieldInputDto[] {
+    return additionalFields.flatMap(({ id, fkCustomeFieldId, value }) =>
       Array.isArray(value)
-        ? value.map((v) => ({ id, value: String(v) }))
-        : [{ id, value: String(value) }],
+        ? value.map((v) => ({
+            id,
+            fkCustomField: fkCustomeFieldId,
+            value: String(v),
+          }))
+        : [{ id, fkCustomField: fkCustomeFieldId, value: String(value) }],
     );
   }
 
   onSubmit() {
-    // console.log('Form submitted');
+    // this.ticketService
+    //   .updateTicketFields(
+    //     Number(this.ticketId()),
+    //     this.getadditionalFieldsData(this.additionalFieldsArray.value),
+    //   )
+    //   .subscribe({
+    //     next: () => {
+    //       this.isFormValueChanged.set(false);
+    //       this.refreshTrigger.update((v) => v + 1);
+    //     },
+    //   });
   }
 }

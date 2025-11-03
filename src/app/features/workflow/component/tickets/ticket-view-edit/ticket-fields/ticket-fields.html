@@ -57,5 +57,11 @@
         </div>
       }
     </div>
+    @if (isFormValueChanged()) {
+      <div class="text-end">
+        <button class="ch-btn ch-btn-red-border h-30">Cancel</button
+        ><button class="ch-btn ch-btn-green ms-2 h-30" type="submit">Save</button>
+      </div>
+    }
   </form>
 </div>

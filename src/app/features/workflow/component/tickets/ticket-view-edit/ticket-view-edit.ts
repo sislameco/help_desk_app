@@ -16,6 +16,11 @@ import { TicketComment } from './ticket-comment/ticket-comment';
 import { Dropdown } from '@shared/helper/components/dropdown/dropdown';
 import { TicketFields } from './ticket-fields/ticket-fields';
 import { TicketLinkedItems } from './ticket-linked-items/ticket-linked-items';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TicketLogs } from './ticket-logs/ticket-logs';
+import { TicketWatchers } from './ticket-watchers/ticket-watchers';
+import { TicketSpecification } from './ticket-specification/ticket-specification';
+import { getPriorityColor } from '@shared/helper/enum-ddl-helpers';
 
 @Component({
   selector: 'app-ticket-view-edit',
@@ -30,6 +35,10 @@ import { TicketLinkedItems } from './ticket-linked-items/ticket-linked-items';
     Dropdown,
     TicketFields,
     TicketLinkedItems,
+    TabsModule,
+    TicketLogs,
+    TicketWatchers,
+    TicketSpecification,
   ],
   providers: [TicketService],
   templateUrl: './ticket-view-edit.html',
@@ -42,8 +51,9 @@ export class TicketViewEdit {
   editor!: Editor;
   newComment = '';
   enumStatus = EnumTicketStatus;
-  isDescriptionCollapsed = signal(false);
+  isDescriptionEditing = signal(false);
   ticketBasicDescriptionRefresh = signal(0);
+  priorityColor = computed(() => getPriorityColor(this.ticketBasicInfo().priority || 0));
   companyId = computed(() =>
     this.ticketBasicInfo().company ? Number(this.ticketBasicInfo().company.id) : 0,
   );
@@ -102,18 +112,22 @@ export class TicketViewEdit {
   //     initialValue: [],
   //   },
   // );
-  readonly watchers = derivedAsync(
-    () => {
-      // this.refreshTrigger();
-      return this.ticketService.getTicketWatchers(Number(this.ticketId()));
-    },
-    {
-      initialValue: [],
-    },
-  );
+  // readonly watchers = derivedAsync(
+  //   () => {
+  //     // this.refreshTrigger();
+  //     return this.ticketService.getTicketWatchers(Number(this.ticketId()));
+  //   },
+  //   {
+  //     initialValue: [],
+  //   },
+  // );
 
   constructor() {
     this.editor = new Editor();
+  }
+
+  toggleDescriptionEdit() {
+    this.isDescriptionEditing.update((val) => !val);
   }
 
   // ======= MAIN TICKET DATA =======
@@ -242,6 +256,7 @@ export class TicketViewEdit {
         next: (res) => {
           if (res) {
             this.ticketBasicDescriptionRefresh.update((val) => val + 1);
+            this.toggleDescriptionEdit();
           }
         },
       });

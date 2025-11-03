@@ -3,7 +3,7 @@
     <!-- 🔹 Header -->
     <div class="d-flex border-bottom pb-2 mb-3">
       <div class="d-flex align-items-end gap-2">
-        <h4 class="fw-bold">
+        <h4 class="fw-bold" [ngClass]="'text-' + priorityColor()">
           {{ ticketBasicInfo().ticketNumber }}
           <span class="badge bg-secondary ms-2">{{ enumStatus[ticketBasicInfo().status] }}</span>
         </h4>
@@ -18,28 +18,44 @@
         <!-- Summary -->
         <div class="mb-3 d-none">
           <p class="form-label fw-semibold">Summary</p>
-          <!-- <input type="text" class="form-control" [(ngModel)]="ticket.subject" /> -->
         </div>
 
         <!-- Description -->
         <div class="mb-4">
-          <!-- <p class="form-label fw-semibold">Description</p> -->
           <app-dropdown heading="Description">
-            <div class="ngx-editor-container">
-              <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
-              <ngx-editor
-                [(ngModel)]="ticketBasicInfo().description"
-                [editor]="editor"
-                [disabled]="false"
-                [placeholder]="'Describe the issue in detail...'"
-              ></ngx-editor>
-            </div>
-            <button
-              class="ch-btn ch-btn-green mt-3"
-              (click)="updateDescription(ticketBasicInfo().description)"
-            >
-              Update Description
-            </button>
+            @if (isDescriptionEditing()) {
+              <div class="description-form">
+                <div class="ngx-editor-container">
+                  <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
+                  <ngx-editor
+                    [(ngModel)]="ticketBasicInfo().description"
+                    [editor]="editor"
+                    [disabled]="false"
+                    [placeholder]="'Describe the issue in detail...'"
+                  ></ngx-editor>
+                </div>
+                <div class="text-end mt-3">
+                  <button
+                    class="ch-btn ch-btn-green h-30 me-2"
+                    (click)="updateDescription(ticketBasicInfo().description)"
+                  >
+                    Update Description
+                  </button>
+                  <button class="ch-btn ch-btn-red-border h-30" (click)="toggleDescriptionEdit()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            } @else {
+              <div class="description-details">
+                <!-- eslint-disable-next-line -->
+                <div
+                  class="description-html"
+                  (click)="toggleDescriptionEdit()"
+                  [innerHTML]="ticketBasicInfo().description"
+                ></div>
+              </div>
+            }
           </app-dropdown>
         </div>
 
@@ -56,11 +72,27 @@
 
         <!-- Comments -->
         <!-- <app-ticket-comment [comments]="comments()"></app-ticket-comment> -->
-        <app-ticket-comment [ticketId]="ticketId()"></app-ticket-comment>
+        <tabset>
+          <tab heading="Comments" class="pt-3">
+            <app-ticket-comment [ticketId]="ticketId()"></app-ticket-comment>
+          </tab>
+          <tab heading="Ticket Logs" class="pt-3">
+            <app-ticket-logs></app-ticket-logs>
+          </tab>
+          <tab heading="Watchers" class="pt-3">
+            <app-ticket-watchers [ticketId]="ticketId()"></app-ticket-watchers>
+          </tab>
+        </tabset>
       </div>
 
       <!-- 🧱 Right Panel -->
       <div class="col-lg-4 col-md-5">
+        <app-ticket-specification
+          [ticketId]="ticketId()"
+          [companyId]="companyId()"
+          [ticketStatus]="ticketBasicInfo().status"
+          [ticketPriority]="ticketBasicInfo().priority"
+        ></app-ticket-specification>
         <app-ticket-fields [ticketId]="ticketId()"></app-ticket-fields>
         <div class="card shadow-sm border-0">
           <div class="card-body">

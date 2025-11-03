@@ -1,1 +1,112 @@
-<p>ticket-specification works!</p>
+<div class="card p-3 mt-2">
+  <div class="row align-items-center">
+    <div class="col-lg-3">
+      <p>Status: {{ enumTicketStatus[ticketStatus()] }}</p>
+    </div>
+    <div class="app-form col-lg-9">
+      <div class="form-group mb-0">
+        <label for="priority" class="input-label">Priority</label>
+        <ng-select
+          id="priority"
+          class="select-dropdown"
+          [items]="priorities"
+          [multiple]="false"
+          [clearable]="false"
+          [(ngModel)]="ticketPriorityForForm"
+          bindLabel="key"
+          bindValue="value"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card p-3 my-3">
+  <div class="app-form">
+    <div class="form-group mb-3">
+      <label for="assignee" class="input-label">Assignee</label>
+      <ng-select
+        id="assignee"
+        class="select-dropdown"
+        [items]="users()"
+        [multiple]="false"
+        [clearable]="false"
+        [(ngModel)]="ticketPriorityForForm"
+        bindLabel="name"
+        bindValue="id"
+      ></ng-select>
+    </div>
+    <div class="form-group mb-3">
+      <label for="department" class="input-label">Department</label>
+      <ng-select
+        id="department"
+        class="select-dropdown"
+        [items]="departments()"
+        [multiple]="false"
+        [clearable]="false"
+        [(ngModel)]="ticketPriorityForForm"
+        bindLabel="name"
+        bindValue="id"
+      ></ng-select>
+    </div>
+    <div class="form-group mb-3">
+      <label for="rootCause" class="input-label">Root Cause</label>
+      <ng-select
+        id="rootCause"
+        class="select-dropdown"
+        [items]="rootCauses()"
+        [multiple]="false"
+        [clearable]="false"
+        [(ngModel)]="ticketPriorityForForm"
+        bindLabel="name"
+        bindValue="id"
+      ></ng-select>
+    </div>
+    <div class="form-group mb-3">
+      <label for="resolution" class="input-label">Resolution</label>
+      <ng-select
+        id="resolution"
+        class="select-dropdown"
+        [items]="rootCauses()"
+        [multiple]="false"
+        [clearable]="false"
+        [(ngModel)]="ticketPriorityForForm"
+        bindLabel="name"
+        bindValue="id"
+      ></ng-select>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="project" class="input-label">Linked Project</label>
+      <ng-select
+        id="project"
+        class="select-dropdown"
+        [virtualScroll]="true"
+        [items]="projects()"
+        [multiple]="false"
+        [clearable]="false"
+        [(ngModel)]="ticketPriorityForForm"
+        bindLabel="referenceNumber"
+        bindValue="id"
+      ></ng-select>
+    </div>
+    <div class="form-group mb-3">
+      <label for="customer" class="input-label">Customer</label>
+      <ng-select
+        id="customer"
+        class="select-dropdown"
+        [virtualScroll]="true"
+        [items]="customers()"
+        [multiple]="false"
+        [clearable]="false"
+        [(ngModel)]="ticketPriorityForForm"
+        bindLabel="fullName"
+        bindValue="id"
+      ></ng-select>
+    </div>
+
+    <div class="form-group">
+      <p>Due Date:</p>
+    </div>
+  </div>
+</div>
