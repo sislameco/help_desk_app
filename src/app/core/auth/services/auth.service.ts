@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginRequest, LoginResponse } from '@core/auth/models/user.model';
 import { UserMenuItem } from '@core/layout/pages/authorized-layout/authorized-sidebar/sidebar-data-type';
@@ -17,6 +17,13 @@ export class AuthService {
 
   login(data: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(environment.apiBaseUrl + '/api/helpdesk/login', data);
+  }
+
+  refreshToken(token: string): Observable<{ token: string; refreshToken: string }> {
+    return this.http.post<{ token: string; refreshToken: string }>(
+      environment.apiBaseUrl + '/api/helpdesk/refresh-token?token=' + token,
+      {},
+    );
   }
   getSidebarItems(): Observable<UserMenuItem[]> {
     return this.http.get<UserMenuItem[]>(environment.apiBaseUrl + '/api/permission/get-menus');
@@ -46,6 +53,23 @@ export class AuthService {
         userToken,
         newPassword,
       },
+    );
+  }
+
+  loginWithUserId(
+    data: { userId: number; appId: number },
+    company: string,
+    authKey: string,
+  ): Observable<LoginResponse> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      company,
+      AuthorizationKey: authKey,
+    });
+    return this.http.post<LoginResponse>(
+      environment.apiBaseUrl + '/api/helpdesk/embedded-login',
+      data,
+      { headers },
     );
   }
 }
