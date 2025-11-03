@@ -11,6 +11,10 @@ import { environment } from '../../../../environments/environment';
 export class AuthService {
   private readonly http = inject(HttpClient);
 
+  signOut(): Observable<boolean> {
+    return this.http.get<boolean>(environment.apiBaseUrl + '/api/helpdesk/sign-out');
+  }
+
   login(data: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(environment.apiBaseUrl + '/api/helpdesk/login', data);
   }

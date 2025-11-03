@@ -1,4 +1,11 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { AddTicketModal } from '../ticket-add-modal/add-ticket-modal/add-ticket-modal';
 import { derivedAsync } from 'ngxtension/derived-async';
@@ -28,36 +35,22 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BsModalService, TicketService],
 })
-export class TicketCentre {
+export class TicketCentre implements OnInit {
   readonly route = inject(ActivatedRoute);
   private readonly ticketService = inject(TicketService);
   private readonly modalService = inject(BsModalService);
   private readonly refreshTrigger = signal(0);
 
   private ngUnsubscribe$ = new Subject<void>();
-
+  token: string | null = this.route.snapshot.paramMap.get('token');
+  isIframe: boolean = this.route.snapshot.paramMap.get('iframe') === 'true';
+  userId: number | null = Number(this.route.snapshot.paramMap.get('userId'));
   readonly viewMode = signal<'list' | 'kanban'>('list');
   selectedTicketTypeIds = signal<number[]>([]);
   selectedticketStatusIds = signal<number[]>([]);
   selectedPriorityIds = signal<number[]>([]);
   selecteduserIds = signal<number[]>([]);
   readonly isCollaps = signal(false);
-
-  // readonly selectedViewMode = derivedAsync(() => this.viewMode(), {
-  //   initialValue: 'list' as 'list' | 'kanban',
-  // });
-
-  // readonly isListView = derivedAsync(() => this.viewMode() === 'list', {
-  //   initialValue: true,
-  // });
-
-  // readonly isKanbanView = derivedAsync(() => this.viewMode() === 'kanban', {
-  //   initialValue: false,
-  // });
-
-  // readonly isTicketTypeSelected = derivedAsync(() => this.selectedTicketTypeIds().length > 0, {
-  //   initialValue: false,
-  // });
 
   setView(mode: 'list' | 'kanban') {
     this.viewMode.set(mode);
@@ -71,7 +64,7 @@ export class TicketCentre {
   private readonly refresh = signal(0);
   readonly ticketsResponse = derivedAsync(() => {
     this.refresh();
-    const params = this.mapToProductRequest(this.filters.value());
+    const params = this.ticketRequestMapper(this.filters.value());
     //todo need to remove shareReply
     return this.ticketService.getTickets(1, params).pipe(shareReplay(1));
   });
@@ -79,20 +72,15 @@ export class TicketCentre {
   constructor() {
     this.listenQueryParams();
     afterNextRender(async () => {
-      // const list = await firstValueFrom(this.userProductFilterService.userProductFilters(true));
-
-      // if (!this.hasAppliedDefaultOnInit()) {
-      //   const def = (list || []).find((f) => f.isDefault);
-      //   if (def) {
-      //     // todo need to add later
-      //     //  this.applySavedFilter(def.id);
-      //   }
-      //   this.hasAppliedDefaultOnInit.set(true);
-      // }
-      // Apply default saved filter only once when saved filters first load
       this.listenQueryParams();
-      // Load fields initially without using effect()
-      // this.loadFields(this.appliedFilterId() ?? undefined);
+    });
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.userId = params['userId'];
+      this.token = params['token'];
+      this.isIframe = params['ifram'] === 'true';
     });
   }
 
@@ -113,7 +101,7 @@ export class TicketCentre {
    * Maps UI filter params to server request payload.
    * Keeps undefined properties out of the request, mirroring existing logic.
    */
-  private mapToProductRequest(params: TicketListFilterParams): TicketRequest {
+  private ticketRequestMapper(params: TicketListFilterParams): TicketRequest {
     const request: TicketRequest = {
       page: params.page,
       pageSize: params.pageSize,

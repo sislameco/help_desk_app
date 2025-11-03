@@ -17,10 +17,22 @@ import { AuthStore } from '@core/store/auth-store/auth.store';
   imports: [ReactiveFormsModule, NgxControlError, RouterLink],
 })
 export class Login {
+  readonly route = inject(ActivatedRoute);
+  token: string | null = this.route.snapshot.paramMap.get('token');
+  isIframe: boolean = this.route.snapshot.paramMap.get('iframe') === 'true';
+  userId: number | null = Number(this.route.snapshot.paramMap.get('userId'));
+
+  constructor() {
+    this.route.queryParams.subscribe((params) => {
+      this.userId = params['userId'];
+      this.token = params['token'];
+      this.isIframe = params['iframe'] === 'true';
+    });
+  }
+
   authStore = inject(AuthStore);
   readonly loading = signal(false);
   protected readonly fb = inject(FormBuilder);
-  route = inject(ActivatedRoute);
   auth = inject(AuthService);
   router = inject(Router);
   toastr = inject(ToastrService);
